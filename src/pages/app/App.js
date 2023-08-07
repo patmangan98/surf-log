@@ -3,6 +3,7 @@ import './App.css';
 
 function App() {
   
+  let dataSplit
   
     const fileUrl = '/view_text_file.php?filename=4100452023.txt.gz&dir=data/stdmet/May/'
     // console.log(fileUrl)
@@ -20,6 +21,9 @@ function App() {
       const dataString = fileContent.split('\n')
       console.log(dataString[0])
       console.log(dataString[1])
+      dataSplit = dataString[2].split(' ')
+      console.log(dataSplit)
+
      
       // You can save the file content to a variable or use it as needed
       // For example, you can pass it to another function for further processing
@@ -29,6 +33,7 @@ function App() {
       console.error('Error reading the file:', error);
     });
      
+   
 
   return (
     <div className="App">
