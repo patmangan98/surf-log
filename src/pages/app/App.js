@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 
 function App() {
@@ -18,7 +18,8 @@ function App() {
       // Process the file content here
      
       const dataString = fileContent.split('\n')
-      console.log(dataString)
+      console.log(dataString[0])
+      console.log(dataString[1])
      
       // You can save the file content to a variable or use it as needed
       // For example, you can pass it to another function for further processing
@@ -32,7 +33,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <p>
           Hello from SurfLog
         </p>
