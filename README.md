@@ -1,8 +1,16 @@
-
+![Contributors](https://img.shields.io/github/contributors/DamarisTorrent/surf-log?style=for-the-badge&color=Dark%20green)
 
 ## About SurfLog 
 
 SurfLog is an all in one app to document your progress as a surfer. With SurfLog, you can journal about each time you hit the waves, and store real-time and historical data about wave conditions. This will not only allow you to narrow down the best surf spots, but track your growth as a surfer. In the future, it will also allow you to store photos of memorable moments.
+
+- [About SurfLog](#about-surflog)
+  - [Tech Stack](#tech-stack)
+  - [User Stories - MVP](#user-stories---mvp)
+  - [User Stories - v2](#user-stories---v2)
+      - [Attributions](#attributions)
+
+
 
 <hr/>
 
