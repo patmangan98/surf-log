@@ -15,14 +15,13 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.0-placeholder-for-preset-env.2"
   },
+  "proxy": "https://www.ndbc.noaa.gov/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://www.ndbc.noaa.gov",
-
   "eslintConfig": {
     "extends": [
       "react-app",
