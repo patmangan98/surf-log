@@ -38,13 +38,23 @@ function App() {
       
       dataSplit = dataString[2].split(" ")
       
+      // setCurrentReading({
+      //   ...currentReading,
+      //   day: dataSplit[2],
+      //   month: dataSplit[1],
+      //   year: dataSplit[0],
+      //   hour: dataSplit[3],
+      //   minute: dataSplit[4]
+      // })
+
+      const [year, month, day, hour, minute] = dataSplit
+
       setCurrentReading({
-        ...currentReading,
-        day: dataSplit[2],
-        month: dataSplit[1],
-        year: dataSplit[0],
-        hour: dataSplit[3],
-        minute: dataSplit[4]
+        day,
+        month,
+        year,
+        hour,
+        minute
       })
 
       // You can save the file content to a variable or use it as needed
