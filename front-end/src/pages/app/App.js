@@ -31,15 +31,19 @@ function App() {
       })
       .then((fileContent) => {
         const dataString = fileContent.split("\n")
+        console.log(dataString.length)
         const dataSplit = dataString[2].split(" ")
-        const [year, month, day, hour, minute] = dataSplit
+        console.log(dataSplit)
+        const [year, month, day, hour, minute, wDir, , wSpd] = dataSplit
 
         setCurrentReading({
           day,
           month,
           year,
           hour,
-          minute
+          minute,
+          wDir, 
+          wSpd
         })
       })
       .catch((error) => {
@@ -55,7 +59,7 @@ function App() {
         <p>Hello from SurfLog</p>
         <p>This is a message from the backend Express server: {message}</p>
         <p>
-          The last buoy reading was at: {currentReading.month}-{currentReading.day}-{currentReading.year}:{currentReading.hour}:{currentReading.minute} GMT time.
+          The last buoy reading was at: {currentReading.month}-{currentReading.day}-{currentReading.year}:{currentReading.hour}:{currentReading.minute} GMT time.  The wind on the Edisto buoy is currently blowing from {currentReading.wDir} degrees and the windspeed is {currentReading.wSpd}.
         </p>
       </header>
     </div>
