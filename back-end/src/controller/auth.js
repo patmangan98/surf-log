@@ -2,16 +2,22 @@ const { createUser, showUserByUsername, updatePassword  } = require('../service/
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+
 exports.register = async (req, res) => {
   try {
     const userData = req.body
+    console.log(userData)
 
+
+    // if no email was provided
     if (userData.email === "" || userData.email === null) {
       return res.status(406).json({message: "Email was not provided."})
     }
 
+    //allowing for email info to contain special characters
     const emailRegex = new RegExp(/^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/, "gm")
     const isValidEmail = emailRegex.test(userData.email)
+
     if(isValidEmail === false){
       return res.status(406).json({message: "Email is invalid."})
     }
