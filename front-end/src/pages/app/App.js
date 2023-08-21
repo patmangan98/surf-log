@@ -111,9 +111,9 @@ function App() {
       <header className="App-header">
         <p>Hello from SurfLog</p>
         <p>This is a message from the backend Express server: {message}</p>
-        <p>
+        {/* <p>
           The last buoy reading was at: {currentReading.month}-{currentReading.day}-{currentReading.year}:{currentReading.hour}:{currentReading.minute} GMT time.  The wind on the Edisto buoy is currently blowing from {currentReading.wDir} degrees and the windspeed is {currentReading.wSpd}.
-        </p>
+        </p> */}
         <button onClick={handleRegister}>Register</button>
         <button onClick={handleLogIn}>Log In</button>
         <button onClick={handlePasswordChange}>Change Password</button>
