@@ -25,10 +25,10 @@ async function handleSubmit(event) {
         const formData = {...credentials}
         await register(formData)
             .then(() => {
-                setToken(formData.token)
+                setToken(String(formData.token))
             })
 
-        await setUser(formData)
+        //await setUser(formData.token)
     
     } catch (error) {
         console.log(error)
@@ -68,7 +68,7 @@ console.log(credentials)
               required
            />
 
-           <button type='submit'>Sign Up</button>
+           <button type='submit' onClick={handleSubmit}>Sign Up</button>
 
         </form>
         

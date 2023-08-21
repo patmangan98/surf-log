@@ -1,7 +1,7 @@
 import { getToken } from "./users-service";
 
 // const BASE_URL = '/api/users'
-const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000'
+const baseUrl = 'http://localhost:8000'
 
 //should have signUp, login, maybe send request
 

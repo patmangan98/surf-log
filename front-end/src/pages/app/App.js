@@ -9,7 +9,8 @@ import { getUser } from "../utilities/users-service"
 import { updatePassword } from '../../api'
 import { isUserLoggedIn } from '../../utility'
 import HomePage from "../homePage/homepage"
-import AuthPage from "../AuthPage/AuthPage"
+import AuthPage from "../AuthPage/AuthPage.js"
+// import AuthPage from "../Authpage/Authpage"
 
 function App() {
   // const [message, setMessage] = useState("")
