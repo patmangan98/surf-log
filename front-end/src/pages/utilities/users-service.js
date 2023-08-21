@@ -1,12 +1,12 @@
 
 // I need in this to have the:
-    //sign up function
-    // get token function 
-    //get user function
-    // logout function 
+    //sign up function -false
+    // get token function - true
+    //get user function - true
+    // logout function - basically aka clear token
     //login function
-    // check token
-
+    // check token - 
+const BASE_URL = ''
 
 
 

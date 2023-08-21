@@ -1,9 +1,42 @@
+import { useState } from 'react'
+import { register } from '../../utilities/users-api';
+import { setToken } from '../../utilities/users-service';
 
 
 
-
-export default function SignUpForm () {
+export default function SignUpForm ({ setUser }) {
     
+const [credentials, setCredentials] = useState({
+    email : '',
+    username : '',
+    password : ''
+})
+
+function handleChange(event) {
+    setCredentials({
+        ...credentials,
+        [event.target.name]: event.target.value
+    })
+}
+
+async function handleSubmit(event) {
+    event.preventDefault();
+    try {
+        const formData = {...credentials}
+        await register(formData)
+            .then(() => {
+                setToken(formData.token)
+            })
+
+        await setUser(formData)
+    
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+console.log(credentials)
+
     return (
         <>
         
@@ -12,12 +45,26 @@ export default function SignUpForm () {
            <input
               type='email'
               name='email'
+              value={credentials.email}
+              onChange={handleChange}
               required
            />
+
+           <label>Username</label>
+           <input
+              type='text'
+              name='username'
+              value={credentials.username}
+              onChange={handleChange}
+              required
+           />
+
          <label>Password</label>
            <input
               type='password'
               name='password'
+              value={credentials.password}
+              onChange={handleChange}
               required
            />
 

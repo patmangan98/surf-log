@@ -117,7 +117,7 @@ function App() {
         <HomePage/>
         </>
       ):(
-        <AuthPage/>
+        <AuthPage setUser = {setUser}/>
       )}
 
 
