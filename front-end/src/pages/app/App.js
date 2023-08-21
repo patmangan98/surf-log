@@ -1,62 +1,67 @@
 import "./App.css"
 import React, { useState, useEffect } from "react"
+
 import { register } from '../../api'
 import { login } from '../../api'
 import { setToken } from '../../utility'
 import { getToken } from '../../utility'
 import { updatePassword } from '../../api'
 import { isUserLoggedIn } from '../../utility'
+import {getUse}
+
 
 function App() {
   const [message, setMessage] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
 
-  const [currentReading, setCurrentReading] = useState({
-    day: "",
-    month: "",
-    year: "",
-    hour: "",
-    minute: ""
-  })
+  const [user, setUser] = useState()
 
-  useEffect(() => {
-    fetch("http://localhost:8000/message")
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message))
-      .catch((error) => {
-        console.error("Error fetching message:", error)
-      })
+  // const [currentReading, setCurrentReading] = useState({
+  //   day: "",
+  //   month: "",
+  //   year: "",
+  //   hour: "",
+  //   minute: ""
+  // })
 
-    const fileUrl = "data/realtime2/41004.txt"
+  // useEffect(() => {
+  //   fetch("http://localhost:8000/message")
+  //     .then((res) => res.json())
+  //     .then((data) => setMessage(data.message))
+  //     .catch((error) => {
+  //       console.error("Error fetching message:", error)
+  //     })
 
-    fetch(fileUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok")
-        }
-        return response.text()
-      })
-      .then((fileContent) => {
-        const dataString = fileContent.split("\n")
-        console.log(dataString.length)
-        const dataSplit = dataString[2].split(" ")
-        console.log(dataSplit)
-        const [year, month, day, hour, minute, wDir, , wSpd] = dataSplit
+    // const fileUrl = "data/realtime2/41004.txt"
 
-        setCurrentReading({
-          day,
-          month,
-          year,
-          hour,
-          minute,
-          wDir, 
-          wSpd
-        })
-      })
-      .catch((error) => {
-        console.error("Error reading the file:", error)
-      })
-  }, [message])
+    // fetch(fileUrl)
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error("Network response was not ok")
+    //     }
+    //     return response.text()
+    //   })
+    //   .then((fileContent) => {
+    //     const dataString = fileContent.split("\n")
+    //     console.log(dataString.length)
+    //     const dataSplit = dataString[2].split(" ")
+    //     console.log(dataSplit)
+    //     const [year, month, day, hour, minute, wDir, , wSpd] = dataSplit
+
+    //     setCurrentReading({
+    //       day,
+    //       month,
+    //       year,
+    //       hour,
+    //       minute,
+    //       wDir, 
+    //       wSpd
+    //     })
+      // })
+  //     .catch((error) => {
+  //       console.error("Error reading the file:", error)
+  //     })
+  // }, [message])
   
 
 
@@ -107,18 +112,23 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>Hello from SurfLog</p>
-        <p>This is a message from the backend Express server: {message}</p>
-        {/* <p>
-          The last buoy reading was at: {currentReading.month}-{currentReading.day}-{currentReading.year}:{currentReading.hour}:{currentReading.minute} GMT time.  The wind on the Edisto buoy is currently blowing from {currentReading.wDir} degrees and the windspeed is {currentReading.wSpd}.
-        </p> */}
-        <button onClick={handleRegister}>Register</button>
-        <button onClick={handleLogIn}>Log In</button>
-        <button onClick={handlePasswordChange}>Change Password</button>
-      </header>
-    </div>
+    <main className="App">
+      {}
+      <p>This is a message from the backend Express server: {message}</p>
+      <button onClick={handleRegister}>Register</button>
+      <button onClick={handleLogIn}>Log In</button>
+     <button onClick={handlePasswordChange}>Change Password</button>
+    </main>
+    // <div className="App">
+    //   <header className="App-header">
+    //     <p>Hello from SurfLog</p>
+   
+    //     {/* <p>
+    //       The last buoy reading was at: {currentReading.month}-{currentReading.day}-{currentReading.year}:{currentReading.hour}:{currentReading.minute} GMT time.  The wind on the Edisto buoy is currently blowing from {currentReading.wDir} degrees and the windspeed is {currentReading.wSpd}.
+    //     </p> */}
+  
+    //   </header>
+    // </div>
   )
 }
 
