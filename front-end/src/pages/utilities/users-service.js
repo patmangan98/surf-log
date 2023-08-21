@@ -42,6 +42,7 @@ export function getUser() {
         const payload = token.split('.')[1]
         const decodedPayload = atob(payload)
         const parsedPayload = JSON.parse(decodedPayload)
+        return parsedPayload.user
     } else {
         return null
     }

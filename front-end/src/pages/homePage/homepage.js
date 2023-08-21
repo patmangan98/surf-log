@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 
 
 export default function HomePage () {
+    const [message, setMessage] = useState("")
+    const [errorMsg, setErrorMsg] = useState("")
 
     const [currentReading, setCurrentReading] = useState({
         day: "",
