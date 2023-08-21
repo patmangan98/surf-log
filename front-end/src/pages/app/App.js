@@ -1,8 +1,15 @@
 import "./App.css"
 import React, { useState, useEffect } from "react"
+import { register } from '../../api'
+import { login } from '../../api'
+import { setToken } from '../../utility'
+import { getToken } from '../../utility'
+import { updatePassword } from '../../api'
+import { isUserLoggedIn } from '../../utility'
 
 function App() {
   const [message, setMessage] = useState("")
+  const [errorMsg, setErrorMsg] = useState("")
 
   const [currentReading, setCurrentReading] = useState({
     day: "",
@@ -50,8 +57,54 @@ function App() {
         console.error("Error reading the file:", error)
       })
   }, [message])
-  console.log(message)
-  console.log(currentReading.month)
+  
+
+
+  const handleRegister = async () => {
+    try {
+          
+      const tokenValue = await register({
+        email: 'test@gmail.com',
+        username: 'patrickusername', 
+        password: 'test12345'
+      })
+
+      setToken(tokenValue.token)
+      
+    } catch (error) {
+      console.log('READ THE ERROR HERE:', error)
+      if (error){
+        setErrorMsg(`${error.toString().substr(26)}`)
+      }
+    }
+  }
+
+  const handleLogIn = async () => {
+
+    try {
+      
+      const tokenValue = await login({
+        username: 'patrickusername', 
+        password: 'thisisanewpas8687jht'
+      })
+      console.log(tokenValue)
+      setToken(tokenValue.token)
+      
+    } catch (error) {
+      console.error(error)
+      setErrorMsg("Invalid username or password.")
+    }
+  }
+
+  const handlePasswordChange = async () => {
+    try {
+      const token = getToken()
+      const data = { password: 'thisisanewpas8687jht' }
+      await updatePassword(token, data)
+    } catch (error) {
+      console.log(error)
+    }
+  };
 
   return (
     <div className="App">
@@ -61,6 +114,9 @@ function App() {
         <p>
           The last buoy reading was at: {currentReading.month}-{currentReading.day}-{currentReading.year}:{currentReading.hour}:{currentReading.minute} GMT time.  The wind on the Edisto buoy is currently blowing from {currentReading.wDir} degrees and the windspeed is {currentReading.wSpd}.
         </p>
+        <button onClick={handleRegister}>Register</button>
+        <button onClick={handleLogIn}>Log In</button>
+        <button onClick={handlePasswordChange}>Change Password</button>
       </header>
     </div>
   )
