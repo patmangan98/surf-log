@@ -1,15 +1,18 @@
 // Update with your config settings.
-
+require('dotenv').config()
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 module.exports = {
-  client: process.env.db_client || 'mysql',
-  connection: process.env.PG_CONNECTION_STRING || {
-    host : process.env.db_host,
-    port : process.env.db_port,
-    user : process.env.db_user,
-    password : process.env.db_password,
-    database : process.env.db_database 
+    client: 'mysql',
+    connection: {
+      host : process.env.DB_HOST,
+      port : process.env.DB_PORT,
+      user : process.env.DB_USER,
+      password : process.env.DB_PASSWORD,
+      database : process.env.DB_NAME 
+    }
   }
-}
+
+
+

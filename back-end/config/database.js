@@ -8,6 +8,7 @@ const db = mysql.createConnection({
     database: process.env.DB_DATABASE,
 })
 
+
 db.connect((err) => {
     if (err) {
         console.error(err)
