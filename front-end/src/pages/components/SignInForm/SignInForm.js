@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { register } from '../../utilities/users-api';
 import { setToken } from '../../utilities/users-service';
+import { isUserLoggedIn } from '../../../utility';
 
 
 
@@ -25,6 +26,8 @@ async function handleSubmit(event) {
         const formData = {...credentials}
         await register(formData)
             .then((responseData) => setToken(responseData.token))
+        await setUser(isUserLoggedIn())
+            
             //await console.log(formData.token)
         //await setUser(formData.token)
     
