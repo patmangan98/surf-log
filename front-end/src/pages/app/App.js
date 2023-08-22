@@ -5,17 +5,16 @@ import { register } from '../../api'
 import { login } from '../../api'
 import { setToken } from '../../utility'
 import { getToken } from '../../utility'
-import { getUser } from "../utilities/users-service"
 import { updatePassword } from '../../api'
 import { isUserLoggedIn } from '../../utility'
 import HomePage from "../homePage/homepage"
-import AuthPage from "../AuthPage/AuthPage.js"
+import AuthPage from "../AuthPage/AuthPage"
 // import AuthPage from "../Authpage/Authpage"
 
 function App() {
   // const [message, setMessage] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
-  const [user, setUser] = useState(getUser())
+  const [user, setUser] = useState(isUserLoggedIn())
   // const [currentReading, setCurrentReading] = useState({
   //   day: "",
   //   month: "",

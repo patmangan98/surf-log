@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-
+import { clearToken } from "../../utility"
 
 export default function HomePage () {
     const [message, setMessage] = useState("")
@@ -53,6 +53,10 @@ export default function HomePage () {
       }, [message])
       
 
+      function handleLogOut () {
+        clearToken()
+      }
+
     return (
         <>
         <p>Hello from SurfLog</p>
@@ -60,6 +64,7 @@ export default function HomePage () {
         <p>
           The last buoy reading was at: {currentReading.month}-{currentReading.day}-{currentReading.year}:{currentReading.hour}:{currentReading.minute} GMT time.  The wind on the Edisto buoy is currently blowing from {currentReading.wDir} degrees and the windspeed is {currentReading.wSpd}.
         </p>
+        <button onClick={handleLogOut}>Log-Out</button>
         </>
     )
 }

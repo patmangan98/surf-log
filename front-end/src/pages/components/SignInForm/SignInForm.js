@@ -24,10 +24,8 @@ async function handleSubmit(event) {
     try {
         const formData = {...credentials}
         await register(formData)
-            .then(() => {
-                setToken(String(formData.token))
-            })
-
+            .then((responseData) => setToken(responseData.token))
+            //await console.log(formData.token)
         //await setUser(formData.token)
     
     } catch (error) {
