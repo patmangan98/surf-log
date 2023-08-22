@@ -114,7 +114,7 @@ function App() {
     <main className="App">
       {user ? (
         <>
-        <HomePage/>
+        <HomePage setUser={setUser}/>
         </>
       ):(
         <AuthPage setUser = {setUser}/>
