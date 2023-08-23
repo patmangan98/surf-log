@@ -19,34 +19,10 @@ export const isUserLoggedIn = () => {
 
 export const getToken = () => {
     const token = localStorage.getItem('session_token')
-
-    if (!token) return null
-
-    const payload = token.split('.')[1]
-    const decodedPayload = atob(payload)
-    const parsedPayload = JSON.parse(decodedPayload)
-
-    if (parsedPayload.exp < Date.now() / 1000) {
-        localStorage.removeItem('token')
-        return null
-    } else {
-        return token
-    }
-
-    
-  }
-
-export function getUser() {
-    const token = getToken()
-    if (token) {
-        const payload = token.split('.')[1]
-        const decodedPayload = atob(payload)
-        const parsedPayload = JSON.parse(decodedPayload)
-        return parsedPayload.user
-    } else {
-        return null
-    }
+    return token
 }
+
+
 
 
 export const setToken = (token) => {
@@ -59,6 +35,6 @@ export const setToken = (token) => {
 
 export const clearToken = () => {
     localStorage.removeItem('session_token')
-    return true
+    return false
   }
   
