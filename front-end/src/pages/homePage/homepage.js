@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { clearToken } from "../../utility"
 
-export default function HomePage () {
+export default function HomePage ({ setUser }) {
     const [message, setMessage] = useState("")
     const [errorMsg, setErrorMsg] = useState("")
 
@@ -55,6 +55,7 @@ export default function HomePage () {
 
       function handleLogOut () {
         clearToken()
+        setUser()
       }
 
     return (
