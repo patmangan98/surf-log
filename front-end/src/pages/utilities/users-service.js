@@ -23,8 +23,6 @@ export const getToken = () => {
 }
 
 
-
-
 export const setToken = (token) => {
     if(typeof token !== 'string') {
       throw new Error("token must be type: 'string'")

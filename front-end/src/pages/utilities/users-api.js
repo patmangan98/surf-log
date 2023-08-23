@@ -6,47 +6,47 @@ const baseUrl = 'http://localhost:8000'
 //should have signUp, login, maybe send request
 
 
-export const register = async(data) => {
+export const register = async (data) => {
 
 
-    console.log(data)
-    const response = await fetch(`${baseUrl}/auth/register`, {
-      method: "POST", 
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(data),
-    })
-  
-    const responseData = await response.json()
-  
-    if (!response.ok) {
-      throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
-    }
-  
-    return responseData
+  console.log(data)
+  const response = await fetch(`${baseUrl}/auth/register`, {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+
+  const responseData = await response.json()
+
+  if (!response.ok) {
+    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
   }
+
+  return responseData
+}
 
 export const login = async (data) => {
-  
-    const {
-      username,
-      password
-    } = data
-  
-    const response = await fetch(`${baseUrl}/auth/login`, {
-      method: "POST",
-      headers: new Headers({
-        "Authorization": `Basic ${btoa(`${username}:${password}`)}` //btoa is only deprecated in Node.js not in browser environments!
-      }),
-    })
-  
-    const responseData = await response.json()
-  
-    if (!response.ok) {
-      throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
-    }
-  
-    return responseData
+
+  const {
+    username,
+    password
+  } = data
+
+  const response = await fetch(`${baseUrl}/auth/login`, {
+    method: "POST",
+    headers: new Headers({
+      "Authorization": `Basic ${btoa(`${username}:${password}`)}` //btoa is only deprecated in Node.js not in browser environments!
+    }),
+  })
+
+  const responseData = await response.json()
+
+  if (!response.ok) {
+    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
   }
+
+  return responseData
+}
 
 // export default async function sendRequest(url, method='GET', payload=null) {
 //     const options = { method }
@@ -72,22 +72,58 @@ export const login = async (data) => {
 //         throw new Error('Bad Request')
 //     }
 // }
+export const getUserProfile = async (username) => {
 
-export const getUser = async(token) => {
+  console.log(`${baseUrl}/user/${username}`)
+  const response = await fetch(`${baseUrl}/user/username/${username}`, {
+    method: "GET",
+  })
 
-    const response = await fetch(`${baseUrl}/user/token`, {
-      method: "GET", 
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-    })
-  
-    const responseData = await response.json()
-  
-    if (!response.ok) {
-      throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
-    }
-    
-    return responseData
+  const responseData = await response.json()
+
+  if (!response.ok) {
+    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
   }
+
+  return responseData
+}
+
+export const getUser = async (token) => {
+
+  const response = await fetch(`${baseUrl}/user/token`, {
+    method: "GET",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+  })
+
+  const responseData = await response.json()
+
+  if (!response.ok) {
+    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+  }
+
+  return responseData
+}
+
+
+export const updatePassword = async (token, data) => {
+
+  const response = await fetch(`${baseUrl}/auth/updatePassword`, {
+    method: "post",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(data),
+  })
+
+  const responseData = await response.json()
+
+  if (!response.ok) {
+    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+  }
+
+  return responseData
+}
