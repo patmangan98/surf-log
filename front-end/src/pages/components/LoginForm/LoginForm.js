@@ -58,7 +58,7 @@ async function handleSubmit(event) {
               required
            />
 
-           <button type='submit' onClick={handleSubmit}>Sign Up</button>
+           <button type='submit' onClick={handleSubmit}>Log In</button>
 
         </form>
         
