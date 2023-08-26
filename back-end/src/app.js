@@ -3,8 +3,8 @@ const cors = require('cors')
 const { pathLogger } = require('./middleware/logger')
 const router = require('./router')
 
-require('dotenv').config()
-require('../config/database')
+// require('dotenv').config()
+// require('../config/database')
 
 const app = express()
 
