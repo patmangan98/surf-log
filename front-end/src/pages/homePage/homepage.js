@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react"
 import { clearToken } from "../../utility"
+import { addNewPost } from '../../api'
+import { deletePost } from '../../api'
+import { getToken } from '../../utility'
 
 export default function HomePage ({ setUser }) {
     const [message, setMessage] = useState("")
@@ -57,6 +60,31 @@ export default function HomePage ({ setUser }) {
         clearToken()
         setUser()
       }
+     
+      //Dummy post data
+      const post = {
+        user_id: "1",
+        post_date: "2023-08-26",
+        post_description: "New post to test token authentication",
+        post_location: "Folly Beach South Carolina",
+        WDIR: "270",
+        WSPD: "5.2",
+        GST: "5.6",
+        WVHT: "2.2",
+        DPD: "6.3",
+        APD: "5.2",
+        MWD: "155",
+        PRES: "29.24"
+      }
+      const token = getToken()
+      const handleNewPost = () => {
+        addNewPost(token, post)
+      }
+
+      const handleDelete = () => {
+        const post_id = 3
+        deletePost(post_id)
+      }
 
     return (
         <>
@@ -65,6 +93,8 @@ export default function HomePage ({ setUser }) {
         <p>
           The last buoy reading was at: {currentReading.month}-{currentReading.day}-{currentReading.year}:{currentReading.hour}:{currentReading.minute} GMT time.  The wind on the Edisto buoy is currently blowing from {currentReading.wDir} degrees and the windspeed is {currentReading.wSpd}.
         </p>
+        <button onClick={handleNewPost}>Add New Post</button>
+        <button onClick={handleDelete}>Delete A Post</button>
         <button onClick={handleLogOut}>Log-Out</button>
         </>
     )
