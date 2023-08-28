@@ -1,18 +1,5 @@
-//The base url of the API, can be changed in the .env file
 const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000'
 
-
-// /**
-//  * Sends a login request to the api for a user with the provided username and password.
-//  *
-//  * @async
-//  * @function
-//  * @param {Object} data - An object containing the user's login credentials.
-//  * @param {string} data.username - The user's username.
-//  * @param {string} data.password - The user's password.
-//  * @returns {Promise<Object>} - A promise that resolves with the user's data.
-//  * @throws {Error} - Throws an error if there was an issue with the login request.
-//  */
 export const login = async (data) => {
   
   const {
@@ -36,20 +23,7 @@ export const login = async (data) => {
   return responseData
 }
 
-// /**
-//  * Sends a registration request to the api for a user with the provided data.
-//  *
-//  * @async
-//  * @function
-//  * @param {Object} data - An object containing the user's data require to create an account.
-//  * @param {string} data.username - The user's username
-//  * @param {string} data.password - The user's password  
-//  * @param {*} data.[...] - Any additional user data required for account creation
-//  * @returns {Promise<Object>} - A promise that resolves with the user's data.
-//  * @throws {Error} - Throws an error if there was an issue with the login request.
-//  */
 export const register = async(data) => {
-
 
   console.log(data)
   const response = await fetch(`${baseUrl}/auth/register`, {
@@ -102,52 +76,6 @@ export const getUser = async(token) => {
   return responseData
 }
 
-// export const getGameHistory = async (username) => {
-
-//   const response = await fetch(`${baseUrl}/game/${username}`, {
-//     method: "GET",
-//   })
-
-//   const responseData = await response.json()
-
-//   if (!response.ok) {
-//     throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
-//   }
-
-//   return responseData
-// }
-
-// export const getGameStatistics = async (username) => {
-
-//   const response = await fetch(`${baseUrl}/stats/${username}`, {
-//     method: "GET",
-//   })
-
-//   const responseData = await response.json()
-
-//   if (!response.ok) {
-//     throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
-//   }
-
-//   return responseData
-// }
-
-// export const getQuestion = async (difficulty, category) => {
-
-//   const response = await fetch(`${baseUrl}/questions/random?difficulty=${encodeURIComponent(difficulty)}&category=${encodeURIComponent(category)}`, { // using a query string
-//     method: "GET",
-    
-//   })
-
-//   const responseData = await response.json()
-
-//   if (!response.ok) {
-//     throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
-//   }
-
-//   return responseData
-// }
-
 export const updatePassword = async(token, data) => {
 
   const response = await fetch(`${baseUrl}/auth/updatePassword`, {
@@ -168,41 +96,41 @@ export const updatePassword = async(token, data) => {
   return responseData
 }
 
-// export const sendGameResults = async(token, data) => {
+export const addNewPost = async(token, post) => {
 
-//   console.log('in the ui api', data)
-//   const response = await fetch(`${baseUrl}/game/results`, {
-//     method: "post", 
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authorization': `Bearer ${token}`
-//     },
-//     body: JSON.stringify(data),
-//   })
-
-//   const responseData = await response.json()
-
-//   if (!response.ok) {
-//     throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
-//   }
   
-//   return responseData
-// }
+  const response = await fetch(`${baseUrl}/post/newpost`, {
+    method: "post", 
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(post),
+  })
 
-// export const getLeaderboard = async() => {
+  const responseData = await response.json()
 
-//   const response = await fetch(`${baseUrl}/leaderboard`, {
-//     method: "GET", 
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//   })
-
-//   const responseData = await response.json()
-
-//   if (!response.ok) {
-//     throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
-//   }
+  if (!response.ok) {
+    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+  }
   
-//   return responseData
-// }
+  return responseData
+}
+
+export const deletePost= async (id) => {
+ 
+  console.log("the deleted id is", id)
+  const response = await fetch(`${baseUrl}/post/id/${id}`, {
+    method: "DELETE",
+  })
+
+  const responseData = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      `Status Code: ${response?.status} - ${responseData?.message}`
+    )
+  }
+
+  return responseData
+}

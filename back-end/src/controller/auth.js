@@ -8,7 +8,6 @@ exports.register = async (req, res) => {
     const userData = req.body
     console.log(userData)
 
-
     // if no email was provided
     if (userData.email === "" || userData.email === null) {
       return res.status(406).json({message: "Email was not provided."})

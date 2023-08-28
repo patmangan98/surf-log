@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 exports.authenticate = (req, res, next) => {
   // Check if the correct Auth Header is provided
   const authHeader = req.headers.authorization
+  console.log(authHeader)
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'Invalid authentication header' })
   }
