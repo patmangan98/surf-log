@@ -49,7 +49,8 @@ export default function LoginForm({ setUser, setSignUpVisible, handleToggle}) {
                     flexDirection: 'column',
                     flexWrap: 'wrap',
                     marginLeft: 'auto',
-                    marginRight: 'auto'
+                    marginRight: 'auto',
+                    marginTop: '10vw'
                 }}
             >
 
@@ -66,7 +67,7 @@ export default function LoginForm({ setUser, setSignUpVisible, handleToggle}) {
                             name='username'
                             value={credentials.username}
                             onChange={handleChange}
-                            sx={{ width: '25ch' }}
+                            sx={{ width: '9.5vw' }}
 
                         />
 
@@ -78,7 +79,7 @@ export default function LoginForm({ setUser, setSignUpVisible, handleToggle}) {
                             name='password'
                             value={credentials.password}
                             onChange={handleChange}
-                            sx={{ width: '25ch' }}
+                            sx={{ width: '9.5vw' }}
                         />
 
                         <Button
@@ -87,7 +88,7 @@ export default function LoginForm({ setUser, setSignUpVisible, handleToggle}) {
                             variant="contained"
                             sx={{ width: '15ch', alignSelf: 'center' }}
                         >
-                        Sign Up </Button>
+                        Login </Button>
 
                     </Stack>
 

@@ -54,7 +54,9 @@ export default function SignUpForm({ setUser,  handleToggle }) {
                     flexDirection: 'column',
                     flexWrap: 'wrap',
                     marginLeft: 'auto',
-                    marginRight: 'auto'
+                    marginRight: 'auto',
+                    padding: '1.5vw',
+                    marginTop: '10vw'
                 }}
             >
 
@@ -70,6 +72,7 @@ export default function SignUpForm({ setUser,  handleToggle }) {
                             label="Email"
                             type='email'
                             name='email'
+                            sx={{ width: '9.5vw' }}
                             value={credentials.email}
                             onChange={handleChange}
                             required
@@ -81,6 +84,7 @@ export default function SignUpForm({ setUser,  handleToggle }) {
                             label="Username"
                             type='text'
                             name='username'
+                            sx={{ width: '9.5vw' }}
                             value={credentials.username}
                             onChange={handleChange}
                             required
@@ -92,6 +96,7 @@ export default function SignUpForm({ setUser,  handleToggle }) {
                             label="Password"
                             type='password'
                             name='password'
+                            sx={{ width: '9.5vw' }}
                             value={credentials.password}
                             onChange={handleChange}
                             required
@@ -101,7 +106,7 @@ export default function SignUpForm({ setUser,  handleToggle }) {
                             type='submit'
                             onClick={handleSubmit}
                             variant="contained"
-                            sx={{ width: '15ch', alignSelf: 'center' }}
+                            sx={{ width: '7vw', alignSelf: 'center'}}
                         >Sign Up</Button>
 
                     </Stack>
