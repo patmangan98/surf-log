@@ -1,13 +1,25 @@
 import LoginForm from "../components/LoginForm/LoginForm";
 import SignUpForm from "../components/SignInForm/SignInForm";
+import { useState } from "react";
 //Renamed form .js
 export default function AuthPage ({ setUser }) {
-    return (
-        <>
-        <h1>Sign-Up</h1>
-        <SignUpForm setUser={setUser}/>
-        <h1>Login</h1>
-        <LoginForm setUser={setUser}/>
-        </>
-    )
+
+    const [signUpVisible, setSignUpVisible] = useState(true)
+    
+    function handleToggle() {
+        setSignUpVisible(!signUpVisible)
+    }
+
+    if (signUpVisible === true) {
+        return (
+            <SignUpForm setUser={setUser} setSignUpVisible={setSignUpVisible} handleToggle={handleToggle}/>
+        )
+    }
+
+    if (signUpVisible === !true) {
+        return (
+            <LoginForm setUser={setUser} setSignUpVisible={setSignUpVisible} handleToggle={handleToggle}/>
+        )
+    }
+
 }

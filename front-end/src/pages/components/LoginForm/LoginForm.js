@@ -4,7 +4,7 @@ import { setToken } from "../../utilities/users-service";
 import { login } from "../../utilities/users-api";
 import { Paper, Button, TextField, Divider, Stack, Typography } from '@mui/material'
 
-export default function LoginForm({ setUser }) {
+export default function LoginForm({ setUser, setSignUpVisible, handleToggle}) {
 
 
     const [credentials, setCredentials] = useState({
@@ -92,7 +92,19 @@ export default function LoginForm({ setUser }) {
                     </Stack>
 
                 </form>
+
+               
             </Paper>
+            <br></br>
+            <br></br>
+            <Button 
+            variant="caption"
+            onClick={handleToggle}
+            >
+                
+
+                Did you mean to Sign-Up?
+                </Button>
 
         </>
     )
