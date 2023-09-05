@@ -64,11 +64,11 @@ export default function HomePage ({ setUser }) {
      
       //Dummy post data
       const post = {
-        post_id:"1",
+        
         user_id: "1",
         post_date: "2023-09-03",
-        post_description: "I had a fabulous time today",
-        post_location: "Cape Hatteras North Carolina",
+        post_description: "New New Post",
+        post_location: "Rincon Californina",
         WDIR: "270",
         WSPD: "5.2",
         GST: "5.6",
@@ -80,7 +80,7 @@ export default function HomePage ({ setUser }) {
       }
       const token = getToken()
       const handleNewPost = () => {
-        addNewPost(token, post)
+        addNewPost(post)
       }
 
       const handleDelete = () => {

@@ -98,6 +98,7 @@ export const updatePassword = async(token, data) => {
 
 export const addNewPost = async(post) => {
 
+  console.log(post)
   
   const response = await fetch(`${baseUrl}/post/newpost`, {
     method: "POST", 
