@@ -1,6 +1,6 @@
-const { showPostsByUsername, createPost, deletePost } = require('../service/posts')
+const { showPostsByUsername, createPost, deletePost, updatePost } = require('../service/posts')
 
-exports.getPostsByUsername = async (req, res) => {
+exports.getPostsByUserId = async (req, res) => {
   
   try {
     const posts = await showPostsByUsername(req.params.username)
@@ -15,9 +15,23 @@ exports.getPostsByUsername = async (req, res) => {
   }
 }
 
-exports.addPost = async (req, res) => {
+exports.getPostsByUsername = async (req, res) => {
+  
+  console.log(req.params.username)
+  try {
+    const posts = await showPostsByUsername(req.params.username)
+    
+    res.json(posts)
+    
 
-  console.log(req.body)
+  } catch (error) {
+
+    console.error(error)
+    res.status(500).send("Internal Server Error")
+  }
+}
+
+exports.addPost = async (req, res) => {
 
   const post = req.body
  
@@ -36,13 +50,24 @@ exports.addPost = async (req, res) => {
 
 exports.deletePost = async (req, res) => {   
   
-  console.log('made it to the controller on delete')
   try {
     
-    console.log(req.params)
     const update = await deletePost(req.params.id)
    
     return res.json({message: "Post was deleted."})
+
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+exports.updatePost = async (req, res) => {   
+  
+  try {
+  
+    const update = await updatePost(req.body)
+   
+    return res.json({message: "Post was updated."})
 
   } catch (error) {
     console.log(error)

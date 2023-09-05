@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { clearToken } from "../../utility"
 import { addNewPost } from '../../api'
 import { deletePost } from '../../api'
+import { updatePost } from '../../api'
 import { getToken } from '../../utility'
 
 export default function HomePage ({ setUser }) {
@@ -63,10 +64,11 @@ export default function HomePage ({ setUser }) {
      
       //Dummy post data
       const post = {
+        
         user_id: "1",
-        post_date: "2023-08-26",
-        post_description: "New post to test token authentication",
-        post_location: "Folly Beach South Carolina",
+        post_date: "2023-09-03",
+        post_description: "New New Post",
+        post_location: "Rincon Californina",
         WDIR: "270",
         WSPD: "5.2",
         GST: "5.6",
@@ -78,12 +80,16 @@ export default function HomePage ({ setUser }) {
       }
       const token = getToken()
       const handleNewPost = () => {
-        addNewPost(token, post)
+        addNewPost(post)
       }
 
       const handleDelete = () => {
-        const post_id = 3
+        const post_id = 4
         deletePost(post_id)
+      }
+
+      const handleUpdate = () => {
+        updatePost(post)
       }
 
     return (
@@ -95,6 +101,7 @@ export default function HomePage ({ setUser }) {
         </p>
         <button onClick={handleNewPost}>Add New Post</button>
         <button onClick={handleDelete}>Delete A Post</button>
+        <button onClick={handleUpdate}>Update A Post</button>
         <button onClick={handleLogOut}>Log-Out</button>
         </>
     )

@@ -79,7 +79,7 @@ export const getUser = async(token) => {
 export const updatePassword = async(token, data) => {
 
   const response = await fetch(`${baseUrl}/auth/updatePassword`, {
-    method: "post", 
+    method: "POST", 
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -96,14 +96,14 @@ export const updatePassword = async(token, data) => {
   return responseData
 }
 
-export const addNewPost = async(token, post) => {
+export const addNewPost = async(post) => {
 
+  console.log(post)
   
   const response = await fetch(`${baseUrl}/post/newpost`, {
-    method: "post", 
+    method: "POST", 
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify(post),
   })
@@ -118,9 +118,8 @@ export const addNewPost = async(token, post) => {
 }
 
 export const deletePost= async (id) => {
- 
-  console.log("the deleted id is", id)
-  const response = await fetch(`${baseUrl}/post/id/${id}`, {
+
+  const response = await fetch(`${baseUrl}/post/${id}`, {
     method: "DELETE",
   })
 
@@ -132,5 +131,46 @@ export const deletePost= async (id) => {
     )
   }
 
+  return responseData
+}
+
+export const getPosts = async (username) => {
+
+  console.log(`${baseUrl}/user/${username}`)
+  const response = await fetch(`${baseUrl}/posts/${username}`, {
+    method: "GET",
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  const responseData = await response.json()
+
+  if (!response.ok) {
+    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+  }
+
+  return responseData
+}
+
+export const updatePost = async(post) => {
+
+
+    console.log(post);
+  
+    const response = await fetch(`${baseUrl}/post/`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json", 
+      },
+      body: JSON.stringify(post),
+    })
+
+  const responseData = await response.json()
+
+  if (!response.ok) {
+    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+  }
+  
   return responseData
 }
