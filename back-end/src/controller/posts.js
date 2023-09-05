@@ -33,8 +33,6 @@ exports.getPostsByUsername = async (req, res) => {
 
 exports.addPost = async (req, res) => {
 
-  console.log(req.body)
-
   const post = req.body
  
   try {
