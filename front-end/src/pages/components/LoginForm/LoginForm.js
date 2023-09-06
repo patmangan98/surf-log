@@ -103,81 +103,59 @@ export default function LoginForm({ setUser, setSignUpVisible, handleToggle }) {
             <br></br>
             <br></br> */}
 
-      <Grid container direction="row" justifyContent="center">
-        <Card
-          className="form-container"
-          sx={{
-            borderRadius: "20px",
-            boxShadow: "3px 2px 7px rgb(0, 0, 0, 0.5)",
-          }}
-        >
-          <CardContent sx={{ display: "grid", margin: "20px" }}>
-            <Typography
-              fontFamily="monospace"
-              fontWeight="700"
-              display="flex"
-              justifyContent="center"
-              fontSize="30px"
-              color="#0288d1"
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+          <Grid container direction="row" justifyContent="center" alignItems={"center"}>
+            <Card
+              className="form-container"
+              sx={{
+                borderRadius: "10px",
+              }}
+            elevation={5}
+            borderRadius ={'20px'}
             >
-              SURFBOARD
-            </Typography>
-
-            <Typography
-              fontFamily="monospace"
-              fontWeight="700"
-              display="flex"
-              justifyContent="center"
-              fontSize="20px"
-              color="#0288d1"
-            >
-              An Online Surf Journal
-            </Typography>
-
-            <Typography variant="h6" fontWeight="bold" mt="10px">
-              Sign in
-            </Typography>
-
-            <Typography color="red" variant="caption">
-              {errorMsg}
-            </Typography>
-
-            <Grid container direction="column" justify="center">
-              <TextField
-                className="form"
-                label="Username"
-                sx={{ marginBottom: "15px", marginTop: "10px" }}
-                name="username"
-                value={credentials.username}
-                onChange={handleChange}
-              />
-
-              <TextField
-                className="form"
-                id="outlined-password-input"
-                label="Password"
-                type="password"
-                name="password"
-                sx={{ marginBottom: "5px" }}
-                value={credentials.password}
-                onChange={handleChange}
-              />
-              <br></br>
-              <Button
-                type="submit"
-                onClick={handleSubmit}
-                variant="contained"
-                sx={{ width: "15ch", alignSelf: "center" }}
-              >
-                Sign Up{" "}
-              </Button>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid>
-      <Button variant="caption" onClick={handleToggle}>
-        Did you mean to Sign-Up?
-      </Button>
+              <CardContent sx={{ display: "grid", margin: "15px" }}>
+                <Typography variant="h6" fontWeight="bold" mt="10px">
+                  Log-In
+                </Typography>
+                <Typography color="red" variant="caption">
+                  {errorMsg}
+                </Typography>
+                <Grid container direction="column" justify="center">
+                  <TextField
+                    className="form"
+                    label="Username"
+                    sx={{ marginBottom: "15px", marginTop: "10px" }}
+                    name="username"
+                    value={credentials.username}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    className="form"
+                    id="outlined-password-input"
+                    label="Password"
+                    type="password"
+                    name="password"
+                    sx={{ marginBottom: "5px" }}
+                    value={credentials.password}
+                    onChange={handleChange}
+                  />
+                  <br></br>
+                  <Button
+                    type="submit"
+                    onClick={handleSubmit}
+                    variant="contained"
+                    sx={{ width: "15ch", alignSelf: "center" }}
+                  >
+                    Sign Up{" "}
+                  </Button>
+                </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Button variant="caption" onClick={handleToggle}>
+            Did you mean to Sign-Up?
+          </Button>
+      </div>
     </>
   )
 }
