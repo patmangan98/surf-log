@@ -15,6 +15,11 @@ code {
   background-color: #406e8e ;
 }
 
-html {
+/* html {
   background-color: #406e8e;
+} */
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }

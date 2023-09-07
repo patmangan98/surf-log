@@ -1,6 +1,6 @@
 import CompassSVG from './CompassSVG'
 import { Typography } from '@mui/material'
-
+import { teal } from '@mui/material/colors'
 export default function AuthPageLoading () {
     return (
         <div style={{display: 'flex',
@@ -15,7 +15,7 @@ export default function AuthPageLoading () {
         display="flex"
         justifyContent="center"
         fontSize="40px"
-        color="#cbf7ed"
+        color= {teal[500]}
         marginBottom={'30px'}
         >
             Welcome to SurfBoard

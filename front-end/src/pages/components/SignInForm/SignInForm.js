@@ -52,90 +52,92 @@ export default function SignUpForm({ setUser, handleToggle }) {
 
     return (
         <>
-            <motion.div className= 'background'
-               initial={{ opacity: 0, scale: 0.5 }}
-               animate={{ opacity: 1, scale: 1 }}
-               transition={{
-                   type: "spring",
-                   stiffness: 100,
-                   damping: 10,
-                   mass: 1,
-                   velocity: 2
-               }}
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    minHeight: '100vh',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}>
-                <Grid container direction="row" justifyContent="center">
-                    <Card
-                        className="form-container"
-                        sx={{
-                            borderRadius: "10px",
-                        }}
-                    >
-                        <CardContent sx={{ display: "grid", margin: "15px" }}>
-                            <Typography variant="h6" fontWeight="bold" mt="10px">
-                                Sign Up
-                            </Typography>
-                            <Typography color="red" variant="caption">
-                                {errorMsg}
-                            </Typography>
-                            <Grid container direction="column" justify="center">
-                                <TextField
-                                    className="form"
-                                    label="Email"
-                                    type="email"
-                                    name="email"
-                                    sx={{ marginBottom: "15px", marginTop: "10px" }}
-                                    required
-                                    value={credentials.email}
-                                    onChange={handleChange}
-                                />
-                                <TextField
-                                    className="form"
-                                    id="outlined-password-input"
-                                    label="Username"
-                                    name="username"
-                                    sx={{ marginBottom: "5px" }}
-                                    required
-                                    value={credentials.username}
-                                    onChange={handleChange}
-                                />
-                                <TextField
-                                    className="form"
-                                    id="outlined-password-input"
-                                    label="Password"
-                                    type="password"
-                                    name="password"
-                                    sx={{ marginBottom: "5px", paddingTop: "10px" }}
-                                    required
-                                    value={credentials.password}
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                sx={{
-                                    width: "90px",
-                                    mt: "10px",
-                                    display: "flex",
-                                    justifySelf: "center",
-                                }}
-                                onClick={() => handleSubmit()}
-                            >
-                                sign in
-                            </Button>
-                        </CardContent>
-                    </Card>
-                </Grid>
-                <Button variant="caption" sx={{marginTop: '20px'}} onClick={handleToggle}>
-                    Did you mean to Log-in?
-                </Button>
-            </motion.div>
+            <div className= 'background'>
+                <motion.div 
+                   initial={{ opacity: 0, scale: 0.5 }}
+                   animate={{ opacity: 1, scale: 1 }}
+                   transition={{
+                       type: "spring",
+                       stiffness: 100,
+                       damping: 10,
+                       mass: 1,
+                       velocity: 2
+                   }}
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        minHeight: '100vh',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}>
+                    <Grid container direction="row" justifyContent="center">
+                        <Card
+                            className="form-container"
+                            sx={{
+                                borderRadius: "10px",
+                            }}
+                        >
+                            <CardContent sx={{ display: "grid", margin: "15px" }}>
+                                <Typography variant="h6" fontWeight="bold" mt="10px">
+                                    Sign Up
+                                </Typography>
+                                <Typography color="red" variant="caption">
+                                    {errorMsg}
+                                </Typography>
+                                <Grid container direction="column" justify="center">
+                                    <TextField
+                                        className="form"
+                                        label="Email"
+                                        type="email"
+                                        name="email"
+                                        sx={{ marginBottom: "15px", marginTop: "10px" }}
+                                        required
+                                        value={credentials.email}
+                                        onChange={handleChange}
+                                    />
+                                    <TextField
+                                        className="form"
+                                        id="outlined-password-input"
+                                        label="Username"
+                                        name="username"
+                                        sx={{ marginBottom: "5px" }}
+                                        required
+                                        value={credentials.username}
+                                        onChange={handleChange}
+                                    />
+                                    <TextField
+                                        className="form"
+                                        id="outlined-password-input"
+                                        label="Password"
+                                        type="password"
+                                        name="password"
+                                        sx={{ marginBottom: "5px", paddingTop: "10px" }}
+                                        required
+                                        value={credentials.password}
+                                        onChange={handleChange}
+                                    />
+                                </Grid>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    sx={{
+                                        width: "90px",
+                                        mt: "10px",
+                                        display: "flex",
+                                        justifySelf: "center",
+                                    }}
+                                    onClick={() => handleSubmit()}
+                                >
+                                    sign in
+                                </Button>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Button variant="caption" sx={{marginTop: '20px'}} onClick={handleToggle}>
+                        Did you mean to Log-in?
+                    </Button>
+                </motion.div>
+            </div>
         </>
     )
 }
