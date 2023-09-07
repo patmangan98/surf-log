@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { motion, useAnimation } from "framer-motion"
 import { register } from "../../utilities/users-api"
 import { setToken } from "../../utilities/users-service"
 import { isUserLoggedIn } from "../../../utility"
@@ -9,7 +10,10 @@ import {
     Card,
     CardContent,
     Grid,
+    duration,
 } from "@mui/material"
+
+
 
 export default function SignUpForm({ setUser, handleToggle }) {
     const [credentials, setCredentials] = useState({
@@ -48,7 +52,23 @@ export default function SignUpForm({ setUser, handleToggle }) {
 
     return (
         <>
-            <div className= 'background' style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+            <motion.div className= 'background'
+               initial={{ opacity: 0, scale: 0.5 }}
+               animate={{ opacity: 1, scale: 1 }}
+               transition={{
+                   type: "spring",
+                   stiffness: 100,
+                   damping: 10,
+                   mass: 1,
+                   velocity: 2
+               }}
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: '100vh',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
                 <Grid container direction="row" justifyContent="center">
                     <Card
                         className="form-container"
@@ -112,10 +132,10 @@ export default function SignUpForm({ setUser, handleToggle }) {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Button variant="caption" onClick={handleToggle}>
+                <Button variant="caption" sx={{marginTop: '20px'}} onClick={handleToggle}>
                     Did you mean to Log-in?
                 </Button>
-            </div>
+            </motion.div>
         </>
     )
 }
