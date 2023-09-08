@@ -18,18 +18,6 @@ const fetchAndProccessData = async () => {
   
     //removing blanks aka " "
     const labels = splitData.filter((char) => char !== ' ' && char !== '')
-    // console.log(labels)
-//    console.log(rawArray)
-// [
-//     '2023',   '09',   '08',
-//     '22',     '00',   '10',
-//     '1.0',    '1.0',  'MM',
-//     'MM',     'MM',   'MM',
-//     '1013.6', '28.6', '28.2',
-//     '24.8',   'MM',   '-0.4',
-//     'MM'
-//   ]
-
     //delcare a temp matrix
     let rawDataMatrix = []
     
@@ -49,11 +37,41 @@ const fetchAndProccessData = async () => {
     let sortedMatrix = []
 
     for(let i = 0; i < rawDataMatrix.length; i++) {
-        
+        let subArr = rawDataMatrix[i]
+        if(subArr[9] !== 'MM' && subArr[10] !== 'MM') {
+            sortedMatrix.push(subArr)
+        }
     }
+// console.log(sortedMatrix)
 
 
+    //This is the final matrix; this will hold the concated values 
+    let resultMatrix = []
+
+    //basically, I am conncating 
+    for(let i = 0; i < sortedMatrix.length; i++) {
+        let subArr = sortedMatrix[i]
+        let date = (subArr[0] + '-' + subArr[1] + '-' + subArr[2])
+        let time = (subArr[3] + ':' + subArr[4])
+        let wdir = (subArr[5])
+        let wspd = (subArr[6])
+        let gst = (subArr[7])
+        let wvht = (subArr[8])
+        let dpd = (subArr[9])
+        let apd = (subArr[10])
+        let mwd = (subArr[11])
+        let pres = (subArr[12])
+        let concatArr = [date, time, wdir, wspd, gst, wvht, dpd, apd, mwd, pres]
+        resultMatrix.push(concatArr)
+    }
+     
+    console.log(resultMatrix)
 }
+
+//note: use recursion for the latest date. do the sorting, then check if not mm. If blank, currentRow= index[i], function calls its self. If true, return that row, and send it to the frontend. 
+//have the user send the date down, to determine if wether to grab from cache or to wether use the recursive function. 
+//Also make sure they send the bouy id down (once we have that of course)
+
 
 module.exports = {
     fetchAndProccessData
