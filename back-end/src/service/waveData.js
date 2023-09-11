@@ -5,6 +5,10 @@ const id = '41004'
  
 const fetchAndProccessData = async () => {
     //this is temporarily hard coded. the backslash after realtime is where the bouyid will go
+   
+
+    
+
     const fetchUrl = `https://www.ndbc.noaa.gov/data/realtime2/${id}.txt`
     const fetchData = await fetch(fetchUrl)
     const textData = await fetchData.text()
@@ -49,28 +53,38 @@ const fetchAndProccessData = async () => {
         let apd = (subArr[10])
         let mwd = (subArr[11])
         let pres = (subArr[12])
-        knex('forty_five_day_cache').insert({
-
-            'bouy_id': bouyId,
-            'record_date': date,
-            'record_time': time,
-            'WDIR': wdir,
-            'WSPD': wspd,
-            'GST': gst,
-            'WVHT': wvht,
-            'DPD': dpd,
-            'APD': apd,
-            'MWD' : mwd,
-            'PRES': pres
-
-
-        })
-        // let concatArr = [bouyId, date, time, wdir, wspd, gst, wvht, dpd, apd, mwd, pres]
-        // resultMatrix.push(concatArr)
+        let concatArr = [bouyId, date, time, wdir, wspd, gst, wvht, dpd, apd, mwd, pres]
+        resultMatrix.push(concatArr)
     }
-     
-   const returnData = await knex
+
+try {
+
+ for(const row of resultMatrix) {
+    await knex('forty_five_day_cache').insert({
+        "bouy_id": row[0],
+        "record_date": row[1],
+        "record_time": row[2],
+        "WDIR" : row[3],
+        "WSPD": row[4],
+        "GST": row[5],
+        "WVHT": row[6],
+        "DPD": row[7],
+        "APD": row[8],
+        'MWD': row[9],
+        "PRES" : row[10]
+
+    })
+ }
+  console.log('completed insert')
+
+} catch(error) {
+   console.error(error)     
+}
+
+
+//    const returnData = await knex('forty_five_day_cache').select('*')
     
+//    return returnData
 
 
 }

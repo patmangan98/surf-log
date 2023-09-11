@@ -7,7 +7,7 @@ exports.up = function(knex) {
 
         table.string('bouy_id')
         table.date('record_date')
-        table.time('record_time', { precision: 0 })
+        table.time('record_time')
         table.string('WDIR')
         table.string('WSPD')
         table.string('GST')
