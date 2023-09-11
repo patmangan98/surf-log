@@ -4,9 +4,10 @@
  */
 exports.up = function(knex) {
     return knex.schema.createTable('forty_five_day_cache', function(table){
-        
-        tablestring('record_date')
+
         table.string('bouy_id')
+        table.date('record_date')
+        table.time('record_time', { precision: 0 })
         table.string('WDIR')
         table.string('WSPD')
         table.string('GST')
