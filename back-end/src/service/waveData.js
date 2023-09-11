@@ -5,10 +5,6 @@ const id = '41004'
  
 const fetchAndProccessData = async () => {
     //this is temporarily hard coded. the backslash after realtime is where the bouyid will go
-   
-
-    
-
     const fetchUrl = `https://www.ndbc.noaa.gov/data/realtime2/${id}.txt`
     const fetchData = await fetch(fetchUrl)
     const textData = await fetchData.text()
@@ -89,6 +85,14 @@ try {
 
 }
 
+const retrieveData = async (req, res) => {
+    try {
+    const result = await knex() 
+
+    } catch(error) {
+
+    }
+}
 //note: use recursion for the latest date. do the sorting, then check if not mm. If blank, currentRow= index[i], function calls its self. If true, return that row, and send it to the frontend. 
 //have the user send the date down, to determine if wether to grab from cache or to wether use the recursive function. 
 //Also make sure they send the bouy id down (once we have that of course)
