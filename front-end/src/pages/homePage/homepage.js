@@ -6,11 +6,8 @@ import { updatePost } from "../../api"
 import { getToken } from "../../utility"
 import Journal from "../components/JournalForm/Journal"
 import Grid from "@mui/material/Grid"
-import Paper from "@mui/material/Paper"
 import InputLabel from "@mui/material/InputLabel"
-import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
-import Select from "@mui/material/Select"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import Typography from "@mui/material/Typography"
@@ -19,6 +16,7 @@ import Button from "@mui/material/Button"
 import BuoySelect from "./BuoySelect"
 import { DataBox } from "./DataBox"
 import { metersToFeet } from "../../utility"
+import { getMonthString } from "../../utility"
 
 export default function HomePage({ setUser }) {
   const [message, setMessage] = useState("")
@@ -30,13 +28,10 @@ export default function HomePage({ setUser }) {
   }
 
   const currentDate = new Date()
-  const dateTimeString = currentDate.toString()
+  const year = currentDate.getFullYear()
+  const month = currentDate.getMonth()
+  const day = currentDate.getDate()
 
-  const inputStyles = {
-    // Customize the height and other styles as needed
-    height: "300px", // Adjust the height to make it larger
-    fontSize: "16px", // Adjust the font size as needed
-  }
   const [currentReading, setCurrentReading] = useState({
     YY: "",
     MM: "",
@@ -61,7 +56,6 @@ export default function HomePage({ setUser }) {
         console.error("Error fetching message:", error)
       })
 
-    // const fileUrl = "data/realtime2/41008.txt"
     console.log(selectedBuoy)
     if (!selectedBuoy) {
       setSelectedBuoy("data/realtime2/41008.txt")
@@ -81,7 +75,7 @@ export default function HomePage({ setUser }) {
         console.log("first data split", dataSplit)
         //If the latest reading does not have wave height or wave period, loop through the data string until we find one that does
 
-        if (dataSplit[8] == "MM" || dataSplit[9] == "MM") {
+        if (dataSplit[8] === "MM" || dataSplit[9] === "MM") {
           for (let i = 3; i < dataString.length; i++) {
             //Set the array to the next buoy reading
             dataSplit = dataString[i].split(/\s+/)
@@ -168,87 +162,96 @@ export default function HomePage({ setUser }) {
       <Journal></Journal>
       <br></br> <br></br>
       <br></br>
-      {/* Get the selected buoy from the buoy select component */}
-      <FormControl>
-        <InputLabel id="demo-simple-select-label">
-          Choose a Location/Buoy
-        </InputLabel>
-        <BuoySelect onChange={handleSelectChange}></BuoySelect>
-      </FormControl>
-      <Grid container spacing={2}>
-        {/* Left Side of Page*/}
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardContent>
-              <Grid
-                direction="row"
-                justifyContent="space-evenly"
-                alignItems="stretch"
-              >
-                <DataBox
-                  title="Current Wave Height"
-                  data={currentReading.WVHT}
-                  label="feet"
-                ></DataBox>
-                <DataBox
-                  title="Dominant Wave Period"
-                  data={currentReading.DPD}
-                  label="seconds"
-                ></DataBox>
-                <DataBox
-                  title="Average Wave Period"
-                  data={currentReading.APD}
-                  label="seconds"
-                ></DataBox>
-                <DataBox
-                  title="Mean Wave Direction"
-                  data={currentReading.MWD}
-                  label="degrees"
-                ></DataBox>
-                <DataBox
-                  title="Atmospheric Pressure"
-                  data={currentReading.PRES}
-                  label="atms"
-                ></DataBox>
-              </Grid>
-            </CardContent>
-          </Card>
+      <div style={{ height: "900px", overflowY: "auto" }}>
+        <Grid container spacing={2}>
+          {/* Left Side of Page*/}
+
+          <Grid item xs={12} sm={6} md={3} lg={4} marginLeft={10}>
+            <Card>
+              <CardContent>
+                {/* Get the selected buoy from the buoy select component */}
+                <br></br>
+                <FormControl>
+                  <InputLabel id="demo-simple-select-label">
+                    Choose a Location/Buoy
+                  </InputLabel>
+                  <BuoySelect onChange={handleSelectChange}></BuoySelect>
+                </FormControl>
+                <br></br>
+                <Grid direction="row" spacing={3} container>
+                  <Grid item>
+                    <DataBox
+                      title="Current Wave Height"
+                      data={currentReading.WVHT}
+                      label="feet"
+                    ></DataBox>
+                  </Grid>
+                  <Grid item>
+                    <DataBox
+                      title="Dominant Wave Period"
+                      data={currentReading.DPD}
+                      label="seconds"
+                    ></DataBox>
+                  </Grid>
+                  <Grid item>
+                    <DataBox
+                      title="Average Wave Period"
+                      data={currentReading.APD}
+                      label="seconds"
+                    ></DataBox>
+                  </Grid>
+                  <Grid item>
+                    <DataBox
+                      title="Mean Wave Direction"
+                      data={currentReading.MWD}
+                      label="degrees"
+                    ></DataBox>
+                  </Grid>
+                  <Grid item>
+                    <DataBox
+                      title="Atmospheric Pressure"
+                      data={currentReading.PRES}
+                      label="atms"
+                    ></DataBox>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* Right Side of Page */}
+          <Grid item xs={12} sm={6} md={4} lg={6} marginLeft={10}>
+            <Card style={{ height: "100%" }}>
+              <CardContent style={{ height: "100%" }}>
+                <Typography variant="h5" component="div">
+                  Journal Entry
+                </Typography>
+
+                <Typography variant="h5" component="div">
+                  {day} {getMonthString(month)} {year}
+                </Typography>
+
+                <TextField
+                  label="Large Text Input"
+                  variant="outlined"
+                  multiline
+                  rows={10} // Number of visible rows
+                  fullWidth
+                  sx={{ height: "500px", fontSize: "16px" }}
+                />
+                <Button
+                  className="button"
+                  variant="contained"
+                  sx={{ marginTop: "10px", width: "225px" }}
+                  target="_blank"
+                >
+                  Record a Journal Entry
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-
-        {/* Right Side of Page */}
-        <Grid item xs={12} md={6}>
-          <Card style={{ height: "100%" }}>
-            <CardContent style={{ height: "100%" }}>
-              <Typography variant="h5" component="div">
-                Journal Entry
-              </Typography>
-
-              <Typography variant="h5" component="div">
-                {dateTimeString}
-              </Typography>
-
-              <TextField
-                label="Large Text Input"
-                variant="outlined"
-                multiline
-                rows={4} // Number of visible rows
-                fullWidth
-                InputProps={{
-                  style: inputStyles, // Apply the custom styles
-                }}
-              />
-              <Button
-                className="button"
-                variant="contained"
-                sx={{ marginTop: "10px", width: "225px" }}
-                target="_blank"
-              >
-                Record a Journal Entry
-              </Button>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+      </div>
     </>
   )
 }

@@ -13,7 +13,6 @@ function BuoySelect({ onChange }) {
     labelId="demo-simple-select-label"
     id="demo-simple-select"
     label="Choose a Location/Buoy"
- 
     onChange={handleChange}
   >
     <MenuItem value={"data/realtime2/44008.txt"}>

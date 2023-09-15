@@ -48,16 +48,35 @@ export const clearToken = () => {
   return true
 }
 
-export const metersToFeet = (meters)  => {
-  // 1 meter is approximately equal to 3.28084 feet
-  
+export const metersToFeet = (meters)  => {  
     // 1 meter is approximately equal to 3.28084 feet
     const feet = (meters * 3.28084).toFixed(2)
    
     return feet;
-
-  
-
-  
 }
+
+export const getMonthString = (monthNumber) => {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+
+  if (monthNumber >= 1 && monthNumber <= 12) {
+    return months[monthNumber]
+  } else {
+    return "Invalid month number";
+  }
+}
+
+
 
