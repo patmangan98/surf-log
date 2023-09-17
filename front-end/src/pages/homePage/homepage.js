@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react"
 import { clearToken } from "../../utility"
-import { addNewPost } from "../../api"
 import { deletePost } from "../../api"
-import { updatePost } from "../../api"
 import { getToken } from "../../utility"
-import { getUser } from "../utilities/users-api"
-import Journal from "../components/JournalForm/Journal"
 import Grid from "@mui/material/Grid"
 import InputLabel from "@mui/material/InputLabel"
 import FormControl from "@mui/material/FormControl"
@@ -15,10 +11,11 @@ import Typography from "@mui/material/Typography"
 import BuoySelect from "./BuoySelect"
 import { JournalForm } from "../components/JournalForm/JournalForm"
 import { DataBox } from "./DataBox"
-import { metersToFeet } from "../../utility"
 import { getMonthString } from "../../utility"
+import { getLatestBuoyReading } from "../../utility"
+import { useMyContext } from "../components/context/MyContext"
 
-export default function HomePage({ setUser, userId }) {
+export default function HomePage({ setUser }) {
   const [message, setMessage] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
   const [selectedBuoy, setSelectedBuoy] = useState("data/realtime2/41008.txt")
@@ -27,7 +24,8 @@ export default function HomePage({ setUser, userId }) {
   const handleSelectChange = (value) => {
     setSelectedBuoy(value)
   }
-  console.log("the user is", userId)
+  const { myState } = useMyContext()
+
   const currentDate = new Date()
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
@@ -65,28 +63,8 @@ export default function HomePage({ setUser, userId }) {
         return response.text()
       })
       .then((fileContent) => {
-        const dataString = fileContent.split("\n")
-
-        //Get the latest reading from the buoy
-        let dataSplit = dataString[2].split(/\s+/)
-        console.log("first data split", dataSplit)
-        //If the latest reading does not have wave height or wave period, loop through the data string until we find one that does
-
-        if (dataSplit[8] === "MM" || dataSplit[9] === "MM") {
-          for (let i = 3; i < dataString.length; i++) {
-            //Set the array to the next buoy reading
-            dataSplit = dataString[i].split(/\s+/)
-            console.log("new data split", dataSplit)
-            //If that buoy reading has wave height and wave period, exit the loop
-            if (dataSplit[8] !== "MM" && dataSplit[9] !== "MM") {
-              break
-            }
-          }
-        }
-        dataSplit[8] = metersToFeet(parseFloat(dataSplit[8]))
-
         const [YY, MM, DD, hh, mm, WDIR, WSPD, GST, WVHT, DPD, APD, MWD, PRES] =
-          dataSplit
+          getLatestBuoyReading(fileContent)
 
         setCurrentReading({
           YY,
@@ -114,10 +92,6 @@ export default function HomePage({ setUser, userId }) {
     setUser()
   }
 
-  // const handleNewPost = () => {
-  //   addNewPost(post)
-  // }
-
   const handleDelete = () => {
     const post_id = 4
     deletePost(post_id)
@@ -138,7 +112,7 @@ export default function HomePage({ setUser, userId }) {
       <button onClick={handleLogOut}>Log-Out</button>
       <br></br>
       <br></br>
-      <Journal></Journal>
+     
       <br></br> <br></br>
       <br></br>
       <div style={{ height: "900px", overflowY: "auto" }}>
@@ -216,7 +190,7 @@ export default function HomePage({ setUser, userId }) {
                   currentReading={currentReading}
                   selectedBuoy={selectedBuoy}
                   currentDate={currentDate}
-                  userId={userId}
+                  userId={myState}
                 ></JournalForm>
               </CardContent>
             </Card>

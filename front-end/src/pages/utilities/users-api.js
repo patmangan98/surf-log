@@ -8,8 +8,6 @@ const baseUrl = 'http://localhost:8000'
 
 export const register = async(data) => {
 
-
-    console.log(data)
     const response = await fetch(`${baseUrl}/auth/register`, {
       method: "POST", 
       headers: {'Content-Type': 'application/json'},
@@ -40,6 +38,7 @@ export const login = async (data) => {
     })
   
     const responseData = await response.json()
+    console.log("response data", responseData)
   
     if (!response.ok) {
       throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)

@@ -41,9 +41,11 @@ exports.register = async (req, res) => {
 
     const user = await createUser(userData)
     
+    const userId = user.user_id
+
     // Create a JWT and send it back to the client
     const token = jwt.sign({ id: user.user_id }, process.env.SECRET_KEY)
-    return res.json({ token })
+    return res.json({ token, userId })
 
   } catch (error) {
     console.log(error)
@@ -56,7 +58,7 @@ exports.register = async (req, res) => {
   }
 }
 exports.login = async (req, res) => {
-  console.log("made it to controller auth login")
+
   const authHeader = req.headers.authorization
   if (!authHeader || !authHeader.startsWith('Basic ')) {
     return res.status(401).json({ message: 'Invalid authorization header' })
@@ -65,9 +67,9 @@ exports.login = async (req, res) => {
   const credentials = Buffer.from(authHeader.slice(6), 'base64').toString().split(':')
   const [username, password] = credentials
 
-  console.log(username)
   const user = await showUserByUsername(username)
-  console.log(user)
+
+  const userId = user.user_id
   // If the user isn't found or the password is incorrect, return an error
   if (!user || !await bcrypt.compare(password, user.password)) {
     return res.status(401).json({ message: 'Invalid username or password' })
@@ -75,7 +77,7 @@ exports.login = async (req, res) => {
 
   // Create a JWT and send it back to the client
   const token = jwt.sign({ id: user.user_id }, process.env.SECRET_KEY)
-  res.json({ token })
+  res.json({ token, userId })
 }
 // create a controller to update the user's password
 exports.updatePassword = async (req, res) => {   
