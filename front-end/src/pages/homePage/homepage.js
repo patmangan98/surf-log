@@ -4,6 +4,7 @@ import { addNewPost } from "../../api"
 import { deletePost } from "../../api"
 import { updatePost } from "../../api"
 import { getToken } from "../../utility"
+import { getUser } from "../utilities/users-api"
 import Journal from "../components/JournalForm/Journal"
 import Grid from "@mui/material/Grid"
 import InputLabel from "@mui/material/InputLabel"
@@ -11,22 +12,22 @@ import FormControl from "@mui/material/FormControl"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import Typography from "@mui/material/Typography"
-import TextField from "@mui/material/TextField"
-import Button from "@mui/material/Button"
 import BuoySelect from "./BuoySelect"
+import { JournalForm } from "../components/JournalForm/JournalForm"
 import { DataBox } from "./DataBox"
 import { metersToFeet } from "../../utility"
 import { getMonthString } from "../../utility"
 
-export default function HomePage({ setUser }) {
+export default function HomePage({ setUser, userId }) {
   const [message, setMessage] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
-  const [selectedBuoy, setSelectedBuoy] = useState("")
+  const [selectedBuoy, setSelectedBuoy] = useState("data/realtime2/41008.txt")
+  const token = getToken()
 
   const handleSelectChange = (value) => {
     setSelectedBuoy(value)
   }
-
+  console.log("the user is", userId)
   const currentDate = new Date()
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
@@ -56,10 +57,6 @@ export default function HomePage({ setUser }) {
         console.error("Error fetching message:", error)
       })
 
-    console.log(selectedBuoy)
-    if (!selectedBuoy) {
-      setSelectedBuoy("data/realtime2/41008.txt")
-    }
     fetch(selectedBuoy)
       .then((response) => {
         if (!response.ok) {
@@ -117,34 +114,18 @@ export default function HomePage({ setUser }) {
     setUser()
   }
 
-  //Dummy post data
-  const post = {
-    user_id: "1",
-    post_date: "2023-09-03",
-    post_description: "New New Post",
-    post_location: "Rincon Californina",
-    WDIR: "270",
-    WSPD: "5.2",
-    GST: "5.6",
-    WVHT: "2.2",
-    DPD: "6.3",
-    APD: "5.2",
-    MWD: "155",
-    PRES: "29.24",
-  }
-  const token = getToken()
-  const handleNewPost = () => {
-    addNewPost(post)
-  }
+  // const handleNewPost = () => {
+  //   addNewPost(post)
+  // }
 
   const handleDelete = () => {
     const post_id = 4
     deletePost(post_id)
   }
 
-  const handleUpdate = () => {
-    updatePost(post)
-  }
+  // const handleUpdate = () => {
+  //   updatePost(post)
+  // }
 
   return (
     <>
@@ -153,9 +134,7 @@ export default function HomePage({ setUser }) {
         The last buoy reading was at: {currentReading.MM}-{currentReading.DD}-
         {currentReading.YY}:{currentReading.hh}:{currentReading.mm} GMT time.
       </p>
-      <button onClick={handleNewPost}>Add New Post</button>
       <button onClick={handleDelete}>Delete A Post</button>
-      <button onClick={handleUpdate}>Update A Post</button>
       <button onClick={handleLogOut}>Log-Out</button>
       <br></br>
       <br></br>
@@ -175,7 +154,10 @@ export default function HomePage({ setUser }) {
                   <InputLabel id="demo-simple-select-label">
                     Choose a Location/Buoy
                   </InputLabel>
-                  <BuoySelect onChange={handleSelectChange}></BuoySelect>
+                  <BuoySelect
+                    onChange={handleSelectChange}
+                    value={selectedBuoy}
+                  ></BuoySelect>
                 </FormControl>
                 <br></br>
                 <Grid direction="row" spacing={3} container>
@@ -230,23 +212,12 @@ export default function HomePage({ setUser }) {
                 <Typography variant="h5" component="div">
                   {day} {getMonthString(month)} {year}
                 </Typography>
-
-                <TextField
-                  label="Large Text Input"
-                  variant="outlined"
-                  multiline
-                  rows={10} // Number of visible rows
-                  fullWidth
-                  sx={{ height: "500px", fontSize: "16px" }}
-                />
-                <Button
-                  className="button"
-                  variant="contained"
-                  sx={{ marginTop: "10px", width: "225px" }}
-                  target="_blank"
-                >
-                  Record a Journal Entry
-                </Button>
+                <JournalForm
+                  currentReading={currentReading}
+                  selectedBuoy={selectedBuoy}
+                  currentDate={currentDate}
+                  userId={userId}
+                ></JournalForm>
               </CardContent>
             </Card>
           </Grid>

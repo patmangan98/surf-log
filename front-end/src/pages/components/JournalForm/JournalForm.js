@@ -1,100 +1,112 @@
-import { Fragment, useState } from "react";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid";
-import Paper from '@mui/material/Paper';
-import { DataBox } from '../../homePage/DataBox';
-import ArrowDownIcon from '@heroicons/react/24/solid/ArrowDownIcon';
-import ArrowUpIcon from '@heroicons/react/24/solid/ArrowUpIcon';
+import { Fragment, useState } from "react"
+import { addNewPost } from "../../../api"
+import TextField from "@mui/material/TextField"
+import Button from "@mui/material/Button"
+import Grid from "@mui/material/Grid"
+import Rating from "@mui/material/Rating"
+import Card from "@mui/material/Card"
+import CardContent from "@mui/material/CardContent"
 
-import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from '@mui/material';
+export const JournalForm = ({
+  currentReading,
+  selectedBuoy,
+  currentDate,
+  userId,
+  }) => {
 
-export const JournalForm = (props) => {
-//   const { id } = useParams();
+  const [location, setLocation] = useState()
+  const [description, setDescription] = useState()
+  const [rating, setRating] = useState()
 
-  const {
-    handleClose,
-    data
-  } = props 
-
- 
-
- 
-
-  const handleSubmit = async () => {
-    try {
-      // await saveReview(reviewData)
-
-      handleClose()
-    
-    } catch (error) {
-      console.error(error)
-    }
+  let post = {
+    user_id: "",
+    post_date: "",
+    post_description: "",
+    post_location: "",
+    WDIR: "",
+    WSPD: "",
+    GST: "",
+    WVHT: "",
+    DPD: "",
+    APD: "",
+    MWD: "",
+    PRES: "",
   }
 
-//   return (
-//     <Fragment>
-//       <Grid container direction="row" justifyContent="center">
-//         <Card
-//           className="form-container"
-//           width={1225}
-//           sx={{
-//             boxShadow: "3px 2px 7px rgb(0, 0, 0, 0.5)",
-//           }}
-//         >
-//           <CardContent sx={{ display: "grid", margin: "50px", marginRight: "100px", width: "1200px"}}>
-//             <Grid container direction="column" justify="center" >
-//               <TextField
-//                 label="Location"
-//                 sx={{ marginBottom: "15px", marginTop: "10px" }}
-//                 fullWidth
-//                 onChange={(name) => setName(name.target.value)}
-//                 value={name}
-//                 helperText="Please enter your name or nickname."
-//               />
+  const handleSubmit = () => {
+    post.user_id = userId
+    post.post_date = currentDate
+    post.post_description = description
+    post.post_location = location
+    post.WDIR = currentReading.WDIR
+    post.WSPD = currentReading.WSPD
+    post.GST = currentReading.GST
+    post.WVHT = currentReading.WVHT
+    post.DPD = currentReading.DPD
+    post.APD = currentReading.APD
+    post.MWD = currentReading.MWD
+    post.PRES = currentReading.PRES
 
-//               <TextField
-//                 id="summary"
-//                 label="Surf Journal Record"
-//                 sx={{ marginBottom: "5px" }}
-//                 required
-//                 fullWidth
-//                 onChange={(summary) => setSummary(summary.target.value)}
-//                 value={summary}
-//                 helperText="Please provide a short summary."
-//               />
+    addNewPost(post)
+  }
+  return (
+    <Fragment>
+      <Grid container direction="row" justifyContent="center">
+        <Card
+          className="form-container"
+          width={1225}
+          sx={{
+            boxShadow: "3px 2px 7px rgb(0, 0, 0, 0.5)",
+          }}
+        >
+          <CardContent
+            sx={{
+              display: "grid",
+              margin: "50px",
+              marginRight: "100px",
+              width: "1200px",
+            }}
+          >
+            <Grid container direction="column" justify="center">
+              <TextField
+                sx={{ marginBottom: "15px", marginTop: "10px" }}
+                fullWidth
+                onChange={(location) => setLocation(location.target.value)}
+                value={location}
+                helperText="Where did you surf?"
+              />
 
-//               <TextField
-//                 id="review"
-//                 label="Review"
-//                 multiline
-//                 required
-//                 fullWidth
-//                 rows={5}
-//                 onChange={(review) => setReview(review.target.value)}
-//                 value={review}
-//                 helperText="How was your session?"
-//               />
+              <TextField
+                id="review"
+                multiline
+                required
+                fullWidth
+                rows={5}
+                onChange={(description) =>
+                  setDescription(description.target.value)
+                }
+                value={description}
+                helperText="How was your session?"
+              />
 
-//               <br></br>
-//               <Rating
-//                 name="rating"
-//                 value={rating}
-//                 label=""
-//                 required
-//                 onChange={(event, rating) => {
-//                   setRating(rating);
-//                 }}
-//               />
-//             </Grid>
-//           </CardContent>
-//         </Card>
-//       </Grid>
-
+              <br></br>
+              <Rating
+                name="rating"
+                value={rating}
+                label=""
+                required
+                onChange={(event, rating) => {
+                  setRating(rating)
+                }}
+              />
+            </Grid>
+          </CardContent>
+        </Card>
+      </Grid>
       <Grid container direction="row" justify-content="center">
         <Button
           variant="contained"
-          onClick={handleClose}
+          // onClick={handleClose}
           sx={{ margin: "15px", width: "150px" }}
         >
           Cancel
@@ -109,40 +121,7 @@ export const JournalForm = (props) => {
           Submit
         </Button>
       </Grid>
-//     </Fragment>
-//   );
-// };
-
-
- 
-
-  return (
-    <Fragment>
-    <Typography>This is the journal form entry </Typography>
-
-    <Grid container direction="row" justify-content="center">
-    <Button
-      variant="contained"
-      onClick={handleClose}
-      sx={{ margin: "15px", width: "150px" }}
-    >
-      Cancel
-    </Button>
-    <Button
-      type="submit"
-      variant="contained"
-      color="primary"
-      onClick={handleSubmit}
-      sx={{ margin: "15px", width: "150px" }}
-    >
-      Submit
-    </Button>
-  </Grid>
-  </Fragment>
-          
-  )}
-
-
-
-
-export default JournalForm;
+    </Fragment>
+  )
+}
+export default JournalForm

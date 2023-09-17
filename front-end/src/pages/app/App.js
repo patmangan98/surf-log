@@ -1,6 +1,6 @@
 import "./App.css"
 import React from "react"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { register } from "../../api"
 import { login } from "../../api"
 import { setToken } from "../../utility"
@@ -10,12 +10,10 @@ import { isUserLoggedIn } from "../../utility"
 import HomePage from "../homePage/homepage"
 import AuthPage from "../AuthPage/AuthPage"
 
-// import AuthPage from "../Authpage/Authpage"
-
 function App() {
-  // const [message, setMessage] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
   const [user, setUser] = useState(isUserLoggedIn())
+  const userId = '1'
 
   const handleRegister = async () => {
     try {
@@ -40,7 +38,6 @@ function App() {
         username: "pat",
         password: "12345",
       })
-      console.log(tokenValue)
       setToken(tokenValue.token)
     } catch (error) {
       console.error(error)
@@ -62,7 +59,7 @@ function App() {
     <main className="App">
       {user ? (
         <>
-          <HomePage setUser={setUser} />
+          <HomePage setUser={setUser} userId={userId} />
         </>
       ) : (
         <AuthPage setUser={setUser} />
