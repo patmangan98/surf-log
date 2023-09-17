@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
-function BuoySelect({ onChange }) {
+function BuoySelect({ onChange, value }) {
  
   const handleChange = (event) => {
     onChange(event.target.value)
   }
 
+  console.log("in the buoy select", value)
   return (
     <Select
     labelId="demo-simple-select-label"
