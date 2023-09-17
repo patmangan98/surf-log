@@ -9,6 +9,7 @@ import { updatePassword } from "../../api"
 import { isUserLoggedIn } from "../../utility"
 import HomePage from "../homePage/homepage"
 import AuthPage from "../AuthPage/AuthPage"
+import { MyContextProvider } from '../components/context/MyContext'
 
 function App() {
   const [errorMsg, setErrorMsg] = useState("")
@@ -56,6 +57,7 @@ function App() {
   }
 
   return (
+    <MyContextProvider>
     <main className="App">
       {user ? (
         <>
@@ -66,6 +68,7 @@ function App() {
       )}
 
     </main>
+    </MyContextProvider>
   )
 }
 
