@@ -107,7 +107,19 @@ const updateCache = async () => {
         let blanksRemovedRow = row.filter((char) => char !== ' ' && char !== '')
         if (blanksRemovedRow[9] !== 'MM' && blanksRemovedRow[10] !== 'MM' && parseInt(blanksRemovedRow[3]) < 20 && blanksRemovedRow[5] !== 'MM' && parseInt(blanksRemovedRow[3]) >= 5) {
             //do the concat here. 
-            resultMatrix.push(blanksRemovedRow)
+            let bouyId = id
+            let date = (blanksRemovedRow[0] + '-' + blanksRemovedRow[1] + '-' + blanksRemovedRow[2])
+            let time = (blanksRemovedRow[3] + ':' + blanksRemovedRow[4])
+            let wdir = (blanksRemovedRow[5])
+            let wspd = (blanksRemovedRow[6])
+            let gst = (blanksRemovedRow[7])
+            let wvht = (blanksRemovedRow[8])
+            let dpd = (blanksRemovedRow[9])
+            let apd = (blanksRemovedRow[10])
+            let mwd = (blanksRemovedRow[11])
+            let pres = (blanksRemovedRow[12])
+            let concatArr = [bouyId, date, time, wdir, wspd, gst, wvht, dpd, apd, mwd, pres]
+            resultMatrix.push(concatArr)
         }
 
         
