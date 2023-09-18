@@ -6,14 +6,17 @@ const id = '41004'
 const fetchAndProccessData = async () => {
     //this is temporarily hard coded. the backslash after realtime is where the bouyid will go
     const fetchUrl = `https://www.ndbc.noaa.gov/data/realtime2/${id}.txt`
+    console.log(`Fetching data from bouy : ${id}`)
     const fetchData = await fetch(fetchUrl)
     const textData = await fetchData.text()
+    console.log(`Fetch from bouy ${id}, is complete`)
     //spliting the text data string into an array according to lines
     const rawArray = textData.split('\n')
     //divide by spaces
     const splitData = rawArray[0].split(" ")
     //removing blanks aka " "
     const labels = splitData.filter((char) => char !== ' ' && char !== '')
+    console.log('Filtering Labels Complete')
     //delcare a temp matrix
     let rawDataMatrix = []
     //loop through the raw array starting at the numbers, to create a new array that will be pushed into the matrix
@@ -25,6 +28,7 @@ const fetchAndProccessData = async () => {
         //push in the filtered data
         rawDataMatrix.push(filterData)
     }
+    console.log(`Removing spaces from data complete, bouy: ${id}`)
     // declare another matrix that will Only contain data points which include a measurement for wave hieght (index 9) and DPD (index 10)
     let sortedMatrix = []
     for(let i = 0; i < rawDataMatrix.length; i++) {
@@ -33,6 +37,7 @@ const fetchAndProccessData = async () => {
             sortedMatrix.push(subArr)
         }
     }
+    console.log(`Removing uneeded data entries is complete, bouy ${id}`)
     //This is the final matrix; this will hold the concated values 
     let resultMatrix = []
     //basically, I am conncating 
@@ -52,7 +57,7 @@ const fetchAndProccessData = async () => {
         let concatArr = [bouyId, date, time, wdir, wspd, gst, wvht, dpd, apd, mwd, pres]
         resultMatrix.push(concatArr)
     }
-
+ console.log(`Concating the data into a usable format is complete! bouy : ${id}`)
 try {
 
  for(const row of resultMatrix) {
@@ -71,7 +76,7 @@ try {
 
     })
  }
-  console.log('completed insert')
+  console.log(`completed insert, bouy ${id}`)
 
 } catch(error) {
    console.error(error)     
@@ -84,6 +89,7 @@ try {
 
 
 }
+
 
 const retrieveData = async (req, res) => {
     try {
