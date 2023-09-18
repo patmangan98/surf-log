@@ -1,9 +1,9 @@
-const { fetchAndProccessData } = require('../service/waveData')
+const { fetchAndProccessData, updateCache } = require('../service/waveData')
 
 
 const waveData = (app) => {
 
-app.get('/data', fetchAndProccessData)
+app.get('/data', updateCache)
 
 }
 
