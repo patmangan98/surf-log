@@ -14,7 +14,7 @@ exports.showPostsByUsername = async (username) => {
 }
 
 exports.createPost = async (post) => {
-
+  console.log(post)
   const postId = await knex('posts').insert(post)
 
   return postId

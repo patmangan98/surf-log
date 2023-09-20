@@ -21,10 +21,6 @@ export const getToken = () => {
     const token = localStorage.getItem('session_token')
     return token
 }
-
-
-
-
 export const setToken = (token) => {
     if(typeof token !== 'string') {
       throw new Error("token must be type: 'string'")
@@ -37,4 +33,15 @@ export const clearToken = () => {
     localStorage.removeItem('session_token')
     return false
   }
+
+  export const setUserId = (id) => {
+    
+    localStorage.setItem('userId', id)
+    return id
+  }
+
+  export const getUserId = () => {
+    const id = localStorage.getItem('userId')
+    return id
+}
   

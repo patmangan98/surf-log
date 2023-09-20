@@ -1,19 +1,17 @@
-import { Fragment, useState } from "react"
-import { addNewPost } from "../../../api"
+import { useState } from "react"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import Grid from "@mui/material/Grid"
-import Rating from "@mui/material/Rating"
+import { Fragment } from "react"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
+import Rating from "@mui/material/Rating"
+import { addNewPost } from "../../../api"
+import { useMyContext } from "../../components/context/MyContext"
+import { getUserId } from "../../utilities/users-service"
+import Typography from "@mui/material/Typography"
 
-export const JournalForm = ({
-  currentReading,
-  selectedBuoy,
-  currentDate,
-  userId,
-  }) => {
-
+const JournalForm = ({ currentReading, selectedBuoy, date, handleClose }) => {
   const [location, setLocation] = useState()
   const [description, setDescription] = useState()
   const [rating, setRating] = useState()
@@ -33,9 +31,10 @@ export const JournalForm = ({
     PRES: "",
   }
 
-  const handleSubmit = () => {
-    post.user_id = userId
-    post.post_date = currentDate
+  console.log(selectedBuoy)
+  const handleSubmit = async () => {
+    post.user_id = getUserId()
+    post.post_date = date.format('MM-DD-YYYY')
     post.post_description = description
     post.post_location = location
     post.WDIR = currentReading.WDIR
@@ -46,31 +45,31 @@ export const JournalForm = ({
     post.APD = currentReading.APD
     post.MWD = currentReading.MWD
     post.PRES = currentReading.PRES
+    try {
+      addNewPost(post)
 
-    addNewPost(post)
+      handleClose()
+    } catch (error) {
+      console.error(error)
+    }
   }
+
   return (
     <Fragment>
       <Grid container direction="row" justifyContent="center">
         <Card
           className="form-container"
-          width={1225}
+          width={500}
           sx={{
+            borderRadius: "20px",
             boxShadow: "3px 2px 7px rgb(0, 0, 0, 0.5)",
           }}
         >
-          <CardContent
-            sx={{
-              display: "grid",
-              margin: "50px",
-              marginRight: "100px",
-              width: "1200px",
-            }}
-          >
-            <Grid container direction="column" justify="center">
+          <CardContent sx={{ display: "grid", margin: "20px" }}>
+            <Grid container direction="column" justify="center" width={400}>
+              <Typography>Surf Journal Record for {date.format('MM-DD-YYYY')}</Typography>
               <TextField
-                sx={{ marginBottom: "15px", marginTop: "10px" }}
-                fullWidth
+                sx={{ marginBottom: "5px" }}
                 onChange={(location) => setLocation(location.target.value)}
                 value={location}
                 helperText="Where did you surf?"
@@ -78,9 +77,8 @@ export const JournalForm = ({
 
               <TextField
                 id="review"
+                label="Review"
                 multiline
-                required
-                fullWidth
                 rows={5}
                 onChange={(description) =>
                   setDescription(description.target.value)
@@ -94,7 +92,6 @@ export const JournalForm = ({
                 name="rating"
                 value={rating}
                 label=""
-                required
                 onChange={(event, rating) => {
                   setRating(rating)
                 }}
@@ -103,10 +100,11 @@ export const JournalForm = ({
           </CardContent>
         </Card>
       </Grid>
+
       <Grid container direction="row" justify-content="center">
         <Button
           variant="contained"
-          // onClick={handleClose}
+          onClick={handleClose}
           sx={{ margin: "15px", width: "150px" }}
         >
           Cancel
@@ -124,4 +122,5 @@ export const JournalForm = ({
     </Fragment>
   )
 }
+
 export default JournalForm

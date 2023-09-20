@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { motion, useAnimation } from "framer-motion"
 import { register } from "../../utilities/users-api"
 import { setToken } from "../../utilities/users-service"
+import { setUserId } from '../../utilities/users-service'
 import { isUserLoggedIn } from "../../../utility"
 import {
   Button,
@@ -39,7 +40,7 @@ export default function SignUpForm({ setUser, handleToggle }) {
     try {
       await register(formData).then((responseData) => {
         setToken(responseData.token)
-        updateMyState(responseData.userId)
+        setUserId(responseData.userId)
       })
 
       return setUser(isUserLoggedIn())

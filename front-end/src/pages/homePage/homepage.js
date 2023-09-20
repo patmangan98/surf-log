@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useState, useEffect } from "react"
 import { clearToken } from "../../utility"
 import { deletePost } from "../../api"
@@ -7,29 +8,26 @@ import InputLabel from "@mui/material/InputLabel"
 import FormControl from "@mui/material/FormControl"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
-import Typography from "@mui/material/Typography"
 import BuoySelect from "./BuoySelect"
-import { JournalForm } from "../components/JournalForm/JournalForm"
 import { DataBox } from "./DataBox"
-import { getMonthString } from "../../utility"
 import { getLatestBuoyReading } from "../../utility"
 import { useMyContext } from "../components/context/MyContext"
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar"
+import  Dayjs  from 'dayjs'
+import Journal from "./journal/Journal"
 
 export default function HomePage({ setUser }) {
   const [message, setMessage] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
-  const [selectedBuoy, setSelectedBuoy] = useState("data/realtime2/41008.txt")
+  const [selectedBuoy, setSelectedBuoy] = useState("41008")
+  const [date, setDate] = useState(Dayjs())
   const token = getToken()
 
   const handleSelectChange = (value) => {
     setSelectedBuoy(value)
   }
-  const { myState } = useMyContext()
-
-  const currentDate = new Date()
-  const year = currentDate.getFullYear()
-  const month = currentDate.getMonth()
-  const day = currentDate.getDate()
 
   const [currentReading, setCurrentReading] = useState({
     YY: "",
@@ -44,7 +42,7 @@ export default function HomePage({ setUser }) {
     DPD: "",
     APD: "",
     MWD: "",
-    PRES: "",
+    PRES: ""
   })
 
   useEffect(() => {
@@ -54,8 +52,9 @@ export default function HomePage({ setUser }) {
       .catch((error) => {
         console.error("Error fetching message:", error)
       })
-
-    fetch(selectedBuoy)
+    const fetchString = "data/realtime2/" + selectedBuoy + ".txt"
+    
+    fetch(fetchString)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok")
@@ -79,7 +78,7 @@ export default function HomePage({ setUser }) {
           DPD,
           APD,
           MWD,
-          PRES,
+          PRES
         })
       })
       .catch((error) => {
@@ -112,7 +111,6 @@ export default function HomePage({ setUser }) {
       <button onClick={handleLogOut}>Log-Out</button>
       <br></br>
       <br></br>
-     
       <br></br> <br></br>
       <br></br>
       <div style={{ height: "900px", overflowY: "auto" }}>
@@ -179,19 +177,14 @@ export default function HomePage({ setUser }) {
           <Grid item xs={12} sm={6} md={4} lg={6} marginLeft={10}>
             <Card style={{ height: "100%" }}>
               <CardContent style={{ height: "100%" }}>
-                <Typography variant="h5" component="div">
-                  Journal Entry
-                </Typography>
-
-                <Typography variant="h5" component="div">
-                  {day} {getMonthString(month)} {year}
-                </Typography>
-                <JournalForm
-                  currentReading={currentReading}
+               
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateCalendar value={date} onChange={(newValue) => setDate(newValue)} />
+                </LocalizationProvider>
+                <Journal currentReading={currentReading}
                   selectedBuoy={selectedBuoy}
-                  currentDate={currentDate}
-                  userId={myState}
-                ></JournalForm>
+                  date={date}
+                ></Journal>
               </CardContent>
             </Card>
           </Grid>

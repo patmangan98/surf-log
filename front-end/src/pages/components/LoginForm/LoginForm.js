@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { isUserLoggedIn } from "../../utilities/users-service"
 import { setToken } from "../../utilities/users-service"
+import { setUserId } from '../../utilities/users-service'
 import { login } from "../../utilities/users-api"
 import {
   Card,
@@ -35,7 +36,7 @@ export default function LoginForm({ setUser, setSignUpVisible, handleToggle }) {
     try {
       await login(formData).then((responseData) => {
         setToken(responseData.token)
-        updateMyState(responseData.userId)
+        setUserId(responseData.userId)
       })
 
       return setUser(isUserLoggedIn())

@@ -101,3 +101,13 @@ export const getLatestBuoyReading = (fileContent) => {
 
   return dataSplit
 }
+
+export const getBuoyNumber = (urlString) => {
+  
+  const regex = /\/(\d+)\.txt$/
+  const match = urlString.match(regex)
+  
+  if (match) {
+    return match[1]
+  }
+}
