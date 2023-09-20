@@ -16,6 +16,8 @@ exports.up = function(knex) {
         table.string('APD')
         table.string('MWD') 
         table.string('PRES')
+        
+        table.unique(['bouy_id', 'record_date', 'record_time'])
     })
 };
 
@@ -24,5 +26,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-   return knex.schema.dropSchemaIfExists('forty_five_day_cache')
+   return knex.schema.dropTableIfExists('forty_five_day_cache')
 };
