@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react"
 import { useState, useEffect } from "react"
 import { clearToken } from "../../utility"
 import { deletePost } from "../../api"
@@ -15,10 +15,10 @@ import { useMyContext } from "../components/context/MyContext"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar"
-import  Dayjs  from 'dayjs'
+import Dayjs from "dayjs"
 import Journal from "./journal/Journal"
 
-export default function HomePage({ setUser }) {
+export default function HomePage({ setUser, value }) {
   const [message, setMessage] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
   const [selectedBuoy, setSelectedBuoy] = useState("41008")
@@ -42,7 +42,7 @@ export default function HomePage({ setUser }) {
     DPD: "",
     APD: "",
     MWD: "",
-    PRES: ""
+    PRES: "",
   })
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function HomePage({ setUser }) {
         console.error("Error fetching message:", error)
       })
     const fetchString = "data/realtime2/" + selectedBuoy + ".txt"
-    
+
     fetch(fetchString)
       .then((response) => {
         if (!response.ok) {
@@ -78,7 +78,7 @@ export default function HomePage({ setUser }) {
           DPD,
           APD,
           MWD,
-          PRES
+          PRES,
         })
       })
       .catch((error) => {
@@ -122,15 +122,11 @@ export default function HomePage({ setUser }) {
               <CardContent>
                 {/* Get the selected buoy from the buoy select component */}
                 <br></br>
-                <FormControl>
-                  <InputLabel id="demo-simple-select-label">
-                    Choose a Location/Buoy
-                  </InputLabel>
-                  <BuoySelect
-                    onChange={handleSelectChange}
-                    value={selectedBuoy}
-                  ></BuoySelect>
-                </FormControl>
+
+                <BuoySelect
+                  onChange={handleSelectChange}
+                ></BuoySelect>
+
                 <br></br>
                 <Grid direction="row" spacing={3} container>
                   <Grid item>
@@ -177,11 +173,14 @@ export default function HomePage({ setUser }) {
           <Grid item xs={12} sm={6} md={4} lg={6} marginLeft={10}>
             <Card style={{ height: "100%" }}>
               <CardContent style={{ height: "100%" }}>
-               
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateCalendar value={date} onChange={(newValue) => setDate(newValue)} />
+                  <DateCalendar
+                    value={date}
+                    onChange={(newValue) => setDate(newValue)}
+                  />
                 </LocalizationProvider>
-                <Journal currentReading={currentReading}
+                <Journal
+                  currentReading={currentReading}
                   selectedBuoy={selectedBuoy}
                   date={date}
                 ></Journal>

@@ -29,6 +29,7 @@ const JournalForm = ({ currentReading, selectedBuoy, date, handleClose }) => {
     APD: "",
     MWD: "",
     PRES: "",
+    buoy_id: ""
   }
 
   console.log(selectedBuoy)
@@ -45,6 +46,7 @@ const JournalForm = ({ currentReading, selectedBuoy, date, handleClose }) => {
     post.APD = currentReading.APD
     post.MWD = currentReading.MWD
     post.PRES = currentReading.PRES
+    post.buoy_id = selectedBuoy
     try {
       addNewPost(post)
 
