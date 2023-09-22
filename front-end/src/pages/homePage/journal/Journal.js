@@ -29,7 +29,7 @@ export default function Journal(props) {
         onClick={handleOpen}
         target="_blank"
       >
-       Write a Journal Record for you Surf Session
+       Write a Journal Record for your Surf Session
       </Button>
       <JournalModal open={open} handleClose={handleClose} currentReading={currentReading} selectedBuoy={selectedBuoy} date={date} />
       <br></br>
