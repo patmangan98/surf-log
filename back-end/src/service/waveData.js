@@ -1,6 +1,6 @@
 const knex = require('../knex')
 
-const id = '41004'
+// const id = '41004'
 
 
 const fetchAndProccessData = async () => {
@@ -92,65 +92,69 @@ const fetchAndProccessData = async () => {
 }
 
 
-const updateCache = async () => {
+const updateCache = async (idArr) => {
 
-    const fetchUrl = `https://www.ndbc.noaa.gov/data/realtime2/${id}.txt`
-    const fetchData = await fetch(fetchUrl)
-    const textData = await fetchData.text()
-    console.log(`Data fetched Successfully for bouy: ${id}`)
-    const splitDataArray = textData.split('\n')
-    
+    for (let i = 0; i < idArr.length; i++) {
+        id = idArr[i]
+        const fetchUrl = `https://www.ndbc.noaa.gov/data/realtime2/${id}.txt`
+        const fetchData = await fetch(fetchUrl)
+        const textData = await fetchData.text()
+        console.log(`Data fetched Successfully for bouy: ${id}`)
+        const splitDataArray = textData.split('\n')
 
-    let resultMatrix = []
 
-    for (let i = 2; i < splitDataArray.length; i++) {
-        let row = splitDataArray[i].split(" ")
-        let blanksRemovedRow = row.filter((char) => char !== ' ' && char !== '')
-        if (blanksRemovedRow[9] !== 'MM' && blanksRemovedRow[10] !== 'MM' && parseInt(blanksRemovedRow[3]) < 20 && blanksRemovedRow[5] !== 'MM' && parseInt(blanksRemovedRow[3]) >= 5) {
-            //do the concat here. 
-            let bouyId = id
-            let date = (blanksRemovedRow[0] + '-' + blanksRemovedRow[1] + '-' + blanksRemovedRow[2])
-            let time = (blanksRemovedRow[3] + ':' + blanksRemovedRow[4])
-            let wdir = (blanksRemovedRow[5])
-            let wspd = (blanksRemovedRow[6])
-            let gst = (blanksRemovedRow[7])
-            let wvht = (blanksRemovedRow[8])
-            let dpd = (blanksRemovedRow[9])
-            let apd = (blanksRemovedRow[10])
-            let mwd = (blanksRemovedRow[11])
-            let pres = (blanksRemovedRow[12])
-            let concatArr = [bouyId, date, time, wdir, wspd, gst, wvht, dpd, apd, mwd, pres]
-            resultMatrix.push(concatArr)
+        let resultMatrix = []
+
+        for (let i = 2; i < splitDataArray.length; i++) {
+            let row = splitDataArray[i].split(" ")
+            let blanksRemovedRow = row.filter((char) => char !== ' ' && char !== '')
+            if (blanksRemovedRow[9] !== 'MM' && blanksRemovedRow[10] !== 'MM' && parseInt(blanksRemovedRow[3]) < 20 && blanksRemovedRow[5] !== 'MM' && parseInt(blanksRemovedRow[3]) >= 5) {
+                //do the concat here. 
+                let bouyId = id
+                let date = (blanksRemovedRow[0] + '-' + blanksRemovedRow[1] + '-' + blanksRemovedRow[2])
+                let time = (blanksRemovedRow[3] + ':' + blanksRemovedRow[4])
+                let wdir = (blanksRemovedRow[5])
+                let wspd = (blanksRemovedRow[6])
+                let gst = (blanksRemovedRow[7])
+                let wvht = (blanksRemovedRow[8])
+                let dpd = (blanksRemovedRow[9])
+                let apd = (blanksRemovedRow[10])
+                let mwd = (blanksRemovedRow[11])
+                let pres = (blanksRemovedRow[12])
+                let concatArr = [bouyId, date, time, wdir, wspd, gst, wvht, dpd, apd, mwd, pres]
+                resultMatrix.push(concatArr)
+            }
+
+
         }
+        console.log('Sort and filter succesful for bouy:', id)
 
-        
-    }
-    console.log('Sort and filter succesful for bouy:', id)
+        try {
 
-    try {
-
-        const tableName = 'forty_five_day_cache'
-        //Update this so that that it only loops through the top 60 results..This will have to be done once app is deployed
-        for(const row of resultMatrix) {
-            await knex.raw(`
+            const tableName = 'forty_five_day_cache'
+            //Update this so that that it only loops through the top 60 results..This will have to be done once app is deployed
+            for (const row of resultMatrix) {
+                await knex.raw(`
             INSERT IGNORE INTO ${tableName} (bouy_id, record_date, record_time, WDIR, WSPD,GST, WVHT, DPD, APD, MWD, PRES)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `, [row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]])
+            }
+
+            console.log(`Adding Days to Cache Complete for Bouy: ${id}`)
+
+            console.log(`Beginning Delete of out-of-date records for bouy: ${id}`)
+
+            await knex.raw(`DELETE FROM ${tableName} WHERE record_date < DATE_SUB(NOW(), INTERVAL 45 DAY)`)
+
+            console.log(`Delete of old records complete for bouy: ${id}`)
+
+        } catch (error) {
+            console.log('error on insert:', error)
         }
+        // const splitBySpaces =
+    } // const removeBlanks = splitDataArray.
 
-        console.log(`Adding Days to Cache Complete for Bouy: ${id}`)
-
-        console.log(`Beginning Delete of out-of-date records for bouy: ${id}`)
-
-        await knex.raw(`DELETE FROM ${tableName} WHERE record_date < DATE_SUB(NOW(), INTERVAL 45 DAY)`)
-
-        console.log(`Delete of old records complete!`)
-
-    } catch(error) {
-        console.log('error on insert:', error)
-    }
-    // const splitBySpaces =
-    // const removeBlanks = splitDataArray.
+    return
 }
 
 const retrieveData = async (req, res) => {
