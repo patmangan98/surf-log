@@ -130,7 +130,7 @@ const updateCache = async () => {
     try {
 
         const tableName = 'forty_five_day_cache'
-
+        //Update this so that that it only loops through the top 60 results..This will have to be done once app is deployed
         for(const row of resultMatrix) {
             await knex.raw(`
             INSERT IGNORE INTO ${tableName} (bouy_id, record_date, record_time, WDIR, WSPD,GST, WVHT, DPD, APD, MWD, PRES)
@@ -138,7 +138,13 @@ const updateCache = async () => {
             `, [row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]])
         }
 
-        console.log(`Update of Cache Complete for Bouy: ${id}`)
+        console.log(`Adding Days to Cache Complete for Bouy: ${id}`)
+
+        console.log(`Beginning Delete of out-of-date records for bouy: ${id}`)
+
+        await knex.raw(`DELETE FROM ${tableName} WHERE record_date < DATE_SUB(NOW(), INTERVAL 45 DAY)`)
+
+        console.log(`Delete of old records complete!`)
 
     } catch(error) {
         console.log('error on insert:', error)
