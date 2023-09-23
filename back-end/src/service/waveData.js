@@ -79,7 +79,7 @@ const fetchAndProccessData = async () => {
         console.log(`completed insert, bouy ${id}`)
 
     } catch (error) {
-        console.error(error)
+        console.error('error on insert:', error)
     }
 
 
@@ -98,7 +98,7 @@ const updateCache = async () => {
     const textData = await fetchData.text()
 
     const splitDataArray = textData.split('\n')
-    console.log(splitDataArray)
+    
 
     let resultMatrix = []
 
@@ -124,7 +124,23 @@ const updateCache = async () => {
 
         
     }
-    console.log(resultMatrix)
+    console.log('Sort and filter succesful for bouy:', id)
+
+    try {
+
+        for(const row of resultMatrix) {
+            await knex.raw(`
+            INSERT IGNORE INTO 'forty_five_day_cache'
+            (bouy_id, record_date, record_time, WDIR, WSPD, GST, WVHT, DPD, APD, MWD, PRES)
+            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `, [row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]])
+        }
+
+        console.log(`Update of Cache Complete for Bouy: ${id}`)
+
+    } catch(error) {
+        console.log('error on insert:', error)
+    }
     // const splitBySpaces =
     // const removeBlanks = splitDataArray.
 }
