@@ -77,6 +77,7 @@ const fetchAndProccessData = async () => {
             })
         }
         console.log(`completed insert, bouy ${id}`)
+        return
 
     } catch (error) {
         console.error('error on insert:', error)
@@ -96,7 +97,7 @@ const updateCache = async () => {
     const fetchUrl = `https://www.ndbc.noaa.gov/data/realtime2/${id}.txt`
     const fetchData = await fetch(fetchUrl)
     const textData = await fetchData.text()
-
+    console.log(`Data fetched Successfully for bouy: ${id}`)
     const splitDataArray = textData.split('\n')
     
 
@@ -128,11 +129,12 @@ const updateCache = async () => {
 
     try {
 
+        const tableName = 'forty_five_day_cache'
+
         for(const row of resultMatrix) {
             await knex.raw(`
-            INSERT IGNORE INTO 'forty_five_day_cache'
-            (bouy_id, record_date, record_time, WDIR, WSPD, GST, WVHT, DPD, APD, MWD, PRES)
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT IGNORE INTO ${tableName} (bouy_id, record_date, record_time, WDIR, WSPD,GST, WVHT, DPD, APD, MWD, PRES)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `, [row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10]])
         }
 
