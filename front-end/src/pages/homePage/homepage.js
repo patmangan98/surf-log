@@ -17,6 +17,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar"
 import Dayjs from "dayjs"
 import Journal from "./journal/Journal"
+import '../../homepage.css'
 
 export default function HomePage({ setUser, value }) {
   const [message, setMessage] = useState("")
@@ -102,6 +103,7 @@ export default function HomePage({ setUser, value }) {
 
   return (
     <>
+     <div className='home'>
       <p>Hello from SurfLog</p>
       <p>
         The last buoy reading was at: {currentReading.MM}-{currentReading.DD}-
@@ -117,9 +119,9 @@ export default function HomePage({ setUser, value }) {
         <Grid container spacing={2}>
           {/* Left Side of Page*/}
 
-          <Grid item xs={12} sm={6} md={3} lg={4} marginLeft={10}>
-            <Card>
-              <CardContent>
+          <Grid item xs={12} sm={6} md={3} lg={4} marginLeft={12}>
+            <Card sx={{ border: 2 }}>
+              <CardContent style={{ height: "100%" }}>
                 {/* Get the selected buoy from the buoy select component */}
                 <br></br>
 
@@ -171,7 +173,7 @@ export default function HomePage({ setUser, value }) {
 
           {/* Right Side of Page */}
           <Grid item xs={12} sm={6} md={4} lg={6} marginLeft={10}>
-            <Card style={{ height: "100%" }}>
+            <Card sx={{ border: 2 }}>
               <CardContent style={{ height: "100%" }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateCalendar
@@ -188,6 +190,7 @@ export default function HomePage({ setUser, value }) {
             </Card>
           </Grid>
         </Grid>
+      </div>
       </div>
     </>
   )

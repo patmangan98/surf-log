@@ -1,0 +1,7 @@
+.home {
+  background-image: url("../public/wave.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* Other background styles can be added here */
+}
