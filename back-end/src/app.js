@@ -2,6 +2,10 @@ const express = require('express')
 const cors = require('cors')
 const { pathLogger } = require('./middleware/logger')
 const router = require('./router')
+const cron = require('node-cron')
+const { updateCache } = require('./service/waveData')
+
+const bouyIdArr = [41004, 41008]
 
 const app = express()
 
@@ -23,4 +27,8 @@ app.listen(8000, () => {
   console.log(`Server is running on port 8000.`)
 })
 
+cron.schedule('1 0 * * *', () => {
+  console.log('starting cache')
+  updateCache(bouyIdArr)
+})
 
