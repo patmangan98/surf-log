@@ -21,7 +21,7 @@ function BuoySelect({ onChange, value }) {
           label="Choose a Location/Buoy"
           onChange={handleChange}
           autoWidth
-          defaultValue={"41008"}
+          defaultValue={"41004"}
         >
           <MenuItem value={"44008"}>
             NorthEast / Nantucket
