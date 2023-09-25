@@ -1,4 +1,6 @@
+import { getCurrentDateV2 } from './utility'
 const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000'
+
 
 export const login = async (data) => {
   
@@ -25,7 +27,6 @@ export const login = async (data) => {
 
 export const register = async(data) => {
 
-  console.log(data)
   const response = await fetch(`${baseUrl}/auth/register`, {
     method: "POST", 
     headers: {'Content-Type': 'application/json'},
@@ -43,7 +44,6 @@ export const register = async(data) => {
 
 export const getUserProfile = async (username) => {
 
-  console.log(`${baseUrl}/user/${username}`)
   const response = await fetch(`${baseUrl}/user/username/${username}`, {
     method: "GET",
   })
@@ -136,7 +136,6 @@ export const deletePost= async (id) => {
 
 export const getPosts = async (username) => {
 
-  console.log(`${baseUrl}/user/${username}`)
   const response = await fetch(`${baseUrl}/posts/${username}`, {
     method: "GET",
     headers: {
@@ -174,3 +173,28 @@ export const updatePost = async(post) => {
   
   return responseData
 }
+
+export const getWaveData = async(selectedDate, selectedBuoy) => {
+  
+  
+  const response = await fetch(`${baseUrl}/getdata?date=${selectedDate}&selectedBuoy=${selectedBuoy}`, {
+    method: "GET",
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  let responseData
+  if (selectedDate === getCurrentDateV2()) {
+    responseData = await response.text()
+  } else {
+   responseData = await response.json()
+  }
+  if (!response.ok) {
+    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+  }
+  
+  return responseData
+}
+
+  

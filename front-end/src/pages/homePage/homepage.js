@@ -4,32 +4,28 @@ import { clearToken } from "../../utility"
 import { deletePost } from "../../api"
 import { getToken } from "../../utility"
 import Grid from "@mui/material/Grid"
-import InputLabel from "@mui/material/InputLabel"
-import FormControl from "@mui/material/FormControl"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
+import Typography from "@mui/material/Typography"
 import BuoySelect from "./BuoySelect"
 import { DataBox } from "./DataBox"
 import { getLatestBuoyReading } from "../../utility"
+import { getWaveData } from "../../api"
 import { useMyContext } from "../components/context/MyContext"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar"
 import Dayjs from "dayjs"
 import Journal from "./journal/Journal"
-import '../../homepage.css'
+import { getCurrentDate } from "../../utility"
+import "../../homepage.css"
 
 export default function HomePage({ setUser, value }) {
   const [message, setMessage] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
-  const [selectedBuoy, setSelectedBuoy] = useState("41008")
-  const [date, setDate] = useState(Dayjs())
   const token = getToken()
-
-  const handleSelectChange = (value) => {
-    setSelectedBuoy(value)
-  }
-
+  const [selectedBuoy, setSelectedBuoy] = useState("41004")
+  const [selectedDate, setSelectedDate] = useState(Dayjs())
   const [currentReading, setCurrentReading] = useState({
     YY: "",
     MM: "",
@@ -45,6 +41,49 @@ export default function HomePage({ setUser, value }) {
     MWD: "",
     PRES: "",
   })
+
+  const handleSelectChange = (value) => {
+    setCurrentReading(getWaveData(selectedDate.format("YYYY-MM-DD"), value))
+    setSelectedBuoy(value)
+  }
+
+  const handleDateChange = (value) => {
+    console.log(currentReading)  
+    if (value !== "undefined") {
+      getWaveData(value.format("YYYY-MM-DD"), selectedBuoy).then((result) => {
+        if (value.format("MM-DD-YYYY") === getCurrentDate()) {
+          let tempCurrentReading = getLatestBuoyReading(result)
+              console.log(tempCurrentReading)
+          setCurrentReading({
+            ...currentReading,
+            WVHT: tempCurrentReading[8],
+            DPD: tempCurrentReading[9],
+            APD: tempCurrentReading[10],
+            MWD: tempCurrentReading[11],
+            PRES: tempCurrentReading[12],
+            WDIR: tempCurrentReading[5],
+            WSPD: tempCurrentReading[6],
+            GST: tempCurrentReading[7],
+          })
+        } else {
+          setCurrentReading(result)
+        }
+
+
+        
+      })
+    }
+    setSelectedDate(value)
+  }
+ 
+  //Buoy conditions message changes based on current date vs historical date
+  let messageText = "Conditions for "
+  if (selectedDate.format("MM-DD-YYYY") === getCurrentDate()) {
+    messageText = "Current " + messageText + " today " + getCurrentDate()
+  } else {
+    messageText =
+      "Historical " + messageText + selectedDate.format("MM-DD-YYYY")
+  }
 
   useEffect(() => {
     fetch("http://localhost:8000/message")
@@ -103,94 +142,94 @@ export default function HomePage({ setUser, value }) {
 
   return (
     <>
-     <div className='home'>
-      <p>Hello from SurfLog</p>
-      <p>
-        The last buoy reading was at: {currentReading.MM}-{currentReading.DD}-
-        {currentReading.YY}:{currentReading.hh}:{currentReading.mm} GMT time.
-      </p>
-      <button onClick={handleDelete}>Delete A Post</button>
-      <button onClick={handleLogOut}>Log-Out</button>
-      <br></br>
-      <br></br>
-      <br></br> <br></br>
-      <br></br>
-      <div style={{ height: "900px", overflowY: "auto" }}>
-        <Grid container spacing={2}>
-          {/* Left Side of Page*/}
+      <div className="home">
+        <p>Hello from SurfLog</p>
+        <p>
+          The last buoy reading was at: {currentReading.MM}-{currentReading.DD}-
+          {currentReading.YY}:{currentReading.hh}:{currentReading.mm} GMT time.
+        </p>
+        <button onClick={handleDelete}>Delete A Post</button>
+        <button onClick={handleLogOut}>Log-Out</button>
+        <br></br>
+        <br></br>
+        <br></br> <br></br>
+        <br></br>
+        <div style={{ height: "900px", overflowY: "auto" }}>
+          <Grid container spacing={2}>
+            {/* Left Side of Page*/}
 
-          <Grid item xs={12} sm={6} md={3} lg={4} marginLeft={12}>
-            <Card sx={{ border: 2 }}>
-              <CardContent style={{ height: "100%" }}>
-                {/* Get the selected buoy from the buoy select component */}
-                <br></br>
+            <Grid item xs={12} sm={6} md={3} lg={4} marginLeft={12}>
+              <Card sx={{ border: 2 }}>
+                <CardContent style={{ height: "100%" }}>
+                  {/* Get the selected buoy from the buoy select component */}
+                  <br></br>
 
-                <BuoySelect
-                  onChange={handleSelectChange}
-                ></BuoySelect>
+                  <BuoySelect onChange={handleSelectChange}></BuoySelect>
+                  <Typography>{messageText}</Typography>
+                  <br></br>
+                  <Grid direction="row" spacing={3} container>
+                    <Grid item>
+                      <DataBox
+                        title="Current Wave Height"
+                        data={currentReading.WVHT}
+                        label="feet"
+                      ></DataBox>
+                    </Grid>
+                    <Grid item>
+                      <DataBox
+                        title="Dominant Wave Period"
+                        data={currentReading.DPD}
+                        label="seconds"
+                      ></DataBox>
+                    </Grid>
+                    <Grid item>
+                      <DataBox
+                        title="Average Wave Period"
+                        data={currentReading.APD}
+                        label="seconds"
+                      ></DataBox>
+                    </Grid>
+                    <Grid item>
+                      <DataBox
+                        title="Mean Wave Direction"
+                        data={currentReading.MWD}
+                        label="degrees"
+                      ></DataBox>
+                    </Grid>
+                    <Grid item>
+                      <DataBox
+                        title="Atmospheric Pressure"
+                        data={currentReading.PRES}
+                        label="atms"
+                      ></DataBox>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
 
-                <br></br>
-                <Grid direction="row" spacing={3} container>
-                  <Grid item>
-                    <DataBox
-                      title="Current Wave Height"
-                      data={currentReading.WVHT}
-                      label="feet"
-                    ></DataBox>
-                  </Grid>
-                  <Grid item>
-                    <DataBox
-                      title="Dominant Wave Period"
-                      data={currentReading.DPD}
-                      label="seconds"
-                    ></DataBox>
-                  </Grid>
-                  <Grid item>
-                    <DataBox
-                      title="Average Wave Period"
-                      data={currentReading.APD}
-                      label="seconds"
-                    ></DataBox>
-                  </Grid>
-                  <Grid item>
-                    <DataBox
-                      title="Mean Wave Direction"
-                      data={currentReading.MWD}
-                      label="degrees"
-                    ></DataBox>
-                  </Grid>
-                  <Grid item>
-                    <DataBox
-                      title="Atmospheric Pressure"
-                      data={currentReading.PRES}
-                      label="atms"
-                    ></DataBox>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
+            {/* Right Side of Page */}
+            <Grid item xs={12} sm={6} md={4} lg={6} marginLeft={10}>
+              <Card sx={{ border: 2 }}>
+                <CardContent style={{ height: "100%" }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DateCalendar
+                      value={selectedDate}
+                      onChange={handleDateChange}
+                      format="dd-mm-yy"
+                      disableFuture
+                    />
+                  </LocalizationProvider>
+                  <Journal
+                    currentReading={currentReading}
+                    selectedBuoy={selectedBuoy}
+                    date={selectedDate}
+                  ></Journal>
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
-
-          {/* Right Side of Page */}
-          <Grid item xs={12} sm={6} md={4} lg={6} marginLeft={10}>
-            <Card sx={{ border: 2 }}>
-              <CardContent style={{ height: "100%" }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateCalendar
-                    value={date}
-                    onChange={(newValue) => setDate(newValue)}
-                  />
-                </LocalizationProvider>
-                <Journal
-                  currentReading={currentReading}
-                  selectedBuoy={selectedBuoy}
-                  date={date}
-                ></Journal>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </div>
+        </div>
       </div>
     </>
   )
