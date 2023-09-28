@@ -21,9 +21,9 @@ exports.createUser = async (userData) => {
   return user
 }
 
-exports.showUserByUsername = async (userId) => {
+exports.showUserByUsername = async (username) => {
   // Find the first user in the database with the username
-const user = await knex('user').where('user_id', userId).first
+const user = await knex('user').where('username', username).first()
 return user
 }
 
