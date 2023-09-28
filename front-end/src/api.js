@@ -176,7 +176,6 @@ export const updatePost = async(post) => {
 
 export const getWaveData = async(selectedDate, selectedBuoy) => {
   
-  
   const response = await fetch(`${baseUrl}/getdata?date=${selectedDate}&selectedBuoy=${selectedBuoy}`, {
     method: "GET",
     headers: {
