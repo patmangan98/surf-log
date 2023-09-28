@@ -7,17 +7,18 @@ exports.getWaveData = async (req, res) => {
 
   //If date is today's today, we need to fetch the latest readings from the text file.  If the date is not today's date but less than 44 days in the past, we need to retrieve the data from the forty_five_day_cache table in the database.  If the date is greater than 45 days old, the data will need to be retrieved from the past years historical text files.
   if (date === getCurrentDate()) {
+    //The date is today, need to fetch to the NDBC to get the latest reading
     try {
         const waveData = await retrieveCurrentData(selectedBuoy)
-    console.log("it is the current date")
-        console.log(waveData)
+
         res.setHeader('Content-Type', 'text/plain')
         res.send(waveData)
       } catch (error) {
         res.status(500).send("Internal Server Error")
       }
-  } else {
+  } else {//Will need another else here if it's more than 45 days
     try {
+      //Retrieve data from cached records in database
         const waveData = await retrieveCachedData(date, selectedBuoy)
     
         res.json(waveData)

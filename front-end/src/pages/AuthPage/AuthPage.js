@@ -2,7 +2,6 @@ import AuthPageLoading from "../components/LoadingAnimations/AuthPageLoading";
 import LoginForm from "../components/LoginForm/LoginForm";
 import SignUpForm from "../components/SignInForm/SignInForm";
 import { useState, useEffect } from "react";
-//Renamed form .js
 export default function AuthPage ({ setUser }) {
 
     const [signUpVisible, setSignUpVisible] = useState(true)

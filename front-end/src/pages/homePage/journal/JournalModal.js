@@ -8,6 +8,7 @@ const JournalModal = ({ open, handleClose, currentReading,
   return (
     <Dialog open={open} onClose={handleClose}>
       <JournalForm handleClose={handleClose} currentReading={currentReading} selectedBuoy={selectedBuoy} date={date} />
+  
     </Dialog>
   );
 };

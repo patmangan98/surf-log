@@ -17,9 +17,9 @@ export default function Journal(props) {
   } else {
     buttonText = buttonText + "prior day " + date.format("MM-DD-YYYY")
   }
-
+  
   const [open, setOpen] = useState(false)
-
+ 
   // Journal modal dialog open
   const handleOpen = () => {
     setOpen(true)
@@ -28,7 +28,6 @@ export default function Journal(props) {
   // Journal modal dialog close
   const handleClose = () => {
     setOpen(false)
-    alert("Thank you for submitting a surf session record!")
   }
 
   return (
@@ -42,6 +41,7 @@ export default function Journal(props) {
       >
         {buttonText}
       </Button>
+      
       <JournalModal
         open={open}
         handleClose={handleClose}

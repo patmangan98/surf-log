@@ -21,16 +21,11 @@ exports.createUser = async (userData) => {
   return user
 }
 
-exports.showUserByUsername = async (username) => {
+exports.showUserByUsername = async (userId) => {
   // Find the first user in the database with the username
-const user = await knex('user').where('username', username).first()
+const user = await knex('user').where('user_id', userId).first
 return user
 }
-
-// exports.showUserById = async (id) => {
-//   const user = await knex('user').where('user_id', id).first()
-//   return user
-// }
 
 //create a service to update the user's password
 exports.updatePassword = async (username, password) => {

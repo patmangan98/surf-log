@@ -51,6 +51,7 @@ export default function HomePage({ setUser, value }) {
     console.log(currentReading)  
     if (value !== "undefined") {
       getWaveData(value.format("YYYY-MM-DD"), selectedBuoy).then((result) => {
+        //If it is today, we need to grab the latest reading and parse it with getLatestBuoyReading 
         if (value.format("MM-DD-YYYY") === getCurrentDate()) {
           let tempCurrentReading = getLatestBuoyReading(result)
               console.log(tempCurrentReading)
@@ -66,11 +67,9 @@ export default function HomePage({ setUser, value }) {
             GST: tempCurrentReading[7],
           })
         } else {
+          //If the date is not today, read the results from the database, returned as an object, no parsing required
           setCurrentReading(result)
         }
-
-
-        
       })
     }
     setSelectedDate(value)
@@ -143,18 +142,15 @@ export default function HomePage({ setUser, value }) {
   return (
     <>
       <div className="home">
-        <p>Hello from SurfLog</p>
-        <p>
-          The last buoy reading was at: {currentReading.MM}-{currentReading.DD}-
-          {currentReading.YY}:{currentReading.hh}:{currentReading.mm} GMT time.
-        </p>
-        <button onClick={handleDelete}>Delete A Post</button>
+        <br></br>
+        <h1>Welcome to  SurfLog</h1>
+        {/* <button onClick={handleDelete}>Delete A Post</button> */}
         <button onClick={handleLogOut}>Log-Out</button>
         <br></br>
         <br></br>
         <br></br> <br></br>
         <br></br>
-        <div style={{ height: "900px", overflowY: "auto" }}>
+        <div style={{ height: "1000px", overflowY: "auto" }}>
           <Grid container spacing={2}>
             {/* Left Side of Page*/}
 
@@ -165,7 +161,7 @@ export default function HomePage({ setUser, value }) {
                   <br></br>
 
                   <BuoySelect onChange={handleSelectChange}></BuoySelect>
-                  <Typography>{messageText}</Typography>
+                  <Typography style={{ fontSize: '20px' }}>{messageText}</Typography>
                   <br></br>
                   <Grid direction="row" spacing={3} container>
                     <Grid item>

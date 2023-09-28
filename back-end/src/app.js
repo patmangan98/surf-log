@@ -5,7 +5,7 @@ const router = require('./router')
 const cron = require('node-cron')
 const { updateCache } = require('./service/waveData')
 
-const bouyIdArr = [41004, 41008]
+const bouyIdArr = [41004, 41008,41002, 41047]
 
 const app = express()
 

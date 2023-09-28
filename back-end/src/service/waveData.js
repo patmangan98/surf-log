@@ -1,4 +1,5 @@
 const knex = require("../knex")
+const { metersToFeet } = require('../utility.js')
 
 // const id = '41004'
 
@@ -54,7 +55,7 @@ exports.fetchAndProccessData = async () => {
     let wdir = subArr[5]
     let wspd = subArr[6]
     let gst = subArr[7]
-    let wvht = subArr[8]
+    let wvht = metersToFeet(subArr[8])
     let dpd = subArr[9]
     let apd = subArr[10]
     let mwd = subArr[11]
@@ -137,7 +138,7 @@ exports.updateCache = async (idArr) => {
         let wdir = blanksRemovedRow[5]
         let wspd = blanksRemovedRow[6]
         let gst = blanksRemovedRow[7]
-        let wvht = blanksRemovedRow[8]
+        let wvht = metersToFeet(blanksRemovedRow[8])
         let dpd = blanksRemovedRow[9]
         let apd = blanksRemovedRow[10]
         let mwd = blanksRemovedRow[11]

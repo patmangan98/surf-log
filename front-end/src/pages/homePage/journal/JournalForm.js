@@ -32,7 +32,6 @@ const JournalForm = ({ currentReading, selectedBuoy, date, handleClose }) => {
     buoy_id: ""
   }
 
-  console.log(selectedBuoy)
   const handleSubmit = async () => {
     post.user_id = getUserId()
     post.post_date = date.format('MM-DD-YYYY')
@@ -49,7 +48,6 @@ const JournalForm = ({ currentReading, selectedBuoy, date, handleClose }) => {
     post.buoy_id = selectedBuoy
     try {
       addNewPost(post)
-
       handleClose()
     } catch (error) {
       console.error(error)
@@ -69,7 +67,7 @@ const JournalForm = ({ currentReading, selectedBuoy, date, handleClose }) => {
         >
           <CardContent sx={{ display: "grid", margin: "20px" }}>
             <Grid container direction="column" justify="center" width={400}>
-              <Typography>Surf Journal Record for {date.format('MM-DD-YYYY')}</Typography>
+              <Typography style={{ fontSize: '24px' }}>Surf Journal Record for {date.format('MM-DD-YYYY')} </Typography>
               <TextField
                 sx={{ marginBottom: "5px" }}
                 onChange={(location) => setLocation(location.target.value)}

@@ -197,4 +197,19 @@ export const getWaveData = async(selectedDate, selectedBuoy) => {
   return responseData
 }
 
+// export const getUserById= async(userId) => {
+
+//   const response = await fetch(`${baseUrl}/user/userId/${userId}`, {
+//     method: "GET",
+//   })
+
+//   const responseData = await response.json()
+
+//   if (!response.ok) {
+//     throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+//   }
+  
+//   return responseData
+// }
+
   
