@@ -134,9 +134,9 @@ export const deletePost= async (id) => {
   return responseData
 }
 
-export const getPosts = async (username) => {
+export const getPosts = async (id) => {
 
-  const response = await fetch(`${baseUrl}/posts/${username}`, {
+  const response = await fetch(`${baseUrl}/posts/${id}`, {
     method: "GET",
     headers: {
       'Content-Type': 'application/json',

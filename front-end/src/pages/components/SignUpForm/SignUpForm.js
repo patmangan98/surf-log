@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
-import { motion, useAnimation } from "framer-motion"
+import { useState } from "react"
+import { motion } from "framer-motion"
 import { register } from "../../utilities/users-api"
 import { setToken } from "../../utilities/users-service"
 import { setUserId } from '../../utilities/users-service'
@@ -11,7 +11,6 @@ import {
   Card,
   CardContent,
   Grid,
-  duration,
 } from "@mui/material"
 import { useMyContext } from "../context/MyContext"
 
@@ -27,8 +26,6 @@ export default function SignUpForm({ setUser, handleToggle }) {
   const { updateMyState } = useMyContext()
 
   function handleChange(event) {
-    console.log(event.target.value)
-    console.log(event.target.name)
     setCredentials({
       ...credentials,
       [event.target.name]: event.target.value,

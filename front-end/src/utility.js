@@ -52,8 +52,7 @@ export const getMonthString = (monthNumber) => {
 }
 
 export const getLatestBuoyReading = (fileContent) => {
-  console.log(fileContent)
-  console.log(typeof fileContent)
+ 
   const dataString = fileContent.split("\n")
 
   //Get the latest reading from the buoy
