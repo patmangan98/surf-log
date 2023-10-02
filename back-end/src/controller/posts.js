@@ -1,25 +1,9 @@
-const { showPostsByUsername, createPost, deletePost, updatePost } = require('../service/posts')
+const { showPostsByUserId, createPost, deletePost, updatePost } = require('../service/posts')
 
 exports.getPostsByUserId = async (req, res) => {
   
   try {
-    const posts = await showPostsByUsername(req.params.username)
-    
-    res.json(posts)
-    
-
-  } catch (error) {
-
-    console.error(error)
-    res.status(500).send("Internal Server Error")
-  }
-}
-
-exports.getPostsByUsername = async (req, res) => {
-  
-  console.log(req.params.username)
-  try {
-    const posts = await showPostsByUsername(req.params.username)
+    const posts = await showPostsByUserId(req.params.id)
     
     res.json(posts)
     
