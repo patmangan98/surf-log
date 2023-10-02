@@ -129,7 +129,7 @@ export default function HomePage({ setUser, value }) {
     clearToken()
     setUser()
   }
-
+console.log()
   const handleDelete = () => {
     const post_id = 4
     deletePost(post_id)
