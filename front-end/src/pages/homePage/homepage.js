@@ -145,7 +145,7 @@ export default function HomePage({ setUser, value }) {
         <br></br>
         <h1>Welcome to  SurfBoard!</h1>
         {/* <button onClick={handleDelete}>Delete A Post</button> */}
-        <button onClick={handleLogOut}>Log-Out</button>
+        {/* <button onClick={handleLogOut}>Log-Out</button> */}
         <br></br>
         <br></br>
         <br></br> <br></br>

@@ -131,7 +131,7 @@ export default function SignUpForm({ setUser, handleToggle }) {
                   }}
                   onClick={() => handleSubmit()}
                 >
-                  sign in
+                  Sign Up 
                 </Button>
               </CardContent>
             </Card>

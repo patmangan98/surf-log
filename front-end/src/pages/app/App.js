@@ -10,6 +10,9 @@ import { isUserLoggedIn } from "../../utility"
 import HomePage from "../homePage/homepage"
 import AuthPage from "../AuthPage/AuthPage"
 import { MyContextProvider } from '../components/context/MyContext'
+import {Routes, Route, Navigate} from 'react-router-dom'
+import NavBar from "../components/NavBar/NavBar"
+import ViewLogsPage from "../ViewLogsPage/ViewLogsPage"
 
 function App() {
   const [errorMsg, setErrorMsg] = useState("")
@@ -61,7 +64,15 @@ function App() {
     <main className="App">
       {user ? (
         <>
-          <HomePage setUser={setUser} userId={userId} />
+          <NavBar user={user} setUser={setUser} />
+            <Routes>
+              <Route path='/homepage' element ={<HomePage setUser={setUser} userId={userId}/>}/>
+              <Route path='/logs' element={<ViewLogsPage user={user}/>}/>
+              <Route path= "" element={<Navigate to ="/homepage" />}/>
+            </Routes>
+
+
+          {/* <HomePage setUser={setUser} userId={userId} /> */}
         </>
       ) : (
         <AuthPage setUser={setUser} />
