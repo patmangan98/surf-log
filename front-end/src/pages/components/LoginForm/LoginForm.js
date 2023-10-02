@@ -120,7 +120,7 @@ export default function LoginForm({ setUser, setSignUpVisible, handleToggle }) {
                     variant="contained"
                     sx={{ width: "15ch", alignSelf: "center" }}
                   >
-                    Sign Up{" "}
+                    Log-In{" "}
                   </Button>
                 </Grid>
               </CardContent>

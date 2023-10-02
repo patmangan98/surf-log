@@ -1,6 +1,6 @@
 import AuthPageLoading from "../components/LoadingAnimations/AuthPageLoading";
 import LoginForm from "../components/LoginForm/LoginForm";
-import SignUpForm from "../components/SignInForm/SignInForm";
+import SignUpForm from "../components/SignUpForm/SignUpForm";
 import { useState, useEffect } from "react";
 export default function AuthPage ({ setUser }) {
 
