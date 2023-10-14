@@ -1,6 +1,7 @@
 import { getUserId } from "../utilities/users-service"
 import { useEffect, useState } from "react"
 import { indexPosts } from "../utilities/posts-api"
+import JournalPages from "./Components/JournalPages"
 
 
 export default function ViewLogsPage () {
@@ -13,7 +14,7 @@ useEffect(() => {
         .then(resData => setPosts(resData))
 }, [])
 
-console.log(posts)
+// console.log(posts)
 
 
 for(let i = 0; i < posts.length; i++) {
@@ -34,6 +35,8 @@ for(let i = 0; i < posts.length; i++) {
     return (
         <>
         <h1>View Logs Page!</h1>
+
+       <JournalPages></JournalPages>
         </>
     )
 }
