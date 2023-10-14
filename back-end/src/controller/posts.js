@@ -1,9 +1,9 @@
-const { showPostsByUsername, createPost, deletePost, updatePost } = require('../service/posts')
+const { showPostsByUserId, createPost, deletePost, updatePost } = require('../service/posts')
 
 exports.getPostsByUserId = async (req, res) => {
   
   try {
-    const posts = await showPostsByUsername(req.params.username)
+    const posts = await showPostsByUserId(req.params.userId)
     
     res.json(posts)
     

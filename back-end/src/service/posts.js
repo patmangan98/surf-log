@@ -1,12 +1,13 @@
 const knex = require('../knex')
 
-exports.showPostsByUsername = async (username) => {
+exports.showPostsByUserId = async (userId) => {
   
-  const userId = (await knex
-  .distinct()
-  .from('user')
-  .pluck('user_id')
-  .where ('username', username))[0]
+  console.log(userId)
+  // const userId = (await knex
+  // .distinct()
+  // .from('user')
+  // .pluck('user_id')
+  // .where ('username', username))[0]
 
   const posts = await knex('posts').where('user_id', userId)
   
