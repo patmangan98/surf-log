@@ -20,7 +20,7 @@ import { getCurrentDate } from "../../utility"
 import { celsiusToFahrenheit } from  "../../utility"
 import  { weatherSearchUrl } from "../../utility"
 import "../../homepage.css"
-import logo from './logo.png'
+// import logo from './logo.png'
 
 export default function HomePage({ setUser, value }) {
   
@@ -173,7 +173,7 @@ console.log(currentWeather)
       <div className="home">
         <div className="center-container">
           <br></br>
-      <img src={logo} alt="Your Logo" className="logo-image" />
+      {/* <img src={logo} alt="Your Logo" className="logo-image" /> */}
     </div>
         {/* <button onClick={handleDelete}>Delete A Post</button> */}
         {/* <button onClick={handleLogOut}>Log-Out</button> */}
