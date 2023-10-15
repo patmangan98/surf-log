@@ -22,10 +22,14 @@ export const clearToken = () => {
 }
 
 export const metersToFeet = (meters) => {
-  // 1 meter is approximately equal to 3.28084 feet
   const feet = (meters * 3.28084).toFixed(2)
 
   return feet
+}
+
+export function celsiusToFahrenheit(celsius) {
+  const fahrenheit = (celsius * 9/5) + 32;
+  return fahrenheit;
 }
 
 export const getMonthString = (monthNumber) => {
@@ -104,4 +108,10 @@ export const getCurrentDateV2 = () => {
   }
   
   return currentDate.toLocaleDateString('sv-SE', options).replaceAll('/', '-').replaceAll('_', '-').replaceAll(' ', '-')
+}
+
+export const weatherSearchUrl = (dateString) => {
+  const stringOne = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/folly%20beach%2C%20south%20carolina/2023-10-15"
+  const stringTwo = "?unitGroup=metric&include=hours&key=EXQ4HJA5WC2HZL3LRU6EANZKK&contentType=json"
+  return stringOne + stringTwo
 }

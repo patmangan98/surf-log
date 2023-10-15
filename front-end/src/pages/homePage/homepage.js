@@ -11,19 +11,19 @@ import BuoySelect from "./BuoySelect"
 import { DataBox } from "./DataBox"
 import { getLatestBuoyReading } from "../../utility"
 import { getWaveData } from "../../api"
-import { useMyContext } from "../components/context/MyContext"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar"
 import Dayjs from "dayjs"
 import Journal from "./journal/Journal"
 import { getCurrentDate } from "../../utility"
+import { celsiusToFahrenheit } from  "../../utility"
+import  { weatherSearchUrl } from "../../utility"
 import "../../homepage.css"
+import logo from './logo.png'
 
 export default function HomePage({ setUser, value }) {
-  const [message, setMessage] = useState("")
-  const [errorMsg, setErrorMsg] = useState("")
-  const token = getToken()
+  
   const [selectedBuoy, setSelectedBuoy] = useState("41004")
   const [selectedDate, setSelectedDate] = useState(Dayjs())
   const [currentReading, setCurrentReading] = useState({
@@ -40,6 +40,18 @@ export default function HomePage({ setUser, value }) {
     APD: "",
     MWD: "",
     PRES: "",
+  })
+
+  const [currentWeather, setCurrentWeather] = useState({
+    currentTemp: "",
+    relativeHumidity: "",
+    windSpeed: "",
+    windDirection: "",
+    minTemp: "",
+    maxTemp: "",
+    sunsetTime: "",
+    uvIndex: "",
+
   })
 
   const handleSelectChange = (value) => {
@@ -85,12 +97,28 @@ export default function HomePage({ setUser, value }) {
   }
 
   useEffect(() => {
-    fetch("http://localhost:8000/message")
-      .then((res) => res.json())
-      .then((data) => setMessage(data.message))
+    fetch(weatherSearchUrl())
+      .then((response) => response.json())
       .catch((error) => {
         console.error("Error fetching message:", error)
       })
+      .then((data) => {
+        // Process the JSON data here
+        console.log(data.days[0])
+        setCurrentWeather({
+          currentTemp: celsiusToFahrenheit(parseFloat(data.days[0].temp)),
+          relativeHumidity: data.days[0].humidity,
+          windSpeed: data.days[0].windspeed,
+          windDirection: data.days.winddir,
+          maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax)),
+          minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin)),
+          sunriseTime: data.days[0].sunrise,
+          sunsetTime: data.days[0].sunset,
+          uvIndex:data.days[0].uvindex,
+
+        },)
+      })
+     
     const fetchString = "data/realtime2/" + selectedBuoy + ".txt"
 
     fetch(fetchString)
@@ -138,19 +166,21 @@ console.log()
   // const handleUpdate = () => {
   //   updatePost(post)
   // }
+console.log(currentWeather)
 
   return (
     <>
       <div className="home">
-        <br></br>
-        <h1>Welcome to  SurfBoard!</h1>
+        <div className="center-container">
+          <br></br>
+      <img src={logo} alt="Your Logo" className="logo-image" />
+    </div>
         {/* <button onClick={handleDelete}>Delete A Post</button> */}
         {/* <button onClick={handleLogOut}>Log-Out</button> */}
         <br></br>
         <br></br>
-        <br></br> <br></br>
         <br></br>
-        <div style={{ height: "1000px", overflowY: "auto" }}>
+        
           <Grid container spacing={2}>
             {/* Left Side of Page*/}
 
@@ -162,11 +192,13 @@ console.log()
 
                   <BuoySelect onChange={handleSelectChange}></BuoySelect>
                   <Typography style={{ fontSize: '20px' }}>{messageText}</Typography>
+                  </CardContent>
+              </Card>
                   <br></br>
                   <Grid direction="row" spacing={3} container>
-                    <Grid item>
+                    <Grid item stretch> 
                       <DataBox
-                        title="Current Wave Height"
+                        title="Current Wave Height" 
                         data={currentReading.WVHT}
                         label="feet"
                       ></DataBox>
@@ -200,8 +232,7 @@ console.log()
                       ></DataBox>
                     </Grid>
                   </Grid>
-                </CardContent>
-              </Card>
+              
             </Grid>
 
             {/* Right Side of Page */}
@@ -223,10 +254,35 @@ console.log()
                   ></Journal>
                 </CardContent>
               </Card>
+      <br></br>
+              <Grid direction="row" spacing={3} container>
+                    <Grid item>
+                      <DataBox
+                        title="Current Temperature"
+                        data={currentWeather.currentTemp}
+                        label="Farenheit"
+                      ></DataBox>
+                    </Grid>
+                    <Grid item>
+                      <DataBox
+                        title="Windspeed"
+                        data={currentWeather.windSpeed}
+                        label="mph"
+                      ></DataBox>
+                    </Grid>
+
+                    <Grid item>
+                      <DataBox
+                        title="Today's High Temperature"
+                        data={currentWeather.maxTemp}
+                        label="Farenheit"
+                      ></DataBox>
+                    </Grid>
+                    </Grid>
             </Grid>
           </Grid>
         </div>
-      </div>
+      
     </>
   )
 }
