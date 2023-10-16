@@ -66,8 +66,9 @@ exports.login = async (req, res) => {
   const [username, password] = credentials
 
   const user = await showUserByUsername(username)
-
+  console.log(user)
   const userId = user.user_id
+  
   // If the user isn't found or the password is incorrect, return an error
   if (!user || !await bcrypt.compare(password, user.password)) {
     return res.status(401).json({ message: 'Invalid username or password' })

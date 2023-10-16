@@ -3,7 +3,7 @@ const { showPostsByUserId, createPost, deletePost, updatePost } = require('../se
 exports.getPostsByUserId = async (req, res) => {
   
   try {
-    const posts = await showPostsByUserId(req.params.id)
+    const posts = await showPostsByUserId(req.params.userId)
     
     res.json(posts)
     
@@ -14,6 +14,7 @@ exports.getPostsByUserId = async (req, res) => {
     res.status(500).send("Internal Server Error")
   }
 }
+
 
 exports.addPost = async (req, res) => {
 

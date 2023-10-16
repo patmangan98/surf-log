@@ -3,7 +3,8 @@ const { authenticate } = require('../middleware/authenticate')
 
 const posts = (app) => {
  
-  app.get('/posts/:id', getPostsByUserId)
+
+  app.get('/posts/:userId', getPostsByUserId)
   app.post('/post/newpost', addPost)
   app.put('/post/', updatePost)
   app.delete('/post/:id', deletePost)
