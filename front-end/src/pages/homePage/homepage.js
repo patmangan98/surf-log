@@ -2,14 +2,15 @@ import * as React from "react"
 import { useState, useEffect } from "react"
 import { clearToken } from "../../utility"
 import { deletePost } from "../../api"
-import { getToken } from "../../utility"
 import Grid from "@mui/material/Grid"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import Typography from "@mui/material/Typography"
 import BuoySelect from "./BuoySelect"
 import { DataBox } from "./DataBox"
+import { WaveData } from "./WaveData"
 import { getLatestBuoyReading } from "../../utility"
+import { getWeatherData } from '../../utility'
 import { getWaveData } from "../../api"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
@@ -17,13 +18,13 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar"
 import Dayjs from "dayjs"
 import Journal from "./journal/Journal"
 import { getCurrentDate } from "../../utility"
-import { celsiusToFahrenheit } from  "../../utility"
-import  { weatherSearchUrl } from "../../utility"
+import { celsiusToFahrenheit } from "../../utility"
+import { weatherSearchUrl } from "../../utility"
+import { getCompassDirection } from "../../utility"
 import "../../homepage.css"
 // import logo from './logo.png'
 
 export default function HomePage({ setUser, value }) {
-  
   const [selectedBuoy, setSelectedBuoy] = useState("41004")
   const [selectedDate, setSelectedDate] = useState(Dayjs())
   const [currentReading, setCurrentReading] = useState({
@@ -51,7 +52,6 @@ export default function HomePage({ setUser, value }) {
     maxTemp: "",
     sunsetTime: "",
     uvIndex: "",
-
   })
 
   const handleSelectChange = (value) => {
@@ -60,13 +60,12 @@ export default function HomePage({ setUser, value }) {
   }
 
   const handleDateChange = (value) => {
-    console.log(currentReading)  
     if (value !== "undefined") {
       getWaveData(value.format("YYYY-MM-DD"), selectedBuoy).then((result) => {
-        //If it is today, we need to grab the latest reading and parse it with getLatestBuoyReading 
+        //If it is today, we need to grab the latest reading and parse it with getLatestBuoyReading
         if (value.format("MM-DD-YYYY") === getCurrentDate()) {
           let tempCurrentReading = getLatestBuoyReading(result)
-              console.log(tempCurrentReading)
+  
           setCurrentReading({
             ...currentReading,
             WVHT: tempCurrentReading[8],
@@ -78,15 +77,18 @@ export default function HomePage({ setUser, value }) {
             WSPD: tempCurrentReading[6],
             GST: tempCurrentReading[7],
           })
+
         } else {
           //If the date is not today, read the results from the database, returned as an object, no parsing required
           setCurrentReading(result)
         }
+     
+        // setCurrentWeather(getWeatherData(value.format("YYYY-DD-MM")))
       })
     }
     setSelectedDate(value)
   }
- 
+
   //Buoy conditions message changes based on current date vs historical date
   let messageText = "Conditions for "
   if (selectedDate.format("MM-DD-YYYY") === getCurrentDate()) {
@@ -97,28 +99,30 @@ export default function HomePage({ setUser, value }) {
   }
 
   useEffect(() => {
-    fetch(weatherSearchUrl())
+    fetch(weatherSearchUrl(selectedDate.format("YYYY-MM-DD")))
       .then((response) => response.json())
       .catch((error) => {
         console.error("Error fetching message:", error)
       })
       .then((data) => {
-        // Process the JSON data here
-        console.log(data.days[0])
+        console.log(data)
+        if (data !== undefined){
         setCurrentWeather({
-          currentTemp: celsiusToFahrenheit(parseFloat(data.days[0].temp)),
+        
+          currentTemp: celsiusToFahrenheit(parseFloat(data.days[0].temp), 2),
           relativeHumidity: data.days[0].humidity,
           windSpeed: data.days[0].windspeed,
-          windDirection: data.days.winddir,
-          maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax)),
-          minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin)),
+          windDirectionDegrees: data.days[0].winddir,
+          windDirection: getCompassDirection(data.days[0].winddir),
+          maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax), 2),
+          minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin), 2),
           sunriseTime: data.days[0].sunrise,
           sunsetTime: data.days[0].sunset,
-          uvIndex:data.days[0].uvindex,
-
-        },)
+          uvIndex: data.days[0].uvindex,
+        })
+      }
       })
-     
+
     const fetchString = "data/realtime2/" + selectedBuoy + ".txt"
 
     fetch(fetchString)
@@ -157,7 +161,6 @@ export default function HomePage({ setUser, value }) {
     clearToken()
     setUser()
   }
-console.log()
   const handleDelete = () => {
     const post_id = 4
     deletePost(post_id)
@@ -166,21 +169,16 @@ console.log()
   // const handleUpdate = () => {
   //   updatePost(post)
   // }
-console.log(currentWeather)
 
   return (
     <>
       <div className="home">
         <div className="center-container">
           <br></br>
-      {/* <img src={logo} alt="Your Logo" className="logo-image" /> */}
-    </div>
-        {/* <button onClick={handleDelete}>Delete A Post</button> */}
-        {/* <button onClick={handleLogOut}>Log-Out</button> */}
-        <br></br>
-        <br></br>
-        <br></br>
-        
+          {/* <img src={logo} alt="Your Logo" className="logo-image" /> */}
+        </div>
+
+        <div style={{ height: "1000px", overflowY: "auto" }}>
           <Grid container spacing={2}>
             {/* Left Side of Page*/}
 
@@ -189,50 +187,14 @@ console.log(currentWeather)
                 <CardContent style={{ height: "100%" }}>
                   {/* Get the selected buoy from the buoy select component */}
                   <br></br>
-
                   <BuoySelect onChange={handleSelectChange}></BuoySelect>
-                  <Typography style={{ fontSize: '20px' }}>{messageText}</Typography>
-                  </CardContent>
+                  <Typography style={{ fontSize: "20px" }}>
+                    {messageText}
+                  </Typography>
+                </CardContent>
               </Card>
-                  <br></br>
-                  <Grid direction="row" spacing={3} container>
-                    <Grid item stretch> 
-                      <DataBox
-                        title="Current Wave Height" 
-                        data={currentReading.WVHT}
-                        label="feet"
-                      ></DataBox>
-                    </Grid>
-                    <Grid item>
-                      <DataBox
-                        title="Dominant Wave Period"
-                        data={currentReading.DPD}
-                        label="seconds"
-                      ></DataBox>
-                    </Grid>
-                    <Grid item>
-                      <DataBox
-                        title="Average Wave Period"
-                        data={currentReading.APD}
-                        label="seconds"
-                      ></DataBox>
-                    </Grid>
-                    <Grid item>
-                      <DataBox
-                        title="Mean Wave Direction"
-                        data={currentReading.MWD}
-                        label="degrees"
-                      ></DataBox>
-                    </Grid>
-                    <Grid item>
-                      <DataBox
-                        title="Atmospheric Pressure"
-                        data={currentReading.PRES}
-                        label="atms"
-                      ></DataBox>
-                    </Grid>
-                  </Grid>
-              
+              <br></br>
+              <WaveData currentReading={currentReading} />
             </Grid>
 
             {/* Right Side of Page */}
@@ -254,35 +216,68 @@ console.log(currentWeather)
                   ></Journal>
                 </CardContent>
               </Card>
-      <br></br>
-              <Grid direction="row" spacing={3} container>
-                    <Grid item>
-                      <DataBox
-                        title="Current Temperature"
-                        data={currentWeather.currentTemp}
-                        label="Farenheit"
-                      ></DataBox>
-                    </Grid>
-                    <Grid item>
-                      <DataBox
-                        title="Windspeed"
-                        data={currentWeather.windSpeed}
-                        label="mph"
-                      ></DataBox>
-                    </Grid>
+              <br></br>
 
-                    <Grid item>
-                      <DataBox
-                        title="Today's High Temperature"
-                        data={currentWeather.maxTemp}
-                        label="Farenheit"
-                      ></DataBox>
-                    </Grid>
-                    </Grid>
+              <Grid direction="row" spacing={3} container>
+                <Grid item>
+                  <DataBox
+                    title="Current Temperature"
+                    data={currentWeather.currentTemp}
+                    label="Farenheit"
+                  ></DataBox>
+                </Grid>
+                <Grid item>
+                  <DataBox
+                    title="Windspeed"
+                    data={currentWeather.windSpeed}
+                    label="mph"
+                  ></DataBox>
+                </Grid>
+
+                <Grid item>
+                  <DataBox
+                    title="Wind Direction"
+                    data={currentWeather.windDirection}
+                    label={currentWeather.windDirectionDegrees + " degrees"}
+                  ></DataBox>
+                </Grid>
+
+                <Grid item>
+                  <DataBox
+                    title="Today's Low Temp"
+                    data={currentWeather.minTemp}
+                    label="Farenheit"
+                  ></DataBox>
+                </Grid>
+
+                <Grid item>
+                  <DataBox
+                    title="Today's High Temp"
+                    data={currentWeather.maxTemp}
+                    label="Farenheit"
+                  ></DataBox>
+                </Grid>
+
+                <Grid item>
+                  <DataBox
+                    title="Sunrise Time Today"
+                    data={currentWeather.sunriseTime}
+                    label="AM"
+                  ></DataBox>
+                </Grid>
+
+                <Grid item>
+                  <DataBox
+                    title="Sunset Time Today"
+                    data={currentWeather.sunsetTime}
+                    label="PM"
+                  ></DataBox>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </div>
-      
+      </div>
     </>
   )
 }

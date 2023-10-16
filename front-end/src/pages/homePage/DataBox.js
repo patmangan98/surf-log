@@ -8,7 +8,7 @@ export const DataBox = (props) => {
   const { title, data, label} = props
 
   return (
-    <Card width='300px' sx={{ boxShadow: 5 }}>
+    <Card sx={{ width: 300, boxShadow: 5 }}>
       <CardContent>
         <Stack
           alignItems="flex-start"
