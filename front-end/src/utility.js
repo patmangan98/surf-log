@@ -22,10 +22,14 @@ export const clearToken = () => {
 }
 
 export const metersToFeet = (meters) => {
-  // 1 meter is approximately equal to 3.28084 feet
   const feet = (meters * 3.28084).toFixed(2)
 
   return feet
+}
+
+export function celsiusToFahrenheit(celsius) {
+  const fahrenheit = (celsius * 9) / 5 + 32
+  return fahrenheit
 }
 
 export const getMonthString = (monthNumber) => {
@@ -52,8 +56,6 @@ export const getMonthString = (monthNumber) => {
 }
 
 export const getLatestBuoyReading = (fileContent) => {
-  console.log(fileContent)
-  console.log(typeof fileContent)
   const dataString = fileContent.split("\n")
 
   //Get the latest reading from the buoy
@@ -87,22 +89,93 @@ export const getCurrentDate = () => {
   const currentDate = new Date()
 
   const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',   
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
   }
-  
-  return currentDate.toLocaleDateString('en-US', options).replaceAll('/', '-').replaceAll('_', '-').replaceAll(' ', '-')
+
+  return currentDate
+    .toLocaleDateString("en-US", options)
+    .replaceAll("/", "-")
+    .replaceAll("_", "-")
+    .replaceAll(" ", "-")
 }
 
 export const getCurrentDateV2 = () => {
   const currentDate = new Date()
 
   const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',   
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
   }
+
+  return currentDate
+    .toLocaleDateString("sv-SE", options)
+    .replaceAll("/", "-")
+    .replaceAll("_", "-")
+    .replaceAll(" ", "-")
+}
+
+export const getCompassDirection = (degrees) => {
+  degrees = (degrees + 360) % 360
+
+  const directions = [
+    "N",
+    "NNE",
+    "NE",
+    "ENE",
+    "E",
+    "ESE",
+    "SE",
+    "SSE",
+    "S",
+    "SSW",
+    "SW",
+    "WSW",
+    "W",
+    "WNW",
+    "NW",
+    "NNW",
+  ]
+
+  const directionIndex = Math.round(degrees / 22.5)
+
+  return directions[directionIndex % 16]
+}
+
+export const weatherSearchUrl = (dateString) => {
+  console.log("from the utility function", dateString)
+
+  const stringOne =
+    "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/charleston%2C%20south%20carolina/"
+  const stringTwo =
+    "?unitGroup=metric&include=hours&key=EXQ4HJA5WC2HZL3LRU6EANZKK&contentType=json"
+  return stringOne + dateString + stringTwo
+}
+
+export const getWeatherData = async (selectedDate) => {
   
-  return currentDate.toLocaleDateString('sv-SE', options).replaceAll('/', '-').replaceAll('_', '-').replaceAll(' ', '-')
+  const searchString = weatherSearchUrl(selectedDate)
+
+  fetch(searchString)
+    .then((response) => response.json())
+    .catch((error) => {
+      console.error("Error fetching message:", error)
+    })
+    .then((data) => {
+      const weatherData = {
+        currentTemp: celsiusToFahrenheit(parseFloat(data.days[0].temp), 2),
+        relativeHumidity: data.days[0].humidity,
+        windSpeed: data.days[0].windspeed,
+        windDirectionDegrees: data.days[0].winddir,
+        windDirection: getCompassDirection(data.days[0].winddir),
+        maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax), 2),
+        minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin), 2),
+        sunriseTime: data.days[0].sunrise,
+        sunsetTime: data.days[0].sunset,
+        uvIndex: data.days[0].uvindex,
+      }
+      return weatherData
+    })
 }

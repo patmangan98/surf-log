@@ -15,21 +15,6 @@ exports.getPostsByUserId = async (req, res) => {
   }
 }
 
-exports.getPostsByUsername = async (req, res) => {
-  
-  console.log(req.params.username)
-  try {
-    const posts = await showPostsByUsername(req.params.username)
-    
-    res.json(posts)
-    
-
-  } catch (error) {
-
-    console.error(error)
-    res.status(500).send("Internal Server Error")
-  }
-}
 
 exports.addPost = async (req, res) => {
 

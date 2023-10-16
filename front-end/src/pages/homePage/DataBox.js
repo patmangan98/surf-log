@@ -8,7 +8,7 @@ export const DataBox = (props) => {
   const { title, data, label} = props
 
   return (
-    <Card width='300px'>
+    <Card sx={{ width: 300, boxShadow: 5 }}>
       <CardContent>
         <Stack
           alignItems="flex-start"
@@ -39,7 +39,7 @@ export const DataBox = (props) => {
             </SvgIcon>
           </Avatar>
         </Stack>
-        {40 && (
+        
           <Stack
             alignItems="center"
             direction="row"
@@ -71,7 +71,7 @@ export const DataBox = (props) => {
               {label}
             </Typography>
           </Stack>
-        )}
+     
       </CardContent>
     </Card>
   );

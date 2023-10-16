@@ -59,15 +59,16 @@ const JournalForm = ({ currentReading, selectedBuoy, date, handleClose }) => {
       <Grid container direction="row" justifyContent="center">
         <Card
           className="form-container"
-          width={500}
+          width={1200}
           sx={{
-            borderRadius: "20px",
+            borderRadius: "8px",
             boxShadow: "3px 2px 7px rgb(0, 0, 0, 0.5)",
           }}
         >
-          <CardContent sx={{ display: "grid", margin: "20px" }}>
+          <CardContent sx={{ display: "grid", margin: "75px" }}>
             <Grid container direction="column" justify="center" width={400}>
               <Typography style={{ fontSize: '24px' }}>Surf Journal Record for {date.format('MM-DD-YYYY')} </Typography>
+              <br></br>
               <TextField
                 sx={{ marginBottom: "5px" }}
                 onChange={(location) => setLocation(location.target.value)}
@@ -77,7 +78,7 @@ const JournalForm = ({ currentReading, selectedBuoy, date, handleClose }) => {
 
               <TextField
                 id="review"
-                label="Review"
+                label="Write a review"
                 multiline
                 rows={5}
                 onChange={(description) =>

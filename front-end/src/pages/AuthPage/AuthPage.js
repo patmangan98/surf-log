@@ -36,5 +36,4 @@ export default function AuthPage ({ setUser }) {
             <LoginForm setUser={setUser} setSignUpVisible={setSignUpVisible} handleToggle={handleToggle}/>
         )
     }
-
 }

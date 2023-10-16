@@ -1,3 +1,4 @@
+
 import { getUserId } from "../utilities/users-service"
 import { useEffect, useState } from "react"
 import { indexPosts } from "../utilities/posts-api"
@@ -32,11 +33,3 @@ for(let i = 0; i < posts.length; i++) {
 
 
 
-    return (
-        <>
-        <h1>View Logs Page!</h1>
-
-       <JournalPages></JournalPages>
-        </>
-    )
-}
