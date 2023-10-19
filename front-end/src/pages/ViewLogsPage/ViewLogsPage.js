@@ -7,20 +7,20 @@ import JournalPages from "./Components/JournalPages"
 
 export default function ViewLogsPage () {
 
-const [posts, setPosts] = useState([])
+// const [posts, setPosts] = useState([])
 
-useEffect(() => {
-    indexPosts(getUserId())
-        .then(res => res.json())
-        .then(resData => setPosts(resData))
-}, [])
+// useEffect(() => {
+//     indexPosts(getUserId())
+//         .then(res => res.json())
+//         .then(resData => setPosts(resData))
+// }, [])
 
-// console.log(posts)
+// // console.log(posts)
 
 
-for(let i = 0; i < posts.length; i++) {
-    console.log(posts[`${i}`])
-}
+// for(let i = 0; i < posts.length; i++) {
+//     console.log(posts[`${i}`])
+// }
 
 // to do: make a sticky note component that can be easily mapped over 
 
@@ -29,6 +29,14 @@ for(let i = 0; i < posts.length; i++) {
 // wrap those divs in the carousel 
 
 //style properly 
+return (
+    <>
+    <JournalPages />
+    
+    </>
+)
+
+
 
 }
 
