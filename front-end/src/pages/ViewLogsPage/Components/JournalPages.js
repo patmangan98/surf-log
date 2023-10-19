@@ -41,7 +41,7 @@ export default function JournalPages() {
                 container
                 justifyContent="center" alignItems="center"
                 spacing={2}
-                style={{
+                sx={{
                     height: '100vh'
                 }}>
 
