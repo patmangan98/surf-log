@@ -71,7 +71,6 @@ function App() {
               <Route path= "" element={<Navigate to ="/homepage" />}/>
             </Routes>
 
-
           {/* <HomePage setUser={setUser} userId={userId} /> */}
         </>
       ) : (

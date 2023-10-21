@@ -8,15 +8,15 @@ export const DataBox = (props) => {
   const { title, data, label} = props
 
   return (
-    <Card sx={{ width: 300, boxShadow: 5 }}>
+    <Card sx={{ width: 285, boxShadow: 5 }}>
       <CardContent>
         <Stack
           alignItems="flex-start"
           direction="row"
           justifyContent="space-between"
-          spacing={4}
+          spacing={3}
         >
-          <Stack spacing={3}>
+          <Stack spacing={2}>
             <Typography
               color="text.secondary"
               variant="overline"

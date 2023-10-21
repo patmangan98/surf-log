@@ -145,37 +145,42 @@ export const getCompassDirection = (degrees) => {
 }
 
 export const weatherSearchUrl = (dateString) => {
-  console.log("from the utility function", dateString)
-
+  
+  //API Key EXQ4HJA5WC2HZL3LRU6EANZKK damaristorrent@gmail.com
+  //API Key 4PSEWATKQCJJCLS5LN8XJQQX9 damaristorrent21@gmail.com
   const stringOne =
     "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/charleston%2C%20south%20carolina/"
   const stringTwo =
     "?unitGroup=metric&include=hours&key=EXQ4HJA5WC2HZL3LRU6EANZKK&contentType=json"
-  return stringOne + dateString + stringTwo
+  return stringOne + dateString + "/" + dateString + stringTwo
 }
 
 export const getWeatherData = async (selectedDate) => {
-  
-  const searchString = weatherSearchUrl(selectedDate)
+  const searchString = weatherSearchUrl(selectedDate);
 
-  fetch(searchString)
-    .then((response) => response.json())
-    .catch((error) => {
-      console.error("Error fetching message:", error)
-    })
-    .then((data) => {
-      const weatherData = {
-        currentTemp: celsiusToFahrenheit(parseFloat(data.days[0].temp), 2),
+  try {
+    const response = await fetch(searchString)
+    if (!response.ok) {
+      console.error("Error fetching data:", response.statusText)
+      return null
+    }
+
+    const data = await response.json()
+    const weatherData = {
+        currentTemp: celsiusToFahrenheit(parseFloat(data.days[0].temp), 2).toFixed(2),
         relativeHumidity: data.days[0].humidity,
         windSpeed: data.days[0].windspeed,
         windDirectionDegrees: data.days[0].winddir,
         windDirection: getCompassDirection(data.days[0].winddir),
-        maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax), 2),
-        minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin), 2),
+        maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax), 2).toFixed(2),
+        minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin), 2).toFixed(2),
         sunriseTime: data.days[0].sunrise,
         sunsetTime: data.days[0].sunset,
         uvIndex: data.days[0].uvindex,
       }
-      return weatherData
-    })
+    return weatherData
+  } catch (error) {
+    console.error("Error fetching data:", error)
+    return null
+  }
 }

@@ -1,16 +1,14 @@
 import * as React from "react"
 import { useState, useEffect } from "react"
-import { clearToken } from "../../utility"
-import { deletePost } from "../../api"
 import Grid from "@mui/material/Grid"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import Typography from "@mui/material/Typography"
 import BuoySelect from "./BuoySelect"
-import { DataBox } from "./DataBox"
 import { WaveData } from "./WaveData"
+import { WeatherData } from "./WeatherData"
 import { getLatestBuoyReading } from "../../utility"
-import { getWeatherData } from '../../utility'
+import { getWeatherData } from "../../utility"
 import { getWaveData } from "../../api"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
@@ -43,13 +41,14 @@ export default function HomePage({ setUser, value }) {
     PRES: "",
   })
 
-  const [currentWeather, setCurrentWeather] = useState({
+  const [weatherData, setWeatherData] = useState({
     currentTemp: "",
     relativeHumidity: "",
     windSpeed: "",
     windDirection: "",
     minTemp: "",
     maxTemp: "",
+    sunriseTime: "",
     sunsetTime: "",
     uvIndex: "",
   })
@@ -65,7 +64,7 @@ export default function HomePage({ setUser, value }) {
         //If it is today, we need to grab the latest reading and parse it with getLatestBuoyReading
         if (value.format("MM-DD-YYYY") === getCurrentDate()) {
           let tempCurrentReading = getLatestBuoyReading(result)
-  
+
           setCurrentReading({
             ...currentReading,
             WVHT: tempCurrentReading[8],
@@ -77,19 +76,20 @@ export default function HomePage({ setUser, value }) {
             WSPD: tempCurrentReading[6],
             GST: tempCurrentReading[7],
           })
-
         } else {
           //If the date is not today, read the results from the database, returned as an object, no parsing required
           setCurrentReading(result)
         }
-     
-        // setCurrentWeather(getWeatherData(value.format("YYYY-DD-MM")))
+
+        getWeatherData(value.format("YYYY-MM-DD")).then((result) => {
+          setWeatherData(result)
+        })
       })
     }
     setSelectedDate(value)
   }
 
-  //Buoy conditions message changes based on current date vs historical date
+  //Message changes based on current date vs historical date
   let messageText = "Conditions for "
   if (selectedDate.format("MM-DD-YYYY") === getCurrentDate()) {
     messageText = "Current " + messageText + " today " + getCurrentDate()
@@ -105,22 +105,29 @@ export default function HomePage({ setUser, value }) {
         console.error("Error fetching message:", error)
       })
       .then((data) => {
-        console.log(data)
-        if (data !== undefined){
-        setCurrentWeather({
-        
-          currentTemp: celsiusToFahrenheit(parseFloat(data.days[0].temp), 2),
-          relativeHumidity: data.days[0].humidity,
-          windSpeed: data.days[0].windspeed,
-          windDirectionDegrees: data.days[0].winddir,
-          windDirection: getCompassDirection(data.days[0].winddir),
-          maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax), 2),
-          minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin), 2),
-          sunriseTime: data.days[0].sunrise,
-          sunsetTime: data.days[0].sunset,
-          uvIndex: data.days[0].uvindex,
-        })
-      }
+        if (data !== undefined) {
+          setWeatherData({
+            currentTemp: celsiusToFahrenheit(
+              parseFloat(data.days[0].temp),
+              2
+            ).toFixed(2),
+            relativeHumidity: data.days[0].humidity,
+            windSpeed: data.days[0].windspeed,
+            windDirectionDegrees: data.days[0].winddir,
+            windDirection: getCompassDirection(data.days[0].winddir),
+            maxTemp: celsiusToFahrenheit(
+              parseFloat(data.days[0].tempmax),
+              2
+            ).toFixed(2),
+            minTemp: celsiusToFahrenheit(
+              parseFloat(data.days[0].tempmin),
+              2
+            ).toFixed(2),
+            sunriseTime: data.days[0].sunrise,
+            sunsetTime: data.days[0].sunset,
+            uvIndex: data.days[0].uvindex,
+          })
+        }
       })
 
     const fetchString = "data/realtime2/" + selectedBuoy + ".txt"
@@ -157,33 +164,25 @@ export default function HomePage({ setUser, value }) {
       })
   }, [selectedBuoy])
 
-  function handleLogOut() {
-    clearToken()
-    setUser()
-  }
-  const handleDelete = () => {
-    const post_id = 4
-    deletePost(post_id)
-  }
-
-  // const handleUpdate = () => {
-  //   updatePost(post)
+  // function handleLogOut() {
+  //   clearToken()
+  //   setUser()
   // }
 
   return (
     <>
       <div className="home">
         <div className="center-container">
-          <br></br>
-          {/* <img src={logo} alt="Your Logo" className="logo-image" /> */}
+         
+           <img  alt="Your Logo" className="logo-image" /> 
         </div>
-
+        <br></br>
         <div style={{ height: "1000px", overflowY: "auto" }}>
           <Grid container spacing={2}>
             {/* Left Side of Page*/}
 
             <Grid item xs={12} sm={6} md={3} lg={4} marginLeft={12}>
-              <Card sx={{ border: 2 }}>
+              <Card sx={{ border: 2 }} >
                 <CardContent style={{ height: "100%" }}>
                   {/* Get the selected buoy from the buoy select component */}
                   <br></br>
@@ -194,8 +193,14 @@ export default function HomePage({ setUser, value }) {
                 </CardContent>
               </Card>
               <br></br>
+              <Card sx={{ backgroundColor: 'transparent',justifyContent: 'center',
+    alignItems: 'center'}}   >
+                <CardContent style={{ height: "100%" }}>
               <WaveData currentReading={currentReading} />
+              </CardContent>
+              </Card>
             </Grid>
+            
 
             {/* Right Side of Page */}
             <Grid item xs={12} sm={6} md={4} lg={6} marginLeft={10}>
@@ -217,63 +222,21 @@ export default function HomePage({ setUser, value }) {
                 </CardContent>
               </Card>
               <br></br>
-
-              <Grid direction="row" spacing={3} container>
-                <Grid item>
-                  <DataBox
-                    title="Current Temperature"
-                    data={currentWeather.currentTemp}
-                    label="Farenheit"
-                  ></DataBox>
-                </Grid>
-                <Grid item>
-                  <DataBox
-                    title="Windspeed"
-                    data={currentWeather.windSpeed}
-                    label="mph"
-                  ></DataBox>
-                </Grid>
-
-                <Grid item>
-                  <DataBox
-                    title="Wind Direction"
-                    data={currentWeather.windDirection}
-                    label={currentWeather.windDirectionDegrees + " degrees"}
-                  ></DataBox>
-                </Grid>
-
-                <Grid item>
-                  <DataBox
-                    title="Today's Low Temp"
-                    data={currentWeather.minTemp}
-                    label="Farenheit"
-                  ></DataBox>
-                </Grid>
-
-                <Grid item>
-                  <DataBox
-                    title="Today's High Temp"
-                    data={currentWeather.maxTemp}
-                    label="Farenheit"
-                  ></DataBox>
-                </Grid>
-
-                <Grid item>
-                  <DataBox
-                    title="Sunrise Time Today"
-                    data={currentWeather.sunriseTime}
-                    label="AM"
-                  ></DataBox>
-                </Grid>
-
-                <Grid item>
-                  <DataBox
-                    title="Sunset Time Today"
-                    data={currentWeather.sunsetTime}
-                    label="PM"
-                  ></DataBox>
-                </Grid>
-              </Grid>
+              <Card sx={{ border: 2}} >
+                <CardContent style={{ height: "100%" }}>
+                  <br></br>
+                  <Typography style={{ fontSize: "24px" }}>
+                    {messageText}
+                  </Typography>
+                </CardContent>
+              </Card>
+              <br></br>
+              <Card sx={{ backgroundColor: 'transparent',justifyContent: 'center',
+    alignItems: 'center'}}   >
+                <CardContent style={{ height: "100%" }}>
+              <WeatherData weatherData={weatherData} />
+              </CardContent>
+              </Card>
             </Grid>
           </Grid>
         </div>
