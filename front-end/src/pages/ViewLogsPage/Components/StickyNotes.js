@@ -1,13 +1,15 @@
-import { Card, Typography } from "@mui/material"
+import { Paper ,Card, Typography } from "@mui/material"
 
 
 
-export default function StickyNotes () {
+export default function StickyNotes ({title, value}) {
     return (
         <>
-        <Card>
-            <Typography>This is a sticky note</Typography>
-        </Card>
+        
+        <Paper>
+            <p>Hello</p>
+            <Typography>{title}: {value}</Typography>
+        </Paper>
         
         </>
     )

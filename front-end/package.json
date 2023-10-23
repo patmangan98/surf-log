@@ -15,11 +15,13 @@
     "cors": "^2.8.5",
     "dayjs": "^1.11.9",
     "framer-motion": "^10.16.4",
+    "framer-motion-carousel": "^2.0.4",
     "knex": "^2.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0",
     "react-scripts": "5.0.1",
+    "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {

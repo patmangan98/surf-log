@@ -1,34 +1,70 @@
-import { Grid, Card, Typography } from "@mui/material"
-import StickyNotes from "./StickyNotes"
+import { Grid, Card, Typography, Button} from "@mui/material"
+import CardContent from '@mui/material/CardContent';
+import Pages from "./Pages";
+import { useState, useEffect, useRef } from "react";
+import { getUserId } from "../../utilities/users-service";
+import { indexPosts } from "../../utilities/posts-api";
+import Carousel from "framer-motion-carousel"
+// import './carousel.css'
 
 export default function JournalPages() {
+
+    const [posts, setPosts] = useState([])
+
+    useEffect(() => {
+        indexPosts(getUserId())
+            .then(res => res.json())
+            .then(resData => setPosts(resData))
+    }, [])
+    const carouselRef = useRef(0)
+
+    let postMap = posts.map((post, index) => (
+        <>
+     
+                <Pages
+                    post={post}
+                    key={`${index} + ${post['post_id']}`}
+                />
+     
+        </>
+    ))
+
+
+
     return (
         <>
-            <Grid
-                container
-                spacing={2}
-                justifyContent={'center'}
-                alignContent={'center'}
-                sx={{
-                    maxWidth: '100vw',
-                    height: '80vh'
-                }} >
-                <Grid item 
-                xs={5}
-                sx ={{maxHeight: '50vh'}}
-                >
-                    <Card>
-                        <Typography>This is the left card</Typography>
-                        <StickyNotes></StickyNotes>
-                    </Card>
-                </Grid>
-                <Grid item xs={5}>
-                    <Card>
-                        <Typography>This is the right card</Typography>
-                    </Card>
-                </Grid>
-
-            </Grid>
+        <div className="carosuel" style={{
+            height: 800,
+            width:'80vw',
+            margin: '0 auto',
+            marginTop: '15vh',
+            paddingRight: '20px',
+            paddingLeft: '20px'
+            // position: 'relative'
+        }}>
+     
+        <Carousel
+            autoPlay={false}
+            // renderArrowLeft={() => null}
+            // renderArrowRight={() => null}
+            // renderDots={() => null}
+        >
+     
+        {postMap}
+      
+        </Carousel>
+      
+        </div>
         </>
+        
     )
 }
+
+//    APD : post.APD,
+//    DPD : post.DPD,
+//    GST : post.MWD,
+//    PRES : post.PRES,
+//    WDIR : post.WDIR,
+//    WSPD : post.WSPD 
+
+
