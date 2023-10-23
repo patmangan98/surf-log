@@ -1,13 +1,11 @@
-import { Grid, Card, Typography } from "@mui/material"
+import { Grid, Card, Typography, Button} from "@mui/material"
 import CardContent from '@mui/material/CardContent';
-import StickyNotes from "./StickyNotes"
-import LeftPage from "./LeftPage";
-import RightPage from "./RightPage";
-import { useState, useEffect } from "react";
+import Pages from "./Pages";
+import { useState, useEffect, useRef } from "react";
 import { getUserId } from "../../utilities/users-service";
 import { indexPosts } from "../../utilities/posts-api";
-
-
+import Carousel from "framer-motion-carousel"
+// import './carousel.css'
 
 export default function JournalPages() {
 
@@ -18,18 +16,16 @@ export default function JournalPages() {
             .then(res => res.json())
             .then(resData => setPosts(resData))
     }, [])
-
+    const carouselRef = useRef(0)
 
     let postMap = posts.map((post, index) => (
         <>
-        <LeftPage
-            post={post}
-            key={`${index} + ${post['post_id']}`}
-        />
-        <RightPage 
-            post = {post}
-            key={`${index} + ${post['user_id']}`}
-        />
+     
+                <Pages
+                    post={post}
+                    key={`${index} + ${post['post_id']}`}
+                />
+     
         </>
     ))
 
@@ -37,18 +33,30 @@ export default function JournalPages() {
 
     return (
         <>
-            <Grid
-                container
-                justifyContent="center" alignItems="center"
-                spacing={2}
-                sx={{
-                    height: '100vh'
-                }}>
-
-                {postMap}
-
-            </Grid>
+        <div className="carosuel" style={{
+            height: 800,
+            width:'80vw',
+            margin: '0 auto',
+            marginTop: '15vh',
+            paddingRight: '20px',
+            paddingLeft: '20px'
+            // position: 'relative'
+        }}>
+     
+        <Carousel
+            autoPlay={false}
+            // renderArrowLeft={() => null}
+            // renderArrowRight={() => null}
+            // renderDots={() => null}
+        >
+     
+        {postMap}
+      
+        </Carousel>
+      
+        </div>
         </>
+        
     )
 }
 
