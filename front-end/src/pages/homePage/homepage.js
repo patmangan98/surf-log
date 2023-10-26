@@ -193,8 +193,7 @@ export default function HomePage({ setUser, value }) {
                 </CardContent>
               </Card>
               <br></br>
-              <Card sx={{ backgroundColor: 'transparent',justifyContent: 'center',
-    alignItems: 'center'}}   >
+              <Card sx={{ backgroundColor: 'transparent',alignItems: 'center', display:'flex'}}   >
                 <CardContent style={{ height: "100%" }}>
               <WaveData currentReading={currentReading} />
               </CardContent>

@@ -16,7 +16,7 @@ export default function NavBar({ user, setUser }) {
     <>
       {/* <div className="NavBar"> */}
 
-      <AppBar position="static">
+      <AppBar position="static" sx={{ top: 'auto', bottom: 0 }} >
         <Grid2 container spacing={2} sx={{ paddingY: "9px" }}>
           <Grid2>
             <Link to="/homepage">
@@ -41,7 +41,7 @@ export default function NavBar({ user, setUser }) {
           </Grid2>
         </Grid2>
       </AppBar>
-
+    
       {/* </div> */}
     </>
   )

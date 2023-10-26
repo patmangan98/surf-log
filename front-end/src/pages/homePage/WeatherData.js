@@ -8,7 +8,7 @@ export const WeatherData = ({ weatherData }) => {
 
 console.log(weatherData)
   return (
-    <Grid direction="row" spacing={3} container>
+    <Grid direction="row" spacing={4} container>
     <Grid item>
       <DataBox
         title="Temperature"

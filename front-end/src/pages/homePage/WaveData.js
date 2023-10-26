@@ -4,7 +4,7 @@ import { DataBox } from "./DataBox"
 export const WaveData = ({ currentReading }) => {
 
   return (
-    <Grid direction="row" spacing={3} container>
+    <Grid direction="row" spacing={4} container>
       <Grid item>
         <DataBox
           title="Current Wave Height"
