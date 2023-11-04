@@ -1,3 +1,6 @@
+  //API Key EXQ4HJA5WC2HZL3LRU6EANZKK damaristorrent@gmail.com
+  //API Key 4PSEWATKQCJJCLS5LN8XJQQX9 damaristorrent21@gmail.com
+
 export const isUserLoggedIn = () => {
   const token = localStorage.getItem("session_token")
   return token ? true : false
@@ -146,12 +149,11 @@ export const getCompassDirection = (degrees) => {
 
 export const weatherSearchUrl = (dateString) => {
   
-  //API Key EXQ4HJA5WC2HZL3LRU6EANZKK damaristorrent@gmail.com
-  //API Key 4PSEWATKQCJJCLS5LN8XJQQX9 damaristorrent21@gmail.com
+
   const stringOne =
     "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/charleston%2C%20south%20carolina/"
   const stringTwo =
-    "?unitGroup=metric&include=hours&key=EXQ4HJA5WC2HZL3LRU6EANZKK&contentType=json"
+    "?unitGroup=metric&include=hours&key=4PSEWATKQCJJCLS5LN8XJQQX9&contentType=json"
   return stringOne + dateString + "/" + dateString + stringTwo
 }
 

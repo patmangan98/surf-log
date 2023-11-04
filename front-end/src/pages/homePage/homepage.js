@@ -20,6 +20,7 @@ import { celsiusToFahrenheit } from "../../utility"
 import { weatherSearchUrl } from "../../utility"
 import { getCompassDirection } from "../../utility"
 import "../../homepage.css"
+
 // import logo from './logo.png'
 
 export default function HomePage({ setUser, value }) {
@@ -174,8 +175,9 @@ export default function HomePage({ setUser, value }) {
       <div className="home">
         <div className="center-container">
          
-           <img  alt="Your Logo" className="logo-image" /> 
+           <h1> Welcome to Surfboard!</h1>
         </div>
+       
         <br></br>
         <div style={{ height: "1000px", overflowY: "auto" }}>
           <Grid container spacing={2}>

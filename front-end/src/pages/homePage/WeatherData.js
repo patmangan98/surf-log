@@ -1,14 +1,10 @@
-import { useState } from 'react'
 import Grid from "@mui/material/Grid"
 import { DataBox } from "./DataBox"
-import { getCurrentDate } from '../../utility'
 
 export const WeatherData = ({ weatherData }) => {
   
-
-console.log(weatherData)
   return (
-    <Grid direction="row" spacing={4} container>
+    <Grid direction="row" spacing={3} container>
     <Grid item>
       <DataBox
         title="Temperature"
@@ -56,10 +52,6 @@ console.log(weatherData)
         label={weatherData.windDirectionDegrees + " degrees"}
       ></DataBox>
     </Grid>
-
-   
-
-   
 
     <Grid item>
       <DataBox
