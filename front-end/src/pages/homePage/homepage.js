@@ -247,6 +247,11 @@ export default function HomePage({ setUser, value }) {
                   />
                 </LocalizationProvider>
               </Card>
+              <Journal
+                    currentReading={currentReading}
+                    selectedBuoy={selectedBuoy}
+                    date={selectedDate}
+                  ></Journal>
             </Grid>
           </Grid>
         </Card>
