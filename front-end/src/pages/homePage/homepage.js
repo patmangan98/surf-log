@@ -233,10 +233,19 @@ export default function HomePage({ setUser, value }) {
             }}
           >
             <Grid item>
+             
               <BuoySelect onChange={handleSelectChange}></BuoySelect>
-              <Typography style={{ fontSize: "20px" }}>
-                {messageText}
-              </Typography>
+              
+              <Card sx={{
+                marginBottom: '2vh',
+                paddingX: '1vh',
+                paddingY: '1vw'
+              }}>
+                  <Typography style={{ fontSize: "20px" }}>
+                    {messageText}
+                  </Typography>
+            
+              </Card>
               <Card>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateCalendar
@@ -247,11 +256,13 @@ export default function HomePage({ setUser, value }) {
                   />
                 </LocalizationProvider>
               </Card>
+
               <Journal
-                    currentReading={currentReading}
-                    selectedBuoy={selectedBuoy}
-                    date={selectedDate}
-                  ></Journal>
+                currentReading={currentReading}
+                selectedBuoy={selectedBuoy}
+                date={selectedDate}
+              ></Journal>
+
             </Grid>
           </Grid>
         </Card>
