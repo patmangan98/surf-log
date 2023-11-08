@@ -19,45 +19,45 @@ function App() {
   const [user, setUser] = useState(isUserLoggedIn())
   const userId = '1'
 
-  const handleRegister = async () => {
-    try {
-      const tokenValue = await register({
-        email: "test@gmail.com",
-        username: "pat",
-        password: "Pp123456789",
-      })
+  // const handleRegister = async () => {
+  //   try {
+  //     const tokenValue = await register({
+  //       email: "test@gmail.com",
+  //       username: "pat",
+  //       password: "Pp123456789",
+  //     })
 
-      setToken(tokenValue.token)
-    } catch (error) {
-      console.log("READ THE ERROR HERE:", error)
-      if (error) {
-        setErrorMsg(`${error.toString().substr(26)}`)
-      }
-    }
-  }
+  //     setToken(tokenValue.token)
+  //   } catch (error) {
+  //     console.log("READ THE ERROR HERE:", error)
+  //     if (error) {
+  //       setErrorMsg(`${error.toString().substr(26)}`)
+  //     }
+  //   }
+  // }
 
-  const handleLogIn = async () => {
-    try {
-      const tokenValue = await login({
-        username: "pat",
-        password: "12345",
-      })
-      setToken(tokenValue.token)
-    } catch (error) {
-      console.error(error)
-      setErrorMsg("Invalid username or password.")
-    }
-  }
+  // const handleLogIn = async () => {
+  //   try {
+  //     const tokenValue = await login({
+  //       username: "pat",
+  //       password: "12345",
+  //     })
+  //     setToken(tokenValue.token)
+  //   } catch (error) {
+  //     console.error(error)
+  //     setErrorMsg("Invalid username or password.")
+  //   }
+  // }
 
-  const handlePasswordChange = async () => {
-    try {
-      const token = getToken()
-      const data = { password: "thisisanewpas8687jht" }
-      await updatePassword(token, data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // const handlePasswordChange = async () => {
+  //   try {
+  //     const token = getToken()
+  //     const data = { password: "thisisanewpas8687jht" }
+  //     await updatePassword(token, data)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   return (
     <MyContextProvider>

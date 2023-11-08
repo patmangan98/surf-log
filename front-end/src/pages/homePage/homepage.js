@@ -20,7 +20,9 @@ import { celsiusToFahrenheit } from "../../utility"
 import { weatherSearchUrl } from "../../utility"
 import { getCompassDirection } from "../../utility"
 import "../../homepage.css"
-
+import leftSvg from './images/Left.svg'
+import middleSvg from './images/Middle.svg'
+import rightSvg from './images/Right.svg'
 // import logo from './logo.png'
 
 export default function HomePage({ setUser, value }) {
@@ -171,77 +173,107 @@ export default function HomePage({ setUser, value }) {
   // }
 
   return (
-    <>
-      <div className="home">
-        <div className="center-container">
-         
-           <h1> Welcome to Surfboard!</h1>
-        </div>
-       
-        <br></br>
-        <div style={{ height: "1000px", overflowY: "auto" }}>
-          <Grid container spacing={2}>
-            {/* Left Side of Page*/}
 
-            <Grid item xs={12} sm={6} md={3} lg={4} marginLeft={12}>
-              <Card sx={{ border: 2 }} >
-                <CardContent style={{ height: "100%" }}>
-                  {/* Get the selected buoy from the buoy select component */}
-                  <br></br>
-                  <BuoySelect onChange={handleSelectChange}></BuoySelect>
-                  <Typography style={{ fontSize: "20px" }}>
-                    {messageText}
-                  </Typography>
-                </CardContent>
-              </Card>
-              <br></br>
-              <Card sx={{ backgroundColor: 'transparent',alignItems: 'center', display:'flex'}}   >
-                <CardContent style={{ height: "100%" }}>
+    <Grid container spacing={2}
+      justifyContent="center"
+      alignItems="center"
+      sx={{
+        height: '100vh'
+      }}
+    >
+      <Grid item xs={3}>
+        <Card
+          sx={{
+            height: 710,
+            background: `linear-gradient(to bottom,  
+                rgba(1, 36, 58, 1) 0%, 
+                rgba(1, 36, 58, .7) 25%, 
+                rgba(1, 36, 58, 0) 50%, 
+                rgba(1, 36, 58, 0) 75%, 
+                rgba(1, 36, 58, 1) 100%,
+                transparent),
+                 url(${leftSvg})`,
+            // filter: "blur(1px)",
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center"
+          }}
+        >
+          <Card sx={{ backgroundColor: 'transparent' }}   >
+            <CardContent>
               <WaveData currentReading={currentReading} />
-              </CardContent>
-              </Card>
-            </Grid>
-            
-
-            {/* Right Side of Page */}
-            <Grid item xs={12} sm={6} md={4} lg={6} marginLeft={10}>
-              <Card sx={{ border: 2 }}>
-                <CardContent style={{ height: "100%" }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateCalendar
-                      value={selectedDate}
-                      onChange={handleDateChange}
-                      format="dd-mm-yy"
-                      disableFuture
-                    />
-                  </LocalizationProvider>
-                  <Journal
-                    currentReading={currentReading}
-                    selectedBuoy={selectedBuoy}
-                    date={selectedDate}
-                  ></Journal>
-                </CardContent>
-              </Card>
-              <br></br>
-              <Card sx={{ border: 2}} >
-                <CardContent style={{ height: "100%" }}>
-                  <br></br>
-                  <Typography style={{ fontSize: "24px" }}>
-                    {messageText}
-                  </Typography>
-                </CardContent>
-              </Card>
-              <br></br>
-              <Card sx={{ backgroundColor: 'transparent',justifyContent: 'center',
-    alignItems: 'center'}}   >
-                <CardContent style={{ height: "100%" }}>
-              <WeatherData weatherData={weatherData} />
-              </CardContent>
+            </CardContent>
+          </Card>
+        </Card>
+      </Grid>
+      <Grid className="middle" item xs={6}>
+        <Card
+          sx={{
+            height: 710,
+            background: `linear-gradient(to bottom,  
+                rgba(1, 36, 58, 1) 0%, 
+                rgba(1, 36, 58, .7) 25%, 
+                rgba(1, 36, 58, 0) 50%, 
+                rgba(1, 36, 58, 0) 75%, 
+                rgba(1, 36, 58, 1) 100%,
+                transparent), url(${middleSvg})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center"
+          }}
+          elevation={3}
+        >
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+            sx={{
+              height: "100%"
+            }}
+          >
+            <Grid item>
+              <BuoySelect onChange={handleSelectChange}></BuoySelect>
+              <Typography style={{ fontSize: "20px" }}>
+                {messageText}
+              </Typography>
+              <Card>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateCalendar
+                    value={selectedDate}
+                    onChange={handleDateChange}
+                    format="dd-mm-yy"
+                    disableFuture
+                  />
+                </LocalizationProvider>
               </Card>
             </Grid>
           </Grid>
-        </div>
-      </div>
-    </>
+        </Card>
+      </Grid>
+      <Grid className="right" item xs={3}>
+        <Card
+          sx={{
+            height: 710,
+            backgroundImage: ` linear-gradient(to bottom,  
+                rgba(1, 36, 58, 1) 0%, 
+                rgba(1, 36, 58, .7) 25%, 
+                rgba(1, 36, 58, 0) 50%, 
+                rgba(1, 36, 58, 0) 75%, 
+                rgba(1, 36, 58, 1) 100%,
+                transparent), url(${rightSvg})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center"
+          }}
+        ></Card>
+      </Grid>
+
+    </Grid>
+
+
+
+
+
   )
 }
