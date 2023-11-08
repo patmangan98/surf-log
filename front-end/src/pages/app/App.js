@@ -72,7 +72,7 @@ function App() {
             </Routes>
 
           {/* <HomePage setUser={setUser} userId={userId} /> */}
-          <NavBar/>
+          {/* <NavBar/> */}
         </>
       ) : (
         <AuthPage setUser={setUser} />

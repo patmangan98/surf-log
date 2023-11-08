@@ -193,7 +193,6 @@ export default function HomePage({ setUser, value }) {
                 rgba(1, 36, 58, 1) 100%,
                 transparent),
                  url(${leftSvg})`,
-            // filter: "blur(1px)",
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center"
@@ -233,18 +232,18 @@ export default function HomePage({ setUser, value }) {
             }}
           >
             <Grid item>
-             
+
               <BuoySelect onChange={handleSelectChange}></BuoySelect>
-              
+
               <Card sx={{
                 marginBottom: '2vh',
                 paddingX: '1vh',
                 paddingY: '1vw'
               }}>
-                  <Typography style={{ fontSize: "20px" }}>
-                    {messageText}
-                  </Typography>
-            
+                <Typography style={{ fontSize: "20px" }}>
+                  {messageText}
+                </Typography>
+
               </Card>
               <Card>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -282,7 +281,15 @@ export default function HomePage({ setUser, value }) {
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center"
           }}
-        ></Card>
+        >
+
+      
+
+          <WeatherData weatherData={weatherData} />
+
+         
+         
+        </Card>
       </Grid>
 
     </Grid>
