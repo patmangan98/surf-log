@@ -19,7 +19,7 @@ import { getCurrentDate } from "../../utility"
 import { celsiusToFahrenheit } from "../../utility"
 import { weatherSearchUrl } from "../../utility"
 import { getCompassDirection } from "../../utility"
-import "../../homepage.css"
+// import "../../homepage.css"
 import leftSvg from './images/Left.svg'
 import middleSvg from './images/Middle.svg'
 import rightSvg from './images/Right.svg'
@@ -172,6 +172,8 @@ export default function HomePage({ setUser, value }) {
   //   setUser()
   // }
 
+console.log(weatherData)
+
   return (
 
     <Grid container spacing={2}
@@ -184,10 +186,10 @@ export default function HomePage({ setUser, value }) {
       <Grid item xs={3}>
         <Card
           sx={{
-            height: 710,
+            height: '70vh',
             background: `linear-gradient(to bottom,  
                 rgba(1, 36, 58, 1) 0%, 
-                rgba(1, 36, 58, .7) 25%, 
+                rgba(1, 36, 58, .8) 25%, 
                 rgba(1, 36, 58, 0) 50%, 
                 rgba(1, 36, 58, 0) 75%, 
                 rgba(1, 36, 58, 1) 100%,
@@ -198,7 +200,11 @@ export default function HomePage({ setUser, value }) {
             backgroundPosition: "center"
           }}
         >
-          <Card sx={{ backgroundColor: 'transparent' }}   >
+          <Card sx={{ 
+              backgroundColor: 'transparent',
+              border : 'none',
+              boxShadow: 0 
+            }}   >
             <CardContent>
               <WaveData currentReading={currentReading} />
             </CardContent>
@@ -208,10 +214,10 @@ export default function HomePage({ setUser, value }) {
       <Grid className="middle" item xs={6}>
         <Card
           sx={{
-            height: 710,
+            height: '70vh',
             background: `linear-gradient(to bottom,  
                 rgba(1, 36, 58, 1) 0%, 
-                rgba(1, 36, 58, .7) 25%, 
+                rgba(1, 36, 58, .8) 25%, 
                 rgba(1, 36, 58, 0) 50%, 
                 rgba(1, 36, 58, 0) 75%, 
                 rgba(1, 36, 58, 1) 100%,
@@ -269,10 +275,10 @@ export default function HomePage({ setUser, value }) {
       <Grid className="right" item xs={3}>
         <Card
           sx={{
-            height: 710,
+            height: '70vh',
             backgroundImage: ` linear-gradient(to bottom,  
                 rgba(1, 36, 58, 1) 0%, 
-                rgba(1, 36, 58, .7) 25%, 
+                rgba(1, 36, 58, .8) 25%, 
                 rgba(1, 36, 58, 0) 50%, 
                 rgba(1, 36, 58, 0) 75%, 
                 rgba(1, 36, 58, 1) 100%,
@@ -284,9 +290,20 @@ export default function HomePage({ setUser, value }) {
         >
 
       
-
+          <Card sx={{ 
+            backgroundColor: 'transparent',
+            border : 'none',
+            boxShadow: 0, 
+            height: '100%',
+            }}>
+          <CardContent sx={{
+            backgroundColor: 'transparent',
+            border : 'none',
+            boxShadow: 0 
+          }}> 
           <WeatherData weatherData={weatherData} />
-
+          </CardContent>
+          </Card>
          
          
         </Card>

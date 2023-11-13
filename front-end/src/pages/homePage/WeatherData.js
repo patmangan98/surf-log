@@ -1,16 +1,26 @@
 import Grid from "@mui/material/Grid"
 import { DataBox } from "./DataBox"
+import { Typography } from "@mui/material"
 
 export const WeatherData = ({ weatherData }) => {
   
   return (
     <Grid container
-    direction="column" 
+    direction="row" 
     justifyContent="center"
     alignItems="center"
-    spacing={4} 
+    spacing={2} 
   >
-    <Grid item>
+     <Grid item xs={10}></Grid>
+       <Grid item xs={10}>
+        <Typography color='white' variant="h4" fontWeight={500}>Current Weather Data</Typography>
+      </Grid>
+      <Grid item xs={10}></Grid>
+      <Grid item xs={10}></Grid>
+      <Grid item xs={10}></Grid>
+      <Grid item xs={10}></Grid>
+      <Grid item xs={10}></Grid>
+    <Grid item xs={5}>
       <DataBox
         title="Temperature"
         data={weatherData.currentTemp}
@@ -18,7 +28,7 @@ export const WeatherData = ({ weatherData }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item>
+    <Grid item xs={5}>
       <DataBox
         title="Today's High Temp"
         data={weatherData.maxTemp}
@@ -26,7 +36,7 @@ export const WeatherData = ({ weatherData }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item>
+    <Grid item xs={5}>
       <DataBox
         title="Today's Low Temp"
         data={weatherData.minTemp}
@@ -34,7 +44,7 @@ export const WeatherData = ({ weatherData }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item>
+    <Grid item xs={5}> 
       <DataBox
         title="Relative Humidity"
         data={weatherData.relativeHumidity}
@@ -42,7 +52,7 @@ export const WeatherData = ({ weatherData }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item>
+    <Grid item xs={5}>
       <DataBox
         title="Windspeed"
         data={weatherData.windSpeed}
@@ -50,7 +60,7 @@ export const WeatherData = ({ weatherData }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item>
+    <Grid item xs={5}>
       <DataBox
         title="Wind Direction"
         data={weatherData.windDirection}
@@ -58,7 +68,7 @@ export const WeatherData = ({ weatherData }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item>
+    <Grid item xs={10}>
       <DataBox
         title="Sunrise Time"
         data={weatherData.sunriseTime}
@@ -66,7 +76,7 @@ export const WeatherData = ({ weatherData }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item>
+    <Grid item xs={10}>
       <DataBox
         title="Sunset Time"
         data={weatherData.sunsetTime}
