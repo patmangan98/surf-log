@@ -15,10 +15,6 @@ app.use(pathLogger)
 
 router(app)
 
-let currentDate = new Date();
-let time = currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds()
-console.log(time)
-
 app.get('/message', (_req, res) => {
   res.json({ message: `The SurfLog back end server is running and it is ${time} local time. ` })
 })

@@ -79,6 +79,41 @@ export const getLatestBuoyReading = (fileContent) => {
   return dataSplit
 }
 
+export const getHistoricalBuoyReading = (fileContent) => {
+  const dataString = fileContent.split("\n")
+  
+  console.log(dataString)
+  //Get the latest reading from the buoy
+  // let dataSplit = dataString[2].split(/\s+/)
+  //If the latest reading does not have wave height or wave period, loop through the data string until we find one that does
+  for (let i = 2; i < dataString.length; i++) {
+    let dataSplit = dataString[i].split(/\s+/)
+      console.log(dataSplit[2])
+  }
+
+    // Check if the line matches the desired date and time
+    // if (columns[0] === inputDate && columns[3] === inputTime) {
+    //   console.log('Found matching line:', line);
+    //   break; // Stop searching once a match is found
+    // }
+  
+  
+  //We need to loop
+  // if (dataSplit[8] === "MM" || dataSplit[9] === "MM") {
+  //   for (let i = 3; i < dataString.length; i++) {
+  //     //Set the array to the next buoy reading
+  //     dataSplit = dataString[i].split(/\s+/)
+  //     //If that buoy reading has wave height and wave period, exit the loop
+  //     if (dataSplit[8] !== "MM" && dataSplit[9] !== "MM") {
+  //       break
+  //     }
+  //   }
+  // }
+  // dataSplit[8] = metersToFeet(parseFloat(dataSplit[8]))
+
+  return 'hello'
+}
+
 export const getBuoyNumber = (urlString) => {
   const regex = /\/(\d+)\.txt$/
   const match = urlString.match(regex)
@@ -118,6 +153,25 @@ export const getCurrentDateV2 = () => {
     .replaceAll("/", "-")
     .replaceAll("_", "-")
     .replaceAll(" ", "-")
+}
+
+export const isGreaterThan45Days = (date1, date2) => {
+
+  const tempDate1 = new Date(date1)
+  const tempDate2 = new Date(date2)
+
+  // Calculate the time difference in milliseconds
+  const timeDifference = tempDate2 - tempDate1;
+
+  // Convert milliseconds to days (1 day = 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+  const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+
+  if (daysDifference >= 45) {
+    return true
+  }
+  else {
+    return false
+  }
 }
 
 export const getCompassDirection = (degrees) => {

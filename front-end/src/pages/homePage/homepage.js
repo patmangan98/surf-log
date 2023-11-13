@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography"
 import BuoySelect from "./BuoySelect"
 import { WaveData } from "./WaveData"
 import { WeatherData } from "./WeatherData"
-import { getLatestBuoyReading } from "../../utility"
+import { getLatestBuoyReading, getHistoricalBuoyReading } from "../../utility"
 import { getWeatherData } from "../../utility"
 import { getWaveData } from "../../api"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
@@ -18,7 +18,7 @@ import Journal from "./journal/Journal"
 import { getCurrentDate } from "../../utility"
 import { celsiusToFahrenheit } from "../../utility"
 import { weatherSearchUrl } from "../../utility"
-import { getCompassDirection } from "../../utility"
+import { getCompassDirection, isGreaterThan45Days } from "../../utility"
 import "../../homepage.css"
 
 // import logo from './logo.png'
@@ -26,7 +26,7 @@ import "../../homepage.css"
 export default function HomePage({ setUser, value }) {
   const [selectedBuoy, setSelectedBuoy] = useState("41004")
   const [selectedDate, setSelectedDate] = useState(Dayjs())
-  const [currentReading, setCurrentReading] = useState({
+  const [waveData, setWaveData] = useState({
     YY: "",
     MM: "",
     DD: "",
@@ -55,41 +55,51 @@ export default function HomePage({ setUser, value }) {
   })
 
   const handleSelectChange = (value) => {
-    setCurrentReading(getWaveData(selectedDate.format("YYYY-MM-DD"), value))
+    setWaveData(getWaveData(selectedDate.format("YYYY-MM-DD"), value))
     setSelectedBuoy(value)
   }
 
   const handleDateChange = (value) => {
     if (value !== "undefined") {
       getWaveData(value.format("YYYY-MM-DD"), selectedBuoy).then((result) => {
-        //If it is today, we need to grab the latest reading and parse it with getLatestBuoyReading
+        let tempWaveData;
+  
         if (value.format("MM-DD-YYYY") === getCurrentDate()) {
-          let tempCurrentReading = getLatestBuoyReading(result)
-
-          setCurrentReading({
-            ...currentReading,
-            WVHT: tempCurrentReading[8],
-            DPD: tempCurrentReading[9],
-            APD: tempCurrentReading[10],
-            MWD: tempCurrentReading[11],
-            PRES: tempCurrentReading[12],
-            WDIR: tempCurrentReading[5],
-            WSPD: tempCurrentReading[6],
-            GST: tempCurrentReading[7],
-          })
+          tempWaveData = getLatestBuoyReading(result);
+        } else if (isGreaterThan45Days(value.format("MM-DD-YYYY"), getCurrentDate())) {
+          console.log('its more than 45 days', result)
+          tempWaveData = getHistoricalBuoyReading(result);
         } else {
-          //If the date is not today, read the results from the database, returned as an object, no parsing required
-          setCurrentReading(result)
+          // Handle the case when neither of the above conditions is met
+          console.log('this should be coming from the database')
+          setWaveData(result);
         }
-
+  
+        if (tempWaveData) {
+          setWaveData({
+            ...waveData,
+            WVHT: tempWaveData[8],
+            DPD: tempWaveData[9],
+            APD: tempWaveData[10],
+            MWD: tempWaveData[11],
+            PRES: tempWaveData[12],
+            WDIR: tempWaveData[5],
+            WSPD: tempWaveData[6],
+            GST: tempWaveData[7],
+          });
+        }
+  
         getWeatherData(value.format("YYYY-MM-DD")).then((result) => {
-          setWeatherData(result)
-        })
-      })
+          setWeatherData(result);
+        });
+      });
+  
+      setSelectedDate(value);
     }
-    setSelectedDate(value)
-  }
-
+  };
+  
+  
+  
   //Message changes based on current date vs historical date
   let messageText = "Conditions for "
   if (selectedDate.format("MM-DD-YYYY") === getCurrentDate()) {
@@ -144,7 +154,7 @@ export default function HomePage({ setUser, value }) {
         const [YY, MM, DD, hh, mm, WDIR, WSPD, GST, WVHT, DPD, APD, MWD, PRES] =
           getLatestBuoyReading(fileContent)
 
-        setCurrentReading({
+        setWaveData({
           YY,
           MM,
           DD,
@@ -164,11 +174,6 @@ export default function HomePage({ setUser, value }) {
         console.error("Error reading the file:", error)
       })
   }, [selectedBuoy])
-
-  // function handleLogOut() {
-  //   clearToken()
-  //   setUser()
-  // }
 
   return (
     <>
@@ -197,7 +202,7 @@ export default function HomePage({ setUser, value }) {
               <br></br>
               <Card sx={{ backgroundColor: 'transparent',alignItems: 'center', display:'flex'}}   >
                 <CardContent style={{ height: "100%" }}>
-              <WaveData currentReading={currentReading} />
+              <WaveData waveData={waveData} />
               </CardContent>
               </Card>
             </Grid>
@@ -216,7 +221,7 @@ export default function HomePage({ setUser, value }) {
                     />
                   </LocalizationProvider>
                   <Journal
-                    currentReading={currentReading}
+                    waveData={waveData}
                     selectedBuoy={selectedBuoy}
                     date={selectedDate}
                   ></Journal>

@@ -1,5 +1,6 @@
 const knex = require("../knex")
-const { metersToFeet } = require('../utility.js')
+const { metersToFeet } = require("../utility.js")
+const { isCurrentYear } = require("../utility.js")
 
 // const id = '41004'
 
@@ -205,21 +206,45 @@ exports.updateCache = async (idArr) => {
 }
 
 exports.retrieveCachedData = async (date, selectedBuoy) => {
-  
-  const result = await knex('forty_five_day_cache')
-    .where('record_date', date)
+  const result = await knex("forty_five_day_cache")
+    .where("record_date", date)
     .first()
 
-    return result
+  return result
 }
 
 exports.retrieveCurrentData = async (selectedBuoy) => {
-    const fetchUrl = `https://www.ndbc.noaa.gov/data/realtime2/${selectedBuoy}.txt`
-    const fetchData = await fetch(fetchUrl)
-    const result = await fetchData.text()
+  const fetchUrl = `https://www.ndbc.noaa.gov/data/realtime2/${selectedBuoy}.txt`
+  const fetchData = await fetch(fetchUrl)
+  const result = await fetchData.text()
 
-    return result   
+  return result
+}
+
+exports.retrieveHistoricalData = async (selectedBuoy, month, year) => {
+  let fetchUrl
+  let fetchData
+  let result
+
+  if (isCurrentYear(year)) {
+    //It is the current year, we need to fetch from the current year text files
+    fetchUrl = `https://www.ndbc.noaa.gov/view_text_file.php?filename=${selectedBuoy}${month.monthNumber}${year}.txt.gz&dir=data/stdmet/${month.monthName}/`
+
+    fetchData = await fetch(fetchUrl)
+
+    result = await fetchData.text()
+    if (result.includes("Unable to access data file")) {
+      //Try again, the month is within 45 days and the data is at a different URL
+      fetchUrl = `https://www.ndbc.noaa.gov/data/stdmet/${month.monthName}/41004.txt`
+      console.log("historical data after the unable check", fetchUrl)
+      fetchData = await fetch(fetchUrl)
+      result = fetchData.text()
+    }
+  } else {
+    //Fetch previous year, if available
+    fetchUrl = `https://www.ndbc.noaa.gov/view_text_file.php?filename=${selectedBuoy}h${year}.txt.gz&dir=data/historical/stdmet/`
+
+    console.log('fetch url with prior year', fetchUrl)
   }
-//note: use recursion for the latest date. do the sorting, then check if not mm. If blank, currentRow= index[i], function calls its self. If true, return that row, and send it to the frontend.
-//have the user send the date down, to determine if wether to grab from cache or to wether use the recursive function.
-//Also make sure they send the bouy id down (once we have that of course)
+  return result
+}

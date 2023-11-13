@@ -8,7 +8,7 @@ export default function Journal(props) {
   // prop "date" is an object and must be formatted
   // utility function getCurrentDate gets the current date in the proper format
 
-  const { currentReading, selectedBuoy, date } = props
+  const { waveData, selectedBuoy, date } = props
 
   let buttonText = "Write a surf journal record for "
 
@@ -45,7 +45,7 @@ export default function Journal(props) {
       <JournalModal
         open={open}
         handleClose={handleClose}
-        currentReading={currentReading}
+        waveData={waveData}
         selectedBuoy={selectedBuoy}
         date={date}
       />
