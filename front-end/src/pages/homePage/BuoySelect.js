@@ -4,6 +4,7 @@ import Select from "@mui/material/Select"
 import FormControl from "@mui/material/FormControl"
 import InputLabel from "@mui/material/InputLabel"
 import { Fragment } from "react"
+import { Card } from "@mui/material"
 
 function BuoySelect({ onChange, value }) {
   const handleChange = (event) => {
@@ -12,6 +13,9 @@ function BuoySelect({ onChange, value }) {
 
   return (
     <Fragment>
+      <Card sx={{
+        marginBottom: '2vh'
+      }}>
       <FormControl sx={{ m: 1, minWidth: 300 }} size="small">
         <InputLabel id="demo-simple-select-label">
           Choose a Location/Buoy
@@ -58,6 +62,7 @@ function BuoySelect({ onChange, value }) {
           </MenuItem>
         </Select>
       </FormControl>
+      </Card>
     </Fragment>
   )
 }

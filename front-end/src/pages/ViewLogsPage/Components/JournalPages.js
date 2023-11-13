@@ -40,7 +40,6 @@ export default function JournalPages() {
             marginTop: '15vh',
             paddingRight: '20px',
             paddingLeft: '20px'
-            // position: 'relative'
         }}>
      
         <Carousel
@@ -60,11 +59,6 @@ export default function JournalPages() {
     )
 }
 
-//    APD : post.APD,
-//    DPD : post.DPD,
-//    GST : post.MWD,
-//    PRES : post.PRES,
-//    WDIR : post.WDIR,
-//    WSPD : post.WSPD 
+
 
 
