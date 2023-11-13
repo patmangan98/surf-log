@@ -66,7 +66,7 @@ exports.login = async (req, res) => {
   const [username, password] = credentials
 
   const user = await showUserByUsername(username)
-  console.log(user)
+
   const userId = user.user_id
   
   // If the user isn't found or the password is incorrect, return an error
@@ -85,9 +85,6 @@ exports.updatePassword = async (req, res) => {
     const id = req.userId//this is the user's id
     const {password} = req.body// this is the user's new password 
       
-    console.log ('id', id)
-    console.log('password', password)
-
     if (password === "" || password === null) {
       return res.status(406).json({message: "Password was not provided."})
     }

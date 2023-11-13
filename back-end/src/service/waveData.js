@@ -230,21 +230,23 @@ exports.retrieveHistoricalData = async (selectedBuoy, month, year) => {
     //It is the current year, we need to fetch from the current year text files
     fetchUrl = `https://www.ndbc.noaa.gov/view_text_file.php?filename=${selectedBuoy}${month.monthNumber}${year}.txt.gz&dir=data/stdmet/${month.monthName}/`
 
+    console.log(fetchUrl)
     fetchData = await fetch(fetchUrl)
 
     result = await fetchData.text()
     if (result.includes("Unable to access data file")) {
       //Try again, the month is within 45 days and the data is at a different URL
       fetchUrl = `https://www.ndbc.noaa.gov/data/stdmet/${month.monthName}/41004.txt`
-      console.log("historical data after the unable check", fetchUrl)
+      console.log(fetchUrl)
       fetchData = await fetch(fetchUrl)
       result = fetchData.text()
     }
   } else {
     //Fetch previous year, if available
     fetchUrl = `https://www.ndbc.noaa.gov/view_text_file.php?filename=${selectedBuoy}h${year}.txt.gz&dir=data/historical/stdmet/`
-
-    console.log('fetch url with prior year', fetchUrl)
+    console.log(fetchUrl)
+    fetchData = await fetch(fetchUrl)
+    result = fetchData.text()
   }
   return result
 }

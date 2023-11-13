@@ -3,8 +3,9 @@ import { DataBox } from "./DataBox"
 
 export const WeatherData = ({ weatherData }) => {
   
+
   return (
-    <Grid direction="row" spacing={3} container>
+   <Grid direction="row" spacing={3} container>
     <Grid item>
       <DataBox
         title="Temperature"

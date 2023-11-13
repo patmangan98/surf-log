@@ -69,10 +69,8 @@ exports.getMonthFromDate = (date) =>{
 
 exports.isCurrentYear = (year) => {
  
-  console.log('year passed in', year)
-
   const currentYear = new Date().getFullYear()
-  console.log('current year', currentYear)
+  
   return year === currentYear;
 
 }

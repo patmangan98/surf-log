@@ -28,17 +28,3 @@ exports.getUserByToken = async (req, res) => {
   }
 }
 
-// exports.getUserById = async (req, res) => {
-  
-//   try {
-//     console.log(req.userId)
-//     const userByUserId = await showUserById(req.params.userId)
-    
-//     res.json(userByUserId)
-  
-//   } catch (error) {
-
-
-//     res.status(500).send("Internal Server Error")
-//   }
-// }

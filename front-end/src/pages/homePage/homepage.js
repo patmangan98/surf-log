@@ -7,23 +7,18 @@ import Typography from "@mui/material/Typography"
 import BuoySelect from "./BuoySelect"
 import { WaveData } from "./WaveData"
 import { WeatherData } from "./WeatherData"
-import { getLatestBuoyReading, getHistoricalBuoyReading } from "../../utility"
-import { getWeatherData } from "../../utility"
+import { getLatestBuoyReading, getHistoricalBuoyReading, getWeatherData, getCurrentDate  } from "../../utility"
 import { getWaveData } from "../../api"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar"
 import Dayjs from "dayjs"
 import Journal from "./journal/Journal"
-import { getCurrentDate } from "../../utility"
-import { celsiusToFahrenheit } from "../../utility"
-import { weatherSearchUrl } from "../../utility"
-import { getCompassDirection, isGreaterThan45Days } from "../../utility"
+
+import { isGreaterThan45Days } from "../../utility"
 import "../../homepage.css"
 
-// import logo from './logo.png'
-
-export default function HomePage({ setUser, value }) {
+export default function HomePage() {
   const [selectedBuoy, setSelectedBuoy] = useState("41004")
   const [selectedDate, setSelectedDate] = useState(Dayjs())
   const [waveData, setWaveData] = useState({
@@ -54,27 +49,30 @@ export default function HomePage({ setUser, value }) {
     uvIndex: "",
   })
 
-  const handleSelectChange = (value) => {
-    setWaveData(getWaveData(selectedDate.format("YYYY-MM-DD"), value))
-    setSelectedBuoy(value)
+  const handleSelectChange = (newBuoy) => {
+    setWaveData(getWaveData(selectedDate.format("YYYY-MM-DD"), newBuoy))
+    setSelectedBuoy(newBuoy)
   }
 
-  const handleDateChange = (value) => {
-    if (value !== "undefined") {
-      getWaveData(value.format("YYYY-MM-DD"), selectedBuoy).then((result) => {
-        let tempWaveData;
-  
-        if (value.format("MM-DD-YYYY") === getCurrentDate()) {
-          tempWaveData = getLatestBuoyReading(result);
-        } else if (isGreaterThan45Days(value.format("MM-DD-YYYY"), getCurrentDate())) {
-          console.log('its more than 45 days', result)
-          tempWaveData = getHistoricalBuoyReading(result);
+  const handleDateChange = (newDate) => {
+    if (newDate !== "undefined") {
+      getWaveData(newDate.format("YYYY-MM-DD"), selectedBuoy).then((result) => {
+        let tempWaveData
+
+        if (newDate.format("MM-DD-YYYY") === getCurrentDate()) {
+          tempWaveData = getLatestBuoyReading(result)
+        } else if (
+          isGreaterThan45Days(newDate.format("MM-DD-YYYY"), getCurrentDate())
+        ) {
+          tempWaveData = getHistoricalBuoyReading(
+            result,
+            newDate.format("YYYY-MM-DD")
+          )
         } else {
-          // Handle the case when neither of the above conditions is met
-          console.log('this should be coming from the database')
-          setWaveData(result);
+          setWaveData(result)
         }
-  
+
+        console.log(tempWaveData)
         if (tempWaveData) {
           setWaveData({
             ...waveData,
@@ -86,20 +84,18 @@ export default function HomePage({ setUser, value }) {
             WDIR: tempWaveData[5],
             WSPD: tempWaveData[6],
             GST: tempWaveData[7],
-          });
+          })
         }
-  
-        getWeatherData(value.format("YYYY-MM-DD")).then((result) => {
-          setWeatherData(result);
-        });
-      });
-  
-      setSelectedDate(value);
+
+        getWeatherData(newDate.format("YYYY-MM-DD")).then((result) => {
+          setWeatherData(result)
+        })
+      })
+
+      setSelectedDate(newDate)
     }
-  };
-  
-  
-  
+  }
+
   //Message changes based on current date vs historical date
   let messageText = "Conditions for "
   if (selectedDate.format("MM-DD-YYYY") === getCurrentDate()) {
@@ -110,36 +106,9 @@ export default function HomePage({ setUser, value }) {
   }
 
   useEffect(() => {
-    fetch(weatherSearchUrl(selectedDate.format("YYYY-MM-DD")))
-      .then((response) => response.json())
-      .catch((error) => {
-        console.error("Error fetching message:", error)
-      })
-      .then((data) => {
-        if (data !== undefined) {
-          setWeatherData({
-            currentTemp: celsiusToFahrenheit(
-              parseFloat(data.days[0].temp),
-              2
-            ).toFixed(2),
-            relativeHumidity: data.days[0].humidity,
-            windSpeed: data.days[0].windspeed,
-            windDirectionDegrees: data.days[0].winddir,
-            windDirection: getCompassDirection(data.days[0].winddir),
-            maxTemp: celsiusToFahrenheit(
-              parseFloat(data.days[0].tempmax),
-              2
-            ).toFixed(2),
-            minTemp: celsiusToFahrenheit(
-              parseFloat(data.days[0].tempmin),
-              2
-            ).toFixed(2),
-            sunriseTime: data.days[0].sunrise,
-            sunsetTime: data.days[0].sunset,
-            uvIndex: data.days[0].uvindex,
-          })
-        }
-      })
+    getWeatherData(selectedDate.format("YYYY-MM-DD")).then((result) => {
+      setWeatherData(result)
+    })
 
     const fetchString = "data/realtime2/" + selectedBuoy + ".txt"
 
@@ -179,17 +148,16 @@ export default function HomePage({ setUser, value }) {
     <>
       <div className="home">
         <div className="center-container">
-         
-           <h1> Welcome to Surfboard!</h1>
+          <h1> Welcome to Surfboard!</h1>
         </div>
-       
+
         <br></br>
         <div style={{ height: "1000px", overflowY: "auto" }}>
           <Grid container spacing={2}>
             {/* Left Side of Page*/}
 
             <Grid item xs={12} sm={6} md={3} lg={4} marginLeft={12}>
-              <Card sx={{ border: 2 }} >
+              <Card sx={{ border: 2 }}>
                 <CardContent style={{ height: "100%" }}>
                   {/* Get the selected buoy from the buoy select component */}
                   <br></br>
@@ -200,13 +168,18 @@ export default function HomePage({ setUser, value }) {
                 </CardContent>
               </Card>
               <br></br>
-              <Card sx={{ backgroundColor: 'transparent',alignItems: 'center', display:'flex'}}   >
+              <Card
+                sx={{
+                  backgroundColor: "transparent",
+                  alignItems: "center",
+                  display: "flex",
+                }}
+              >
                 <CardContent style={{ height: "100%" }}>
-              <WaveData waveData={waveData} />
-              </CardContent>
+                  <WaveData waveData={waveData} />
+                </CardContent>
               </Card>
             </Grid>
-            
 
             {/* Right Side of Page */}
             <Grid item xs={12} sm={6} md={4} lg={6} marginLeft={10}>
@@ -228,7 +201,7 @@ export default function HomePage({ setUser, value }) {
                 </CardContent>
               </Card>
               <br></br>
-              <Card sx={{ border: 2}} >
+              <Card sx={{ border: 2 }}>
                 <CardContent style={{ height: "100%" }}>
                   <br></br>
                   <Typography style={{ fontSize: "24px" }}>
@@ -237,11 +210,16 @@ export default function HomePage({ setUser, value }) {
                 </CardContent>
               </Card>
               <br></br>
-              <Card sx={{ backgroundColor: 'transparent',justifyContent: 'center',
-    alignItems: 'center'}}   >
+              <Card
+                sx={{
+                  backgroundColor: "transparent",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <CardContent style={{ height: "100%" }}>
-              <WeatherData weatherData={weatherData} />
-              </CardContent>
+                  <WeatherData weatherData={weatherData} />
+                </CardContent>
               </Card>
             </Grid>
           </Grid>
