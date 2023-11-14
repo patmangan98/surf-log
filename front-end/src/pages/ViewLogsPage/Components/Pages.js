@@ -12,12 +12,14 @@ export default function Pages({ post }) {
             {/* <Grid item xs={12}> */}
                 <Grid
                     container
-                    spacing={2}
+                    justifyContent='center'
+                    alignContent='center'
+                    spacing={4}
                     style={{
                         minHeight: 680
                     }}
                 >
-                    <Grid item xs={6}
+                    <Grid item xs={5}
                         style={{
                             minHeight: 680,
                 
@@ -26,11 +28,14 @@ export default function Pages({ post }) {
                         <Card
                             elevation={3}
                             sx={{
-                                minHeight: '90%'
+                                minHeight: '90%',
+                                background: `linear-gradient(to bottom, 
+                                    rgba( 1, 36, 58 ) 0%,
+                                    rgba(16, 112, 166) 100%)`
                             }}
                         >
                             <CardContent>
-                                <Typography variant="h4">Wave Data</Typography>
+                                <Typography variant="h4" color='white'>Wave Data</Typography>
                             </CardContent>
                             <Grid
                                 container
@@ -44,7 +49,7 @@ export default function Pages({ post }) {
                                             <Typography variant="overline">
                                                 Wave Height
                                             </Typography>
-                                            <Typography variant="h4">
+                                            <Typography variant="h5">
                                                 {post.WVHT}
                                             </Typography>
                                         </CardContent>
@@ -56,7 +61,7 @@ export default function Pages({ post }) {
                                             <Typography variant="overline">
                                                 Dominant Wave Period
                                             </Typography>
-                                            <Typography variant="h4">
+                                            <Typography variant="h5">
                                                 {post.DPD}
                                             </Typography>
                                         </CardContent>
@@ -68,7 +73,7 @@ export default function Pages({ post }) {
                                             <Typography variant="overline">
                                                 Average Wave Period
                                             </Typography>
-                                            <Typography variant="h4">
+                                            <Typography variant="h5">
                                                 {post.APD}
                                             </Typography>
                                         </CardContent>
@@ -80,7 +85,7 @@ export default function Pages({ post }) {
                                             <Typography variant="overline">
                                                 Wave Direction
                                             </Typography>
-                                            <Typography variant="h4">
+                                            <Typography variant="h5">
                                                 {post.MWD}
                                             </Typography>
                                         </CardContent>
@@ -92,7 +97,7 @@ export default function Pages({ post }) {
                                             <Typography variant="overline">
                                                 Wind Direction
                                             </Typography>
-                                            <Typography variant="h4">
+                                            <Typography variant="h5">
                                                 {post.WDIR}
                                             </Typography>
                                         </CardContent>
@@ -104,7 +109,7 @@ export default function Pages({ post }) {
                                             <Typography variant="overline">
                                                 Wind Speed
                                             </Typography>
-                                            <Typography variant="h4">
+                                            <Typography variant="h5">
                                                 {post.WSPD}
                                             </Typography>
                                         </CardContent>
@@ -116,7 +121,7 @@ export default function Pages({ post }) {
                                             <Typography variant="overline">
                                                 Peak Gust Speed
                                             </Typography>
-                                            <Typography variant="h4">
+                                            <Typography variant="h5">
                                                 {post.GST}
                                             </Typography>
                                         </CardContent>
@@ -128,7 +133,7 @@ export default function Pages({ post }) {
                                             <Typography variant="overline">
                                                 Atmospheric Pressure
                                             </Typography>
-                                            <Typography variant="h4">
+                                            <Typography variant="h5">
                                                 {post.PRES}
                                             </Typography>
                                         </CardContent>
@@ -137,19 +142,22 @@ export default function Pages({ post }) {
                             </Grid>
                         </Card>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={5}>
                         <Card
                         elevation={3}
                             sx={{
-                                minHeight: '90%'
+                                minHeight: '90%',
+                                background: `linear-gradient(to bottom, 
+                                    rgba( 1, 36, 58 ) 0%,
+                                    rgba(16, 112, 166) 100%)`
                             }}
                         >
                             <CardContent>
-                            <Typography variant="overline"> Location:</Typography>
-                            <Typography variant="h4">{post.post_location}</Typography>
-                            <Divider/>
+                            <Typography variant="overline" color='white'> Location:</Typography>
+                            <Typography variant="h4" color='white'>{post.post_location}</Typography>
+                            <Divider color='white'/>
                             <br></br>
-                            <Typography variant="body1">{post.post_description}</Typography>
+                            <Typography variant="body1" color='white'>{post.post_description}</Typography>
                             </CardContent>
                         </Card>
                     </Grid>
