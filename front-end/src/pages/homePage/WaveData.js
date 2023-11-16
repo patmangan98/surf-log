@@ -16,12 +16,12 @@ export const WaveData = ({ currentReading }) => {
       <Grid item xs={10}>
         <Typography color='white' variant="h4" fontWeight={500}>Current Wave Data</Typography>
       </Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}>
+      {/* <Grid item xs={0}  lg={0} xl={10}></Grid>
+      <Grid itme xs={0}  lg={0}  xl={10}></Grid>
+      <Grid item xs={0}  lg={0} xl={10}></Grid>
+      <Grid item xs={0}  lg={0} xl={10}></Grid>
+      <Grid item xs={0}  lg={0} xl={10}></Grid> */}
+      <Grid item xs={10}  lg={0}  xl={10}>
         <DataBox
           title="Current Wave Height"
           data={currentReading.WVHT}

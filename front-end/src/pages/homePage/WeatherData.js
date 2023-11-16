@@ -15,11 +15,11 @@ export const WeatherData = ({ weatherData }) => {
        <Grid item xs={10}>
         <Typography color='white' variant="h4" fontWeight={500}>Current Weather Data</Typography>
       </Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
+      {/* <Grid item xs={0} xl={10}></Grid>
+      <Grid item xs={0} xl={10}></Grid>
+      <Grid item xs={0} xl={10}></Grid>
+      <Grid item xs={0} xl={10}></Grid>
+      <Grid item xs={0} xl={10}></Grid> */}
     <Grid item xs={5}>
       <DataBox
         title="Temperature"

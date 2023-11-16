@@ -183,7 +183,7 @@ console.log(weatherData)
         height: '100vh'
       }}
     >
-      <Grid item xs={3}>
+      <Grid item xs={12} xl={3} order={{xs: 0, xl: 0}}>
         <Card
           sx={{
             height: '70vh',
@@ -211,7 +211,7 @@ console.log(weatherData)
           </Card>
         </Card>
       </Grid>
-      <Grid className="middle" item xs={6}>
+      <Grid className="middle" item xs={12} xl={6} order={{xs: 2, xl: 1}}>
         <Card
           sx={{
             height: '70vh',
@@ -272,7 +272,7 @@ console.log(weatherData)
           </Grid>
         </Card>
       </Grid>
-      <Grid className="right" item xs={3}>
+      <Grid className="right" item xs={12} xl={3} order={{xs: 1, xl: 2}}>
         <Card
           sx={{
             height: '70vh',
