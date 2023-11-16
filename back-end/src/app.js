@@ -13,6 +13,8 @@ app.use(cors());
 app.use(express.json())
 app.use(pathLogger)
 
+console.log(process.env.DB_HOST)
+
 router(app)
 
 let currentDate = new Date();
