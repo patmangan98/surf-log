@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import MenuItem from "@mui/material/MenuItem"
 import Select from "@mui/material/Select"
 import FormControl from "@mui/material/FormControl"
@@ -59,6 +59,12 @@ function BuoySelect({ onChange, value }) {
           </MenuItem>
           <MenuItem value={"41046"}>
             Bahamas / East Bahama 
+          </MenuItem>
+          <MenuItem value={"46053"}>
+            California / Santa Barbara 
+          </MenuItem>
+          <MenuItem value={"46086"}>
+            California / San Clemente Basin 
           </MenuItem>
         </Select>
       </FormControl>

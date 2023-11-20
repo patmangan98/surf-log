@@ -178,7 +178,7 @@ export const getWaveData = async(selectedDate, selectedBuoy) => {
       'Content-Type': 'application/json',
     },
   })
-
+  
   let responseData
 
   if (selectedDate !== getCurrentDateV2() && !isGreaterThan45Days(selectedDate, getCurrentDateV2() )) {
@@ -187,6 +187,7 @@ export const getWaveData = async(selectedDate, selectedBuoy) => {
   } else {
    responseData = await response.text()
   }
+ 
   if (!response.ok) {
     throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
   }

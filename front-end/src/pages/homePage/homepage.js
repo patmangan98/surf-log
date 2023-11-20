@@ -14,15 +14,15 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar"
 import Dayjs from "dayjs"
 import Journal from "./journal/Journal"
-
 import { isGreaterThan45Days } from "../../utility"
-// import "../../homepage.css"
 import leftSvg from './images/Left.svg'
 import middleSvg from './images/Middle.svg'
 import rightSvg from './images/Right.svg'
+
 export default function HomePage() {
   const [selectedBuoy, setSelectedBuoy] = useState("41004")
   const [selectedDate, setSelectedDate] = useState(Dayjs())
+  //State management for wave data returned from the NDBC
   const [waveData, setWaveData] = useState({
     YY: "",
     MM: "",
@@ -38,7 +38,7 @@ export default function HomePage() {
     MWD: "",
     PRES: "",
   })
-
+  //State management for data returned from the visualcrossing.com weather api
   const [weatherData, setWeatherData] = useState({
     currentTemp: "",
     relativeHumidity: "",
@@ -51,11 +51,18 @@ export default function HomePage() {
     uvIndex: "",
   })
 
+  //The select component where user can change the buoy
   const handleSelectChange = (newBuoy) => {
     setWaveData(getWaveData(selectedDate.format("YYYY-MM-DD"), newBuoy))
     setSelectedBuoy(newBuoy)
   }
 
+  //Handle the date change:
+  // 1. Get the wave data for the selected date
+  // 2. If it is today's date, parse the data result with getLatestBuoyReading function
+  // 3. If it is greater than 45 days ago, parse the result with getHistoricalBuoyReading function
+  // 4. If it is none of those things, retrieve from database 45 day cached data
+  // 5. Get the weather data for the selected date
   const handleDateChange = (newDate) => {
     if (newDate !== "undefined") {
       getWaveData(newDate.format("YYYY-MM-DD"), selectedBuoy).then((result) => {
@@ -66,15 +73,23 @@ export default function HomePage() {
         } else if (
           isGreaterThan45Days(newDate.format("MM-DD-YYYY"), getCurrentDate())
         ) {
-          tempWaveData = getHistoricalBuoyReading(
-            result,
-            newDate.format("YYYY-MM-DD")
-          )
+          tempWaveData = getHistoricalBuoyReading(result, newDate.format("YYYY-MM-DD"))
         } else {
           setWaveData(result)
         }
-
-        console.log(tempWaveData)
+        if (tempWaveData === 'No wave data available') {
+          setWaveData({
+            ...waveData,
+            WVHT: 'No data available',
+            DPD: 'No data available',
+            APD: 'No data available',
+            MWD: 'No data available',
+            PRES: 'No data available',
+            WDIR: 'No data available',
+            WSPD: 'No data available',
+            GST: 'No data available',
+          })
+        } else {
         if (tempWaveData) {
           setWaveData({
             ...waveData,
@@ -88,6 +103,7 @@ export default function HomePage() {
             GST: tempWaveData[7],
           })
         }
+      }
 
         getWeatherData(newDate.format("YYYY-MM-DD")).then((result) => {
           setWeatherData(result)
@@ -107,6 +123,7 @@ export default function HomePage() {
       "Historical " + messageText + selectedDate.format("MM-DD-YYYY")
   }
 
+  //useEffect gets wave and weather data right now when page first loads
   useEffect(() => {
     getWeatherData(selectedDate.format("YYYY-MM-DD")).then((result) => {
       setWeatherData(result)
@@ -178,7 +195,7 @@ export default function HomePage() {
               boxShadow: 0 
             }}   >
             <CardContent>
-              <WaveData currentReading={currentReading} />
+              <WaveData waveData={waveData} />
             </CardContent>
           </Card>
         </Card>
@@ -235,7 +252,7 @@ export default function HomePage() {
               </Card>
 
               <Journal
-                currentReading={currentReading}
+                waveData={waveData}
                 selectedBuoy={selectedBuoy}
                 date={selectedDate}
               ></Journal>

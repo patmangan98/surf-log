@@ -2,6 +2,8 @@
 //API Key 4PSEWATKQCJJCLS5LN8XJQQX9 damaristorrent21@gmail.com
 //API Key RM9MFARWRLYSCGUE7J8LYPUPM damaristorrent@hotmail.com
 
+
+
 export const isUserLoggedIn = () => {
   const token = localStorage.getItem("session_token")
   return token ? true : false
@@ -81,26 +83,37 @@ export const getLatestBuoyReading = (fileContent) => {
 }
 
 export const getHistoricalBuoyReading = (fileContent, selectedDate) => {
+
   const dataString = fileContent.split("\n")
   const [, month, day] = selectedDate.split("-")
   let dataSplit
-  
+  let isDateInFileContent = false
+
   //Search for the date in the text file
   for (let i = 2; i < dataString.length; i++) {
     dataSplit = dataString[i].split(/\s+/)
-
-    if (dataSplit[1] === month && dataSplit[2] === day && dataSplit[4] === "40") {
+    if (
+      dataSplit[1] === month &&
+      dataSplit[2] === day &&
+      dataSplit[8] !== "99.00"
+    ) {
+      isDateInFileContent = true
       break
     }
   }
   
-  //There is no wave information for this day
-  if (dataSplit[8] === '99.00') {
-    dataSplit[8] = 'No wave data available'
+  if (dataSplit !== undefined && isDateInFileContent) {
+    //There is no wave information for this day
+    console.log('datasplit after the date search', dataSplit)
+    if (dataSplit[8] === "99.00") {
+      dataSplit[8] = "No wave data available"
+    } else {
+      dataSplit[8] = metersToFeet(parseFloat(dataSplit[8]))
+    }
   } else {
-  dataSplit[8] = metersToFeet(parseFloat(dataSplit[8]))
+    dataSplit = "No wave data available"
   }
-
+  console.log(dataSplit)
   return dataSplit
 }
 
@@ -198,53 +211,52 @@ export const weatherSearchUrl = (dateString) => {
 }
 
 export const getWeatherData = async (selectedDate) => {
-  // const searchString = weatherSearchUrl(selectedDate)
+  const searchString = weatherSearchUrl(selectedDate)
 
-  // try {
-  //   const response = await fetch(searchString)
-  //   if (!response.ok) {
-  //     console.error("Error fetching data:", response.statusText)
-  //     return null
-  //   }
-
-  //   const data = await response.json()
-  //   const weatherData = {
-  //     currentTemp: celsiusToFahrenheit(
-  //       parseFloat(data.days[0].temp),
-  //       2
-  //     ).toFixed(2),
-  //     relativeHumidity: data.days[0].humidity,
-  //     windSpeed: data.days[0].windspeed,
-  //     windDirectionDegrees: data.days[0].winddir,
-  //     windDirection: getCompassDirection(data.days[0].winddir),
-  //     maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax), 2).toFixed(
-  //       2
-  //     ),
-  //     minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin), 2).toFixed(
-  //       2
-  //     ),
-  //     sunriseTime: data.days[0].sunrise,
-  //     sunsetTime: data.days[0].sunset,
-  //     uvIndex: data.days[0].uvindex,
-  //   }
-
-
-    const weatherData = {
-      currentTemp: '75',
-      relativeHumidity: '92',
-      windSpeed: '17',
-      windDirectionDegrees: '276',
-      windDirection: 'SSW',
-      maxTemp: '82.6',
-      minTemp: '56.9',
-      sunriseTime: '6:13',
-      sunsetTime: '5:45',
-      uvIndex: '7',
+  try {
+    const response = await fetch(searchString)
+    if (!response.ok) {
+      console.error("Error fetching data:", response.statusText)
+      return null
     }
-    return weatherData
 
-  // } catch (error) {
-  //   console.error("Error fetching data:", error)
-  //   return null
+    const data = await response.json()
+    const weatherData = {
+      currentTemp: celsiusToFahrenheit(
+        parseFloat(data.days[0].temp),
+        2
+      ).toFixed(2),
+      relativeHumidity: data.days[0].humidity,
+      windSpeed: data.days[0].windspeed,
+      windDirectionDegrees: data.days[0].winddir,
+      windDirection: getCompassDirection(data.days[0].winddir),
+      maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax), 2).toFixed(
+        2
+      ),
+      minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin), 2).toFixed(
+        2
+      ),
+      sunriseTime: data.days[0].sunrise,
+      sunsetTime: data.days[0].sunset,
+      uvIndex: data.days[0].uvindex,
+    }
+
+  // const weatherData = {
+  //   currentTemp: "75",
+  //   relativeHumidity: "92",
+  //   windSpeed: "17",
+  //   windDirectionDegrees: "276",
+  //   windDirection: "SSW",
+  //   maxTemp: "82.6",
+  //   minTemp: "56.9",
+  //   sunriseTime: "6:13",
+  //   sunsetTime: "5:45",
+  //   uvIndex: "7",
   // }
+  return weatherData
+
+  } catch (error) {
+    console.error("Error fetching data:", error)
+    return null
+  }
 }

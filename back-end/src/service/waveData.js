@@ -208,6 +208,7 @@ exports.updateCache = async (idArr) => {
 exports.retrieveCachedData = async (date, selectedBuoy) => {
   const result = await knex("forty_five_day_cache")
     .where("record_date", date)
+    .where("bouy_id", selectedBuoy)
     .first()
 
   return result
@@ -217,7 +218,7 @@ exports.retrieveCurrentData = async (selectedBuoy) => {
   const fetchUrl = `https://www.ndbc.noaa.gov/data/realtime2/${selectedBuoy}.txt`
   const fetchData = await fetch(fetchUrl)
   const result = await fetchData.text()
-
+  
   return result
 }
 
@@ -227,7 +228,7 @@ exports.retrieveHistoricalData = async (selectedBuoy, month, year) => {
   let result
 
   if (isCurrentYear(year)) {
-    //It is the current year, we need to fetch from the current year text files
+    //It is the current year, we need to fetch from the current year/monthly text files
     fetchUrl = `https://www.ndbc.noaa.gov/view_text_file.php?filename=${selectedBuoy}${month.monthNumber}${year}.txt.gz&dir=data/stdmet/${month.monthName}/`
 
     console.log(fetchUrl)
@@ -247,6 +248,7 @@ exports.retrieveHistoricalData = async (selectedBuoy, month, year) => {
     console.log(fetchUrl)
     fetchData = await fetch(fetchUrl)
     result = fetchData.text()
+  
   }
   return result
 }
