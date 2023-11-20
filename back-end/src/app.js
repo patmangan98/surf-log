@@ -5,7 +5,7 @@ const router = require('./router')
 const cron = require('node-cron')
 const { updateCache } = require('./service/waveData')
 
-const bouyIdArr = [44008, 44084, 41002, 41013, 41110, 41004, 41008, 41009, 41114, 41047, 41046]
+const bouyIdArr = [44008, 44084, 41002, 41013, 41110, 41004, 41008, 41009, 41114, 41047, 41046, 46053, 46086]
 
 const app = express()
 
@@ -14,10 +14,6 @@ app.use(express.json())
 app.use(pathLogger)
 
 router(app)
-
-let currentDate = new Date();
-let time = currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds()
-console.log(time)
 
 app.get('/message', (_req, res) => {
   res.json({ message: `The SurfLog back end server is running and it is ${time} local time. ` })

@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 exports.createUser = async (userData) => {
 
   const {username, password, email} = userData
-  console.log(userData)
+
   // Hash the password with 10 rounds of salt
   const hash = await bcrypt.hash(password, 10)
 

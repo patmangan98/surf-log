@@ -38,8 +38,7 @@ export const login = async (data) => {
     })
   
     const responseData = await response.json()
-    console.log("response data", responseData)
-  
+
     if (!response.ok) {
       throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
     }

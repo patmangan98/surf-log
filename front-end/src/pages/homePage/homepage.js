@@ -7,28 +7,23 @@ import Typography from "@mui/material/Typography"
 import BuoySelect from "./BuoySelect"
 import { WaveData } from "./WaveData"
 import { WeatherData } from "./WeatherData"
-import { getLatestBuoyReading } from "../../utility"
-import { getWeatherData } from "../../utility"
+import { getLatestBuoyReading, getHistoricalBuoyReading, getWeatherData, getCurrentDate  } from "../../utility"
 import { getWaveData } from "../../api"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar"
 import Dayjs from "dayjs"
 import Journal from "./journal/Journal"
-import { getCurrentDate } from "../../utility"
-import { celsiusToFahrenheit } from "../../utility"
-import { weatherSearchUrl } from "../../utility"
-import { getCompassDirection } from "../../utility"
-// import "../../homepage.css"
+import { isGreaterThan45Days } from "../../utility"
 import leftSvg from './images/Left.svg'
 import middleSvg from './images/Middle.svg'
 import rightSvg from './images/Right.svg'
-// import logo from './logo.png'
 
-export default function HomePage({ setUser, value }) {
+export default function HomePage() {
   const [selectedBuoy, setSelectedBuoy] = useState("41004")
   const [selectedDate, setSelectedDate] = useState(Dayjs())
-  const [currentReading, setCurrentReading] = useState({
+  //State management for wave data returned from the NDBC
+  const [waveData, setWaveData] = useState({
     YY: "",
     MM: "",
     DD: "",
@@ -43,7 +38,7 @@ export default function HomePage({ setUser, value }) {
     MWD: "",
     PRES: "",
   })
-
+  //State management for data returned from the visualcrossing.com weather api
   const [weatherData, setWeatherData] = useState({
     currentTemp: "",
     relativeHumidity: "",
@@ -56,40 +51,67 @@ export default function HomePage({ setUser, value }) {
     uvIndex: "",
   })
 
-  const handleSelectChange = (value) => {
-    setCurrentReading(getWaveData(selectedDate.format("YYYY-MM-DD"), value))
-    setSelectedBuoy(value)
+  //The select component where user can change the buoy
+  const handleSelectChange = (newBuoy) => {
+    setWaveData(getWaveData(selectedDate.format("YYYY-MM-DD"), newBuoy))
+    setSelectedBuoy(newBuoy)
   }
 
-  const handleDateChange = (value) => {
-    if (value !== "undefined") {
-      getWaveData(value.format("YYYY-MM-DD"), selectedBuoy).then((result) => {
-        //If it is today, we need to grab the latest reading and parse it with getLatestBuoyReading
-        if (value.format("MM-DD-YYYY") === getCurrentDate()) {
-          let tempCurrentReading = getLatestBuoyReading(result)
+  //Handle the date change:
+  // 1. Get the wave data for the selected date
+  // 2. If it is today's date, parse the data result with getLatestBuoyReading function
+  // 3. If it is greater than 45 days ago, parse the result with getHistoricalBuoyReading function
+  // 4. If it is none of those things, retrieve from database 45 day cached data
+  // 5. Get the weather data for the selected date
+  const handleDateChange = (newDate) => {
+    if (newDate !== "undefined") {
+      getWaveData(newDate.format("YYYY-MM-DD"), selectedBuoy).then((result) => {
+        let tempWaveData
 
-          setCurrentReading({
-            ...currentReading,
-            WVHT: tempCurrentReading[8],
-            DPD: tempCurrentReading[9],
-            APD: tempCurrentReading[10],
-            MWD: tempCurrentReading[11],
-            PRES: tempCurrentReading[12],
-            WDIR: tempCurrentReading[5],
-            WSPD: tempCurrentReading[6],
-            GST: tempCurrentReading[7],
+        if (newDate.format("MM-DD-YYYY") === getCurrentDate()) {
+          tempWaveData = getLatestBuoyReading(result)
+        } else if (
+          isGreaterThan45Days(newDate.format("MM-DD-YYYY"), getCurrentDate())
+        ) {
+          tempWaveData = getHistoricalBuoyReading(result, newDate.format("YYYY-MM-DD"))
+        } else {
+          setWaveData(result)
+        }
+        if (tempWaveData === 'No wave data available') {
+          setWaveData({
+            ...waveData,
+            WVHT: 'No data available',
+            DPD: 'No data available',
+            APD: 'No data available',
+            MWD: 'No data available',
+            PRES: 'No data available',
+            WDIR: 'No data available',
+            WSPD: 'No data available',
+            GST: 'No data available',
           })
         } else {
-          //If the date is not today, read the results from the database, returned as an object, no parsing required
-          setCurrentReading(result)
+        if (tempWaveData) {
+          setWaveData({
+            ...waveData,
+            WVHT: tempWaveData[8],
+            DPD: tempWaveData[9],
+            APD: tempWaveData[10],
+            MWD: tempWaveData[11],
+            PRES: tempWaveData[12],
+            WDIR: tempWaveData[5],
+            WSPD: tempWaveData[6],
+            GST: tempWaveData[7],
+          })
         }
+      }
 
-        getWeatherData(value.format("YYYY-MM-DD")).then((result) => {
+        getWeatherData(newDate.format("YYYY-MM-DD")).then((result) => {
           setWeatherData(result)
         })
       })
+
+      setSelectedDate(newDate)
     }
-    setSelectedDate(value)
   }
 
   //Message changes based on current date vs historical date
@@ -101,37 +123,11 @@ export default function HomePage({ setUser, value }) {
       "Historical " + messageText + selectedDate.format("MM-DD-YYYY")
   }
 
+  //useEffect gets wave and weather data right now when page first loads
   useEffect(() => {
-    fetch(weatherSearchUrl(selectedDate.format("YYYY-MM-DD")))
-      .then((response) => response.json())
-      .catch((error) => {
-        console.error("Error fetching message:", error)
-      })
-      .then((data) => {
-        if (data !== undefined) {
-          setWeatherData({
-            currentTemp: celsiusToFahrenheit(
-              parseFloat(data.days[0].temp),
-              2
-            ).toFixed(2),
-            relativeHumidity: data.days[0].humidity,
-            windSpeed: data.days[0].windspeed,
-            windDirectionDegrees: data.days[0].winddir,
-            windDirection: getCompassDirection(data.days[0].winddir),
-            maxTemp: celsiusToFahrenheit(
-              parseFloat(data.days[0].tempmax),
-              2
-            ).toFixed(2),
-            minTemp: celsiusToFahrenheit(
-              parseFloat(data.days[0].tempmin),
-              2
-            ).toFixed(2),
-            sunriseTime: data.days[0].sunrise,
-            sunsetTime: data.days[0].sunset,
-            uvIndex: data.days[0].uvindex,
-          })
-        }
-      })
+    getWeatherData(selectedDate.format("YYYY-MM-DD")).then((result) => {
+      setWeatherData(result)
+    })
 
     const fetchString = "data/realtime2/" + selectedBuoy + ".txt"
 
@@ -146,7 +142,7 @@ export default function HomePage({ setUser, value }) {
         const [YY, MM, DD, hh, mm, WDIR, WSPD, GST, WVHT, DPD, APD, MWD, PRES] =
           getLatestBuoyReading(fileContent)
 
-        setCurrentReading({
+        setWaveData({
           YY,
           MM,
           DD,
@@ -166,13 +162,6 @@ export default function HomePage({ setUser, value }) {
         console.error("Error reading the file:", error)
       })
   }, [selectedBuoy])
-
-  // function handleLogOut() {
-  //   clearToken()
-  //   setUser()
-  // }
-
-console.log(weatherData)
 
   return (
 
@@ -206,7 +195,7 @@ console.log(weatherData)
               boxShadow: 0 
             }}   >
             <CardContent>
-              <WaveData currentReading={currentReading} />
+              <WaveData waveData={waveData} />
             </CardContent>
           </Card>
         </Card>
@@ -263,7 +252,7 @@ console.log(weatherData)
               </Card>
 
               <Journal
-                currentReading={currentReading}
+                waveData={waveData}
                 selectedBuoy={selectedBuoy}
                 date={selectedDate}
               ></Journal>

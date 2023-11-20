@@ -8,7 +8,7 @@ exports.showPostsByUserId = async (userId) => {
 }
 
 exports.createPost = async (post) => {
-  console.log(post)
+
   const postId = await knex('posts').insert(post)
 
   return postId
@@ -25,7 +25,6 @@ exports.deletePost= async (id) => {
 
 exports.updatePost= async (post) => {
 
-  console.log("POSt", post.post_description)
   const result = await knex('posts')
     .where('post_id', post.post_id)
     .update({
