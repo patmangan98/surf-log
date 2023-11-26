@@ -30,9 +30,6 @@ function BuoySelect({ onChange, value }) {
           <MenuItem value={"44008"}>
             NorthEast / Nantucket
           </MenuItem>
-          <MenuItem value={"44084"}>
-            Mid-Atlantic / Bethany Beach DE 
-          </MenuItem>
           <MenuItem value={"41002"}>
             North Carolina / South Hatteras 
           </MenuItem>
@@ -43,10 +40,10 @@ function BuoySelect({ onChange, value }) {
             Southern South Carolina / Edisto 
           </MenuItem>
           <MenuItem value={"41008"}>
-            Southern South Carolina / Grays Reef
+            GA/North Florida / Grays Reef
           </MenuItem>
           <MenuItem value={"41009"}>
-            Northern Florida / East Canaveral
+            Central Florida / East Canaveral
           </MenuItem>
           <MenuItem value={"41114"}>
             Southern Florida / Fort Pierce 
