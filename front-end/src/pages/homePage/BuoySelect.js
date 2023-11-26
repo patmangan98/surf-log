@@ -39,9 +39,6 @@ function BuoySelect({ onChange, value }) {
           <MenuItem value={"41013"}>
             Southern North Carolina / Frying Pan Shoals 
           </MenuItem>
-          <MenuItem value={"41110"}>
-            Southern North Carolina / Masonboro Inlet 
-          </MenuItem>
           <MenuItem value={"41004"}>
             Southern South Carolina / Edisto 
           </MenuItem>

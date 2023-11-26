@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography"
 import BuoySelect from "./BuoySelect"
 import { WaveData } from "./WaveData"
 import { WeatherData } from "./WeatherData"
-import { getLatestBuoyReading, getHistoricalBuoyReading, getWeatherData, getCurrentDate  } from "../../utility"
+import { getLatestBuoyReading, getHistoricalBuoyReading, getWeatherData, getCurrentDate, getWeatherLocation  } from "../../utility"
 import { getWaveData } from "../../api"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
@@ -54,6 +54,9 @@ export default function HomePage() {
   //The select component where user can change the buoy
   const handleSelectChange = (newBuoy) => {
     setWaveData(getWaveData(selectedDate.format("YYYY-MM-DD"), newBuoy))
+    getWeatherData(selectedDate.format("YYYY-MM-DD"), newBuoy).then((result) => {
+      setWeatherData(result)
+    })
     setSelectedBuoy(newBuoy)
   }
 
@@ -62,21 +65,26 @@ export default function HomePage() {
   // 2. If it is today's date, parse the data result with getLatestBuoyReading function
   // 3. If it is greater than 45 days ago, parse the result with getHistoricalBuoyReading function
   // 4. If it is none of those things, retrieve from database 45 day cached data
-  // 5. Get the weather data for the selected date
+  // 5. Check for missing data (buoy may have been offline on that date)
+  // 6. Get the weather data for the selected date
+  // 7. Set the state variable SelectedDate
   const handleDateChange = (newDate) => {
     if (newDate !== "undefined") {
+      // 1. Get the wave data for the selected date
       getWaveData(newDate.format("YYYY-MM-DD"), selectedBuoy).then((result) => {
         let tempWaveData
 
         if (newDate.format("MM-DD-YYYY") === getCurrentDate()) {
+          // 2. If it is today's date, parse the data result with getLatestBuoyReading function
           tempWaveData = getLatestBuoyReading(result)
-        } else if (
-          isGreaterThan45Days(newDate.format("MM-DD-YYYY"), getCurrentDate())
-        ) {
-          tempWaveData = getHistoricalBuoyReading(result, newDate.format("YYYY-MM-DD"))
+        } else if (isGreaterThan45Days(newDate.format("MM-DD-YYYY"), getCurrentDate()) ) {
+            // 3. If it is greater than 45 days ago, parse the result with getHistoricalBuoyReading function
+            tempWaveData = getHistoricalBuoyReading(result, newDate.format("YYYY-MM-DD"))
         } else {
+          // 4. If it is none of those things, retrieve from database 45 day cached data
           setWaveData(result)
         }
+        // 5. Check for missing data (buoy may have been offline on that date)
         if (tempWaveData === 'No wave data available') {
           setWaveData({
             ...waveData,
@@ -104,31 +112,35 @@ export default function HomePage() {
           })
         }
       }
-
-        getWeatherData(newDate.format("YYYY-MM-DD")).then((result) => {
-          setWeatherData(result)
-        })
       })
 
-      setSelectedDate(newDate)
+     // 6. Get the weather data for the selected date
+    getWeatherData(newDate.format("YYYY-MM-DD"), selectedBuoy).then((result) => {
+      setWeatherData(result)
+    })
+
+    setSelectedDate(newDate)
     }
   }
 
   //Message changes based on current date vs historical date
   let messageText = "Conditions for "
   if (selectedDate.format("MM-DD-YYYY") === getCurrentDate()) {
-    messageText = "Current " + messageText + " today " + getCurrentDate()
+    messageText = messageText + getCurrentDate()
   } else {
     messageText =
-      "Historical " + messageText + selectedDate.format("MM-DD-YYYY")
+      messageText + selectedDate.format("MM-DD-YYYY")
   }
+
+  let locationText = getWeatherLocation(selectedBuoy)
 
   //useEffect gets wave and weather data right now when page first loads
   useEffect(() => {
-    getWeatherData(selectedDate.format("YYYY-MM-DD")).then((result) => {
+    getWeatherData(selectedDate.format("YYYY-MM-DD"), '41004').then((result) => {
       setWeatherData(result)
     })
-
+  
+    //This is the realtime url 
     const fetchString = "data/realtime2/" + selectedBuoy + ".txt"
 
     fetch(fetchString)
@@ -195,7 +207,7 @@ export default function HomePage() {
               boxShadow: 0 
             }}   >
             <CardContent>
-              <WaveData waveData={waveData} />
+              <WaveData waveData={waveData} messageText={messageText} />
             </CardContent>
           </Card>
         </Card>
@@ -230,16 +242,6 @@ export default function HomePage() {
 
               <BuoySelect onChange={handleSelectChange}></BuoySelect>
 
-              <Card sx={{
-                marginBottom: '2vh',
-                paddingX: '1vh',
-                paddingY: '1vw'
-              }}>
-                <Typography style={{ fontSize: "20px" }}>
-                  {messageText}
-                </Typography>
-
-              </Card>
               <Card>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateCalendar
@@ -290,7 +292,7 @@ export default function HomePage() {
             border : 'none',
             boxShadow: 0 
           }}> 
-          <WeatherData weatherData={weatherData} />
+          <WeatherData weatherData={weatherData} messageText={messageText} locationText={locationText.label}/>
           </CardContent>
           </Card>
          
@@ -299,10 +301,5 @@ export default function HomePage() {
       </Grid>
 
     </Grid>
-
-
-
-
-
   )
 }
