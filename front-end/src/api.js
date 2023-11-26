@@ -1,4 +1,5 @@
-import { getCurrentDateV2 } from './utility'
+import { getCurrentDateV2, isGreaterThan45Days } from './utility'
+
 const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000'
 
 
@@ -97,8 +98,6 @@ export const updatePassword = async(token, data) => {
 }
 
 export const addNewPost = async(post) => {
-
-  console.log(post)
   
   const response = await fetch(`${baseUrl}/post/newpost`, {
     method: "POST", 
@@ -154,9 +153,6 @@ export const getPosts = async (id) => {
 
 export const updatePost = async(post) => {
 
-
-    console.log(post);
-  
     const response = await fetch(`${baseUrl}/post/`, {
       method: "PUT",
       headers: {
@@ -182,33 +178,20 @@ export const getWaveData = async(selectedDate, selectedBuoy) => {
       'Content-Type': 'application/json',
     },
   })
-
+ 
   let responseData
-  if (selectedDate === getCurrentDateV2()) {
-    responseData = await response.text()
+
+  if (selectedDate !== getCurrentDateV2() && !isGreaterThan45Days(selectedDate, getCurrentDateV2() )) {
+    responseData = await response.json()
   } else {
-   responseData = await response.json()
+   responseData = await response.text()
   }
+ 
   if (!response.ok) {
     throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
   }
   
   return responseData
 }
-
-// export const getUserById= async(userId) => {
-
-//   const response = await fetch(`${baseUrl}/user/userId/${userId}`, {
-//     method: "GET",
-//   })
-
-//   const responseData = await response.json()
-
-//   if (!response.ok) {
-//     throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
-//   }
-  
-//   return responseData
-// }
 
   

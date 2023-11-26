@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import MenuItem from "@mui/material/MenuItem"
 import Select from "@mui/material/Select"
 import FormControl from "@mui/material/FormControl"
@@ -30,26 +30,20 @@ function BuoySelect({ onChange, value }) {
           <MenuItem value={"44008"}>
             NorthEast / Nantucket
           </MenuItem>
-          <MenuItem value={"44084"}>
-            Mid-Atlantic / Bethany Beach DE 
-          </MenuItem>
           <MenuItem value={"41002"}>
             North Carolina / South Hatteras 
           </MenuItem>
           <MenuItem value={"41013"}>
             Southern North Carolina / Frying Pan Shoals 
           </MenuItem>
-          <MenuItem value={"41110"}>
-            Southern North Carolina / Masonboro Inlet 
-          </MenuItem>
           <MenuItem value={"41004"}>
             Southern South Carolina / Edisto 
           </MenuItem>
           <MenuItem value={"41008"}>
-            Southern South Carolina / Grays Reef
+            GA/North Florida / Grays Reef
           </MenuItem>
           <MenuItem value={"41009"}>
-            Northern Florida / East Canaveral
+            Central Florida / East Canaveral
           </MenuItem>
           <MenuItem value={"41114"}>
             Southern Florida / Fort Pierce 
@@ -59,6 +53,12 @@ function BuoySelect({ onChange, value }) {
           </MenuItem>
           <MenuItem value={"41046"}>
             Bahamas / East Bahama 
+          </MenuItem>
+          <MenuItem value={"46053"}>
+            California / Santa Barbara 
+          </MenuItem>
+          <MenuItem value={"46086"}>
+            California / San Clemente Basin 
           </MenuItem>
         </Select>
       </FormControl>

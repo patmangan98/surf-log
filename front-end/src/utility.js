@@ -1,6 +1,3 @@
-  //API Key EXQ4HJA5WC2HZL3LRU6EANZKK damaristorrent@gmail.com
-  //API Key 4PSEWATKQCJJCLS5LN8XJQQX9 damaristorrent21@gmail.com
-
 export const isUserLoggedIn = () => {
   const token = localStorage.getItem("session_token")
   return token ? true : false
@@ -79,6 +76,40 @@ export const getLatestBuoyReading = (fileContent) => {
   return dataSplit
 }
 
+export const getHistoricalBuoyReading = (fileContent, selectedDate) => {
+
+  const dataString = fileContent.split("\n")
+  const [, month, day] = selectedDate.split("-")
+  let dataSplit
+  let isDateInFileContent = false
+
+  //Search for the date in the text file
+  for (let i = 2; i < dataString.length; i++) {
+    dataSplit = dataString[i].split(/\s+/)
+    if (
+      dataSplit[1] === month &&
+      dataSplit[2] === day &&
+      dataSplit[8] !== "99.00"
+    ) {
+      isDateInFileContent = true
+      break
+    }
+  }
+  
+  if (dataSplit !== undefined && isDateInFileContent) {
+    //There is no wave information for this day
+    console.log('datasplit after the date search', dataSplit)
+    if (dataSplit[8] === "99.00") {
+      dataSplit[8] = "No wave data available"
+    } else {
+      dataSplit[8] = metersToFeet(parseFloat(dataSplit[8]))
+    }
+  } else {
+    dataSplit = "No wave data available"
+  }
+  return dataSplit
+}
+
 export const getBuoyNumber = (urlString) => {
   const regex = /\/(\d+)\.txt$/
   const match = urlString.match(regex)
@@ -120,6 +151,23 @@ export const getCurrentDateV2 = () => {
     .replaceAll(" ", "-")
 }
 
+export const isGreaterThan45Days = (date1, date2) => {
+  const tempDate1 = new Date(date1)
+  const tempDate2 = new Date(date2)
+
+  // Calculate the time difference in milliseconds
+  const timeDifference = tempDate2 - tempDate1
+
+  // Convert milliseconds to days (1 day = 24 hours * 60 minutes * 60 seconds * 1000 milliseconds)
+  const daysDifference = timeDifference / (1000 * 60 * 60 * 24)
+
+  if (daysDifference >= 45) {
+    return true
+  } else {
+    return false
+  }
+}
+
 export const getCompassDirection = (degrees) => {
   degrees = (degrees + 360) % 360
 
@@ -147,18 +195,27 @@ export const getCompassDirection = (degrees) => {
   return directions[directionIndex % 16]
 }
 
-export const weatherSearchUrl = (dateString) => {
-  
+export const weatherSearchUrl = (dateString, location) => {
+  //API Key EXQ4HJA5WC2HZL3LRU6EANZKK damaristorrent@gmail.com
+  //API Key 4PSEWATKQCJJCLS5LN8XJQQX9 damaristorrent21@gmail.com
+  //API Key RM9MFARWRLYSCGUE7J8LYPUPM damaristorrent@hotmail.com
 
-  const stringOne =
-    "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/charleston%2C%20south%20carolina/"
-  const stringTwo =
-    "?unitGroup=metric&include=hours&key=4PSEWATKQCJJCLS5LN8XJQQX9&contentType=json"
-  return stringOne + dateString + "/" + dateString + stringTwo
+  const apiKey = "RM9MFARWRLYSCGUE7J8LYPUPM"
+
+  const stringOne = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
+  const stringTwo = "?unitGroup=metric&include=hours&key="
+  const stringThree = "&contentType=json"
+
+  return stringOne + location + "/" + dateString + "/" + dateString + stringTwo + apiKey + stringThree
+  
 }
 
-export const getWeatherData = async (selectedDate) => {
-  const searchString = weatherSearchUrl(selectedDate);
+export const getWeatherData = async (selectedDate, selectedBuoy) => {
+  console.log('selected buoy in the weathersearch url', selectedBuoy)
+  const location = getWeatherLocation(selectedBuoy)
+  console.log('location', location)
+ 
+  const searchString = weatherSearchUrl(selectedDate, location.searchString)
 
   try {
     const response = await fetch(searchString)
@@ -169,20 +226,100 @@ export const getWeatherData = async (selectedDate) => {
 
     const data = await response.json()
     const weatherData = {
-        currentTemp: celsiusToFahrenheit(parseFloat(data.days[0].temp), 2).toFixed(2),
-        relativeHumidity: data.days[0].humidity,
-        windSpeed: data.days[0].windspeed,
-        windDirectionDegrees: data.days[0].winddir,
-        windDirection: getCompassDirection(data.days[0].winddir),
-        maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax), 2).toFixed(2),
-        minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin), 2).toFixed(2),
-        sunriseTime: data.days[0].sunrise,
-        sunsetTime: data.days[0].sunset,
-        uvIndex: data.days[0].uvindex,
-      }
-    return weatherData
+      currentTemp: celsiusToFahrenheit(
+        parseFloat(data.days[0].temp),
+        2
+      ).toFixed(2),
+      relativeHumidity: data.days[0].humidity,
+      windSpeed: data.days[0].windspeed,
+      windDirectionDegrees: data.days[0].winddir,
+      windDirection: getCompassDirection(data.days[0].winddir),
+      maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax), 2).toFixed(
+        2
+      ),
+      minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin), 2).toFixed(
+        2
+      ),
+      sunriseTime: data.days[0].sunrise,
+      sunsetTime: data.days[0].sunset,
+      uvIndex: data.days[0].uvindex,
+    }
+
+  return weatherData
+
   } catch (error) {
     console.error("Error fetching data:", error)
     return null
+  }
+}
+
+export const getWeatherLocation= (selectedBuoy) => {
+  let result = {
+    label: '',
+    searchString: ''
+  };
+  
+  if (selectedBuoy != undefined){
+    switch (selectedBuoy) {
+      case '44008': 
+        //Nantucket Buoy
+        result.label = 'Point Judith, Rhode Island'
+        result.searchString = 'pt%20judith%20rhode%20island'
+        break;
+      case '41002':
+        //Hatteras
+        result.label = 'Cape Hatteras, North Carolina'
+        result.searchString = 'cape%20hatteras%2C%20nc'
+        break;
+      case '41013':
+        //Frying pan
+        result.label = 'Wilmington, North Carolina'
+        result.searchString = 'wrightsville%20beach%2C%20nc'
+        break;
+      case '41004':
+        //Charleston
+        result.label = 'Charleston, South Carolina'
+        result.searchString = 'charleston%2C%20south%20carolina'
+        break;
+      case '41008':
+        //Jax/Grays Reef
+        result.label = 'Jacksonville, Florida'
+        result.searchString =  'savannah%2C%20ga'
+        break;
+      case '41009':
+        //Canaveral
+        result.label = 'Cocoa Beach, Florida'
+        result.searchString = 'cocoa%20beach%2C%20florida'
+        break;
+      case '41114':
+        //Ft Pierce
+        result.label = "Fort Pierce, Florida"
+        result.searchString = 'ft%20pierce%2C%20florida'
+        break;
+      case '41047':
+        //Bahamas
+        result.label = 'Abaco, Bahamas'
+        result.searchString = 'abaco%2C%20bahamas'
+        break;
+      case '41046':
+        //Bahamas
+        result.label = "Eleuthera, Bahamas"
+        result.searchString = 'abaco%2C%20bahamas'
+        break;
+      case '46053':
+        //Santa Barbara
+        result.label = "Santa Barbara, California"
+        result.searchString = 'santa%20barbara%2C%20california'
+        break;
+      case '46086':
+        //San Clemente
+        result.label = "San Clemente, California"
+        result.searchString = 'san%20clemente%2C%20california'
+        break;
+      default:
+        result.label = 'Charleston, South Carolina'
+        result.searchString = 'charleston%2C%20south%20carolina'
+    }
+    return result
   }
 }

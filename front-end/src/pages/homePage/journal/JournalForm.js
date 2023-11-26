@@ -11,7 +11,7 @@ import { useMyContext } from "../../components/context/MyContext"
 import { getUserId } from "../../utilities/users-service"
 import Typography from "@mui/material/Typography"
 
-const JournalForm = ({ currentReading, selectedBuoy, date, handleClose }) => {
+const JournalForm = ({ waveData, selectedBuoy, date, handleClose }) => {
   const [location, setLocation] = useState()
   const [description, setDescription] = useState()
   const [rating, setRating] = useState()
@@ -37,14 +37,14 @@ const JournalForm = ({ currentReading, selectedBuoy, date, handleClose }) => {
     post.post_date = date.format('MM-DD-YYYY')
     post.post_description = description
     post.post_location = location
-    post.WDIR = currentReading.WDIR
-    post.WSPD = currentReading.WSPD
-    post.GST = currentReading.GST
-    post.WVHT = currentReading.WVHT
-    post.DPD = currentReading.DPD
-    post.APD = currentReading.APD
-    post.MWD = currentReading.MWD
-    post.PRES = currentReading.PRES
+    post.WDIR = waveData.WDIR
+    post.WSPD = waveData.WSPD
+    post.GST = waveData.GST
+    post.WVHT = waveData.WVHT
+    post.DPD = waveData.DPD
+    post.APD = waveData.APD
+    post.MWD = waveData.MWD
+    post.PRES = waveData.PRES
     post.buoy_id = selectedBuoy
     try {
       addNewPost(post)
