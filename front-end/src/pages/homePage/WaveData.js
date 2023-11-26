@@ -3,8 +3,7 @@ import { DataBox } from "./DataBox"
 import { Typography } from "@mui/material"
 import '@fontsource/roboto/500.css';
 
-export const WaveData = ({ waveData }) => {
-
+export const WaveData = ({ waveData, messageText }) => {
   return (
     <Grid 
     direction="row" 
@@ -14,7 +13,8 @@ export const WaveData = ({ waveData }) => {
     container>
        <Grid item xs={10}></Grid>
       <Grid item xs={10}>
-        <Typography color='white' variant="h4" fontWeight={500}>Current Wave Data</Typography>
+        <Typography color='white' variant="h5" fontWeight={500}>Wave {messageText}</Typography>
+
       </Grid>
       <Grid item xs={10}></Grid>
       <Grid item xs={10}></Grid>

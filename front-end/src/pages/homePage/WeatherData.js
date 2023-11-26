@@ -2,7 +2,7 @@ import Grid from "@mui/material/Grid"
 import { DataBox } from "./DataBox"
 import { Typography } from "@mui/material"
 
-export const WeatherData = ({ weatherData }) => {
+export const WeatherData = ({ weatherData, messageText, locationText }) => {
   
   return (
     <Grid container
@@ -13,7 +13,8 @@ export const WeatherData = ({ weatherData }) => {
   >
      <Grid item xs={10}></Grid>
        <Grid item xs={10}>
-        <Typography color='white' variant="h4" fontWeight={500}>Current Weather Data</Typography>
+        <Typography color='white' variant="h5" fontWeight={500}>Weather {messageText}</Typography>
+        <Typography color='white' variant="h5" fontWeight={500}>{locationText}</Typography>
       </Grid>
       <Grid item xs={10}></Grid>
       <Grid item xs={10}></Grid>

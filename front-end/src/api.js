@@ -178,12 +178,11 @@ export const getWaveData = async(selectedDate, selectedBuoy) => {
       'Content-Type': 'application/json',
     },
   })
-  
+ 
   let responseData
 
   if (selectedDate !== getCurrentDateV2() && !isGreaterThan45Days(selectedDate, getCurrentDateV2() )) {
     responseData = await response.json()
-    console.log(responseData)
   } else {
    responseData = await response.text()
   }

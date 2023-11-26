@@ -1,9 +1,3 @@
-//API Key EXQ4HJA5WC2HZL3LRU6EANZKK damaristorrent@gmail.com
-//API Key 4PSEWATKQCJJCLS5LN8XJQQX9 damaristorrent21@gmail.com
-//API Key RM9MFARWRLYSCGUE7J8LYPUPM damaristorrent@hotmail.com
-
-
-
 export const isUserLoggedIn = () => {
   const token = localStorage.getItem("session_token")
   return token ? true : false
@@ -113,7 +107,6 @@ export const getHistoricalBuoyReading = (fileContent, selectedDate) => {
   } else {
     dataSplit = "No wave data available"
   }
-  console.log(dataSplit)
   return dataSplit
 }
 
@@ -202,16 +195,27 @@ export const getCompassDirection = (degrees) => {
   return directions[directionIndex % 16]
 }
 
-export const weatherSearchUrl = (dateString) => {
-  const stringOne =
-    "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/charleston%2C%20south%20carolina/"
-  const stringTwo =
-    "?unitGroup=metric&include=hours&key=RM9MFARWRLYSCGUE7J8LYPUPM&contentType=json"
-  return stringOne + dateString + "/" + dateString + stringTwo
+export const weatherSearchUrl = (dateString, location) => {
+  //API Key EXQ4HJA5WC2HZL3LRU6EANZKK damaristorrent@gmail.com
+  //API Key 4PSEWATKQCJJCLS5LN8XJQQX9 damaristorrent21@gmail.com
+  //API Key RM9MFARWRLYSCGUE7J8LYPUPM damaristorrent@hotmail.com
+
+  const apiKey = "RM9MFARWRLYSCGUE7J8LYPUPM"
+
+  const stringOne = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
+  const stringTwo = "?unitGroup=metric&include=hours&key="
+  const stringThree = "&contentType=json"
+
+  return stringOne + location + "/" + dateString + "/" + dateString + stringTwo + apiKey + stringThree
+  
 }
 
-export const getWeatherData = async (selectedDate) => {
-  const searchString = weatherSearchUrl(selectedDate)
+export const getWeatherData = async (selectedDate, selectedBuoy) => {
+  console.log('selected buoy in the weathersearch url', selectedBuoy)
+  const location = getWeatherLocation(selectedBuoy)
+  console.log('location', location)
+ 
+  const searchString = weatherSearchUrl(selectedDate, location.searchString)
 
   try {
     const response = await fetch(searchString)
@@ -241,22 +245,81 @@ export const getWeatherData = async (selectedDate) => {
       uvIndex: data.days[0].uvindex,
     }
 
-  // const weatherData = {
-  //   currentTemp: "75",
-  //   relativeHumidity: "92",
-  //   windSpeed: "17",
-  //   windDirectionDegrees: "276",
-  //   windDirection: "SSW",
-  //   maxTemp: "82.6",
-  //   minTemp: "56.9",
-  //   sunriseTime: "6:13",
-  //   sunsetTime: "5:45",
-  //   uvIndex: "7",
-  // }
   return weatherData
 
   } catch (error) {
     console.error("Error fetching data:", error)
     return null
+  }
+}
+
+export const getWeatherLocation= (selectedBuoy) => {
+  let result = {
+    label: '',
+    searchString: ''
+  };
+  
+  if (selectedBuoy != undefined){
+    switch (selectedBuoy) {
+      case '44008': 
+        //Nantucket Buoy
+        result.label = 'Point Judith, Rhode Island'
+        result.searchString = 'pt%20judith%20rhode%20island'
+        break;
+      case '41002':
+        //Hatteras
+        result.label = 'Cape Hatteras, North Carolina'
+        result.searchString = 'cape%20hatteras%2C%20nc'
+        break;
+      case '41013':
+        //Frying pan
+        result.label = 'Wilmington, North Carolina'
+        result.searchString = 'wrightsville%20beach%2C%20nc'
+        break;
+      case '41004':
+        //Charleston
+        result.label = 'Charleston, South Carolina'
+        result.searchString = 'charleston%2C%20south%20carolina'
+        break;
+      case '41008':
+        //Jax/Grays Reef
+        result.label = 'Jacksonville, Florida'
+        result.searchString =  'savannah%2C%20ga'
+        break;
+      case '41009':
+        //Canaveral
+        result.label = 'Cocoa Beach, Florida'
+        result.searchString = 'cocoa%20beach%2C%20florida'
+        break;
+      case '41114':
+        //Ft Pierce
+        result.label = "Fort Pierce, Florida"
+        result.searchString = 'ft%20pierce%2C%20florida'
+        break;
+      case '41047':
+        //Bahamas
+        result.label = 'Abaco, Bahamas'
+        result.searchString = 'abaco%2C%20bahamas'
+        break;
+      case '41046':
+        //Bahamas
+        result.label = "Eleuthera, Bahamas"
+        result.searchString = 'abaco%2C%20bahamas'
+        break;
+      case '46053':
+        //Santa Barbara
+        result.label = "Santa Barbara, California"
+        result.searchString = 'santa%20barbara%2C%20california'
+        break;
+      case '46086':
+        //San Clemente
+        result.label = "San Clemente, California"
+        result.searchString = 'san%20clemente%2C%20california'
+        break;
+      default:
+        result.label = 'Charleston, South Carolina'
+        result.searchString = 'charleston%2C%20south%20carolina'
+    }
+    return result
   }
 }
