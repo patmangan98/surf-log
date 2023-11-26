@@ -16,11 +16,6 @@ export const WaveData = ({ waveData, messageText }) => {
         <Typography color='white' variant="h5" fontWeight={500}>Wave {messageText}</Typography>
 
       </Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
       <Grid item xs={10}>
         <DataBox
           title="Current Wave Height"

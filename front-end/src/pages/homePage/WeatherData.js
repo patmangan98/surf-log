@@ -1,6 +1,10 @@
 import Grid from "@mui/material/Grid"
 import { DataBox } from "./DataBox"
 import { Typography } from "@mui/material"
+import { createTheme, ThemeProvider} from '@mui/material'
+
+
+
 
 export const WeatherData = ({ weatherData, messageText, locationText }) => {
   
@@ -13,15 +17,26 @@ export const WeatherData = ({ weatherData, messageText, locationText }) => {
   >
      <Grid item xs={10}></Grid>
        <Grid item xs={10}>
-        <Typography color='white' variant="h5" fontWeight={500}>Weather {messageText}</Typography>
-        <Typography color='white' variant="h5" fontWeight={500}>{locationText}</Typography>
+        <Typography color='white' variant="h5" fontWeight={500}
+        sx={{
+          fontSize: {
+            xs: '25px',
+            lg:'15px',
+            xl: '25px'    
+            }
+          }}
+        >Weather {messageText}</Typography>
+        <Typography color='white' variant="h5" fontWeight={500}
+        sx={{
+          fontSize: {
+            xs: '25px',
+            lg:'15px',
+            xl: '25px'    
+          }
+        }}
+        >{locationText}</Typography>
       </Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={10}></Grid>
-    <Grid item xs={5}>
+    <Grid item xs={5} lg={6}>
       <DataBox
         title="Temperature"
         data={weatherData.currentTemp}
@@ -29,7 +44,7 @@ export const WeatherData = ({ weatherData, messageText, locationText }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item xs={5}>
+    <Grid item xs={5} lg={6}>
       <DataBox
         title="Today's High Temp"
         data={weatherData.maxTemp}
@@ -37,7 +52,7 @@ export const WeatherData = ({ weatherData, messageText, locationText }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item xs={5}>
+    <Grid item xs={5} lg={6}>
       <DataBox
         title="Today's Low Temp"
         data={weatherData.minTemp}
@@ -45,7 +60,7 @@ export const WeatherData = ({ weatherData, messageText, locationText }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item xs={5}> 
+    <Grid item xs={5} lg={6}> 
       <DataBox
         title="Relative Humidity"
         data={weatherData.relativeHumidity}
@@ -53,7 +68,7 @@ export const WeatherData = ({ weatherData, messageText, locationText }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item xs={5}>
+    <Grid item xs={5} lg={6}>
       <DataBox
         title="Windspeed"
         data={weatherData.windSpeed}
@@ -61,7 +76,7 @@ export const WeatherData = ({ weatherData, messageText, locationText }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item xs={5}>
+    <Grid item xs={5} lg={6}>
       <DataBox
         title="Wind Direction"
         data={weatherData.windDirection}
@@ -69,7 +84,7 @@ export const WeatherData = ({ weatherData, messageText, locationText }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item xs={10}>
+    <Grid item xs={10} lg={12}>
       <DataBox
         title="Sunrise Time"
         data={weatherData.sunriseTime}
@@ -77,7 +92,7 @@ export const WeatherData = ({ weatherData, messageText, locationText }) => {
       ></DataBox>
     </Grid>
 
-    <Grid item xs={10}>
+    <Grid item xs={10} lg={12}>
       <DataBox
         title="Sunset Time"
         data={weatherData.sunsetTime}
