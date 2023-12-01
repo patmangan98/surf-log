@@ -200,7 +200,7 @@ export const weatherSearchUrl = (dateString, location) => {
   //API Key 4PSEWATKQCJJCLS5LN8XJQQX9 damaristorrent21@gmail.com
   //API Key RM9MFARWRLYSCGUE7J8LYPUPM damaristorrent@hotmail.com
 
-  const apiKey = "RM9MFARWRLYSCGUE7J8LYPUPM"
+  const apiKey = "4PSEWATKQCJJCLS5LN8XJQQX9"
 
   const stringOne = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
   const stringTwo = "?unitGroup=metric&include=hours&key="
@@ -223,13 +223,12 @@ export const getWeatherData = async (selectedDate, selectedBuoy) => {
       console.error("Error fetching data:", response.statusText)
       return null
     }
-
+    
     const data = await response.json()
+    console.log(data)
     const weatherData = {
-      currentTemp: celsiusToFahrenheit(
-        parseFloat(data.days[0].temp),
-        2
-      ).toFixed(2),
+      conditions: data.days[0].conditions,
+     
       relativeHumidity: data.days[0].humidity,
       windSpeed: data.days[0].windspeed,
       windDirectionDegrees: data.days[0].winddir,

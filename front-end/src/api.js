@@ -1,50 +1,47 @@
-import { getCurrentDateV2, isGreaterThan45Days } from './utility'
+import { getCurrentDateV2, isGreaterThan45Days } from "./utility"
 
-const baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000'
-
+const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:8000"
 
 export const login = async (data) => {
-  
-  const {
-    username,
-    password
-  } = data
+  const { username, password } = data
 
   const response = await fetch(`${baseUrl}/auth/login`, {
     method: "POST",
     headers: new Headers({
-      "Authorization": `Basic ${btoa(`${username}:${password}`)}` //btoa is only deprecated in Node.js not in browser environments!
+      Authorization: `Basic ${btoa(`${username}:${password}`)}`, //btoa is only deprecated in Node.js not in browser environments!
     }),
   })
 
   const responseData = await response.json()
 
   if (!response.ok) {
-    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+    throw new Error(
+      `Status Code: ${response?.status} - ${responseData?.message}`
+    )
   }
 
   return responseData
 }
 
-export const register = async(data) => {
-
+export const register = async (data) => {
   const response = await fetch(`${baseUrl}/auth/register`, {
-    method: "POST", 
-    headers: {'Content-Type': 'application/json'},
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   })
 
   const responseData = await response.json()
 
   if (!response.ok) {
-    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+    throw new Error(
+      `Status Code: ${response?.status} - ${responseData?.message}`
+    )
   }
 
   return responseData
 }
 
 export const getUserProfile = async (username) => {
-
   const response = await fetch(`${baseUrl}/user/username/${username}`, {
     method: "GET",
   })
@@ -52,38 +49,40 @@ export const getUserProfile = async (username) => {
   const responseData = await response.json()
 
   if (!response.ok) {
-    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+    throw new Error(
+      `Status Code: ${response?.status} - ${responseData?.message}`
+    )
   }
 
   return responseData
 }
 
-export const getUser = async(token) => {
-
+export const getUser = async (token) => {
   const response = await fetch(`${baseUrl}/user/token`, {
-    method: "GET", 
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   })
 
   const responseData = await response.json()
 
   if (!response.ok) {
-    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+    throw new Error(
+      `Status Code: ${response?.status} - ${responseData?.message}`
+    )
   }
-  
+
   return responseData
 }
 
-export const updatePassword = async(token, data) => {
-
+export const updatePassword = async (token, data) => {
   const response = await fetch(`${baseUrl}/auth/updatePassword`, {
-    method: "POST", 
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
   })
@@ -91,18 +90,19 @@ export const updatePassword = async(token, data) => {
   const responseData = await response.json()
 
   if (!response.ok) {
-    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+    throw new Error(
+      `Status Code: ${response?.status} - ${responseData?.message}`
+    )
   }
-  
+
   return responseData
 }
 
-export const addNewPost = async(post) => {
-  
+export const addNewPost = async (post) => {
   const response = await fetch(`${baseUrl}/post/newpost`, {
-    method: "POST", 
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(post),
   })
@@ -110,19 +110,20 @@ export const addNewPost = async(post) => {
   const responseData = await response.json()
 
   if (!response.ok) {
-    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+    throw new Error(
+      `Status Code: ${response?.status} - ${responseData?.message}`
+    )
   }
-  
+
   return responseData
 }
 
-export const deletePost= async (id) => {
-
+export const deletePost = async (id) => {
   const response = await fetch(`${baseUrl}/post/${id}`, {
     method: "DELETE",
   })
 
-  const responseData = await response.json();
+  const responseData = await response.json()
 
   if (!response.ok) {
     throw new Error(
@@ -134,64 +135,71 @@ export const deletePost= async (id) => {
 }
 
 export const getPosts = async (id) => {
-
   const response = await fetch(`${baseUrl}/posts/${id}`, {
     method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   })
 
   const responseData = await response.json()
 
   if (!response.ok) {
-    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+    throw new Error(
+      `Status Code: ${response?.status} - ${responseData?.message}`
+    )
   }
 
   return responseData
 }
 
-export const updatePost = async(post) => {
-
-    const response = await fetch(`${baseUrl}/post/`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json", 
-      },
-      body: JSON.stringify(post),
-    })
-
-  const responseData = await response.json()
-
-  if (!response.ok) {
-    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
-  }
-  
-  return responseData
-}
-
-export const getWaveData = async(selectedDate, selectedBuoy) => {
-  
-  const response = await fetch(`${baseUrl}/getdata?date=${selectedDate}&selectedBuoy=${selectedBuoy}`, {
-    method: "GET",
+export const updatePost = async (post) => {
+  const response = await fetch(`${baseUrl}/post/`, {
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify(post),
   })
- 
+
+  const responseData = await response.json()
+
+  if (!response.ok) {
+    throw new Error(
+      `Status Code: ${response?.status} - ${responseData?.message}`
+    )
+  }
+
+  return responseData
+}
+
+export const getWaveData = async (selectedDate, selectedBuoy) => {
+  const response = await fetch(
+    `${baseUrl}/getdata?date=${selectedDate}&selectedBuoy=${selectedBuoy}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
+
   let responseData
 
-  if (selectedDate !== getCurrentDateV2() && !isGreaterThan45Days(selectedDate, getCurrentDateV2() )) {
+  if (
+    selectedDate !== getCurrentDateV2() &&
+    !isGreaterThan45Days(selectedDate, getCurrentDateV2())
+  ) {
     responseData = await response.json()
   } else {
-   responseData = await response.text()
+    responseData = await response.text()
   }
- 
+
   if (!response.ok) {
-    throw new Error(`Status Code: ${response?.status} - ${responseData?.message}`)
+    throw new Error(
+      `Status Code: ${response?.status} - ${responseData?.message}`
+    )
   }
-  
+
   return responseData
 }
-
-  

@@ -23,15 +23,14 @@ export const WeatherData = ({ weatherData, messageText, locationText }) => {
       <Grid item xs={10}></Grid>
     <Grid item xs={5}>
       <DataBox
-        title="Temperature"
-        data={weatherData.currentTemp}
-        label="Farenheit"
+        title="Conditions"
+        data={weatherData.conditions}
       ></DataBox>
     </Grid>
 
     <Grid item xs={5}>
       <DataBox
-        title="Today's High Temp"
+        title="High Temp"
         data={weatherData.maxTemp}
         label="Farenheit"
       ></DataBox>
@@ -39,7 +38,7 @@ export const WeatherData = ({ weatherData, messageText, locationText }) => {
 
     <Grid item xs={5}>
       <DataBox
-        title="Today's Low Temp"
+        title="Low Temp"
         data={weatherData.minTemp}
         label="Farenheit"
       ></DataBox>

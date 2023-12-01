@@ -7,14 +7,16 @@ import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import Rating from "@mui/material/Rating"
 import { addNewPost } from "../../../api"
-import { useMyContext } from "../../components/context/MyContext"
 import { getUserId } from "../../utilities/users-service"
 import Typography from "@mui/material/Typography"
+import { getWeatherLocation } from '../../../utility'
 
 const JournalForm = ({ waveData, selectedBuoy, date, handleClose }) => {
   const [location, setLocation] = useState()
   const [description, setDescription] = useState()
   const [rating, setRating] = useState()
+
+  const templocation = getWeatherLocation(selectedBuoy).label
 
   let post = {
     user_id: "",
@@ -36,7 +38,7 @@ const JournalForm = ({ waveData, selectedBuoy, date, handleClose }) => {
     post.user_id = getUserId()
     post.post_date = date.format('MM-DD-YYYY')
     post.post_description = description
-    post.post_location = location
+    post.post_location = templocation
     post.WDIR = waveData.WDIR
     post.WSPD = waveData.WSPD
     post.GST = waveData.GST
@@ -60,19 +62,22 @@ const JournalForm = ({ waveData, selectedBuoy, date, handleClose }) => {
         <Card
           className="form-container"
           width={1200}
+          elevation={3}
           sx={{
-            borderRadius: "8px",
-            boxShadow: "3px 2px 7px rgb(0, 0, 0, 0.5)",
+            minHeight: "90%",
+            background: `linear-gradient(to bottom, 
+                                  rgba( 1, 36, 58 ) 0%,
+                                  rgba(16, 112, 166) 100%)`,
           }}
         >
           <CardContent sx={{ display: "grid", margin: "75px" }}>
             <Grid container direction="column" justify="center" width={400}>
-              <Typography style={{ fontSize: '24px' }}>Surf Journal Record for {date.format('MM-DD-YYYY')} </Typography>
+              <Typography variant="h4" color="white" style={{ fontSize: '24px' }}>Surf Journal Record for {date.format('MM-DD-YYYY')} </Typography>
               <br></br>
               <TextField
                 sx={{ marginBottom: "5px" }}
-                onChange={(location) => setLocation(location.target.value)}
-                value={location}
+                // onChange={(location) => setLocation(location.target.value)}
+                value={templocation}
                 helperText="Where did you surf?"
               />
 
@@ -89,14 +94,6 @@ const JournalForm = ({ waveData, selectedBuoy, date, handleClose }) => {
               />
 
               <br></br>
-              <Rating
-                name="rating"
-                value={rating}
-                label=""
-                onChange={(event, rating) => {
-                  setRating(rating)
-                }}
-              />
             </Grid>
           </CardContent>
         </Card>
