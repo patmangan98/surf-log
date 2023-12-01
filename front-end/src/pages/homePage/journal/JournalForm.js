@@ -5,16 +5,15 @@ import Grid from "@mui/material/Grid"
 import { Fragment } from "react"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
-import Rating from "@mui/material/Rating"
 import { addNewPost } from "../../../api"
 import { getUserId } from "../../utilities/users-service"
 import Typography from "@mui/material/Typography"
-import { getWeatherLocation } from '../../../utility'
+import { getWeatherLocation } from "../../../utility"
 
 const JournalForm = ({ waveData, selectedBuoy, date, handleClose }) => {
   const [location, setLocation] = useState()
   const [description, setDescription] = useState()
-  const [rating, setRating] = useState()
+  const [submitClicked, setSubmitClicked] = useState(false);
 
   const templocation = getWeatherLocation(selectedBuoy).label
 
@@ -31,12 +30,12 @@ const JournalForm = ({ waveData, selectedBuoy, date, handleClose }) => {
     APD: "",
     MWD: "",
     PRES: "",
-    buoy_id: ""
+    buoy_id: "",
   }
 
   const handleSubmit = async () => {
     post.user_id = getUserId()
-    post.post_date = date.format('MM-DD-YYYY')
+    post.post_date = date.format("MM-DD-YYYY")
     post.post_description = description
     post.post_location = templocation
     post.WDIR = waveData.WDIR
@@ -50,6 +49,7 @@ const JournalForm = ({ waveData, selectedBuoy, date, handleClose }) => {
     post.buoy_id = selectedBuoy
     try {
       addNewPost(post)
+      setSubmitClicked(true)
       handleClose()
     } catch (error) {
       console.error(error)
@@ -72,7 +72,13 @@ const JournalForm = ({ waveData, selectedBuoy, date, handleClose }) => {
         >
           <CardContent sx={{ display: "grid", margin: "75px" }}>
             <Grid container direction="column" justify="center" width={400}>
-              <Typography variant="h4" color="white" style={{ fontSize: '24px' }}>Surf Journal Record for {date.format('MM-DD-YYYY')} </Typography>
+              <Typography
+                variant="h4"
+                color="white"
+                style={{ fontSize: "24px" }}
+              >
+                Surf Journal Record for {date.format("MM-DD-YYYY")}{" "}
+              </Typography>
               <br></br>
               <TextField
                 sx={{ marginBottom: "5px" }}

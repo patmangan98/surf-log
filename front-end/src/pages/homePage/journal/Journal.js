@@ -1,4 +1,8 @@
 import Button from "@mui/material/Button"
+import  Dialog  from '@mui/material/Dialog'
+import  DialogTitle  from '@mui/material/DialogTitle'
+import  DialogContent  from '@mui/material/DialogContent'
+import  DialogActions  from '@mui/material/DialogActions'
 import JournalModal from "./JournalModal"
 import { useState } from "react"
 import { getCurrentDate } from "../../../utility"
@@ -28,8 +32,31 @@ export default function Journal(props) {
   // Journal modal dialog close
   const handleClose = () => {
     setOpen(false)
-    alert("Thank you for submitting a surf session record!")
+    setModalOpen(true)
   }
+
+  const handleSuccessfulClose = () => {
+    setModalOpen(false)
+    console.log('made it to the close')
+  }
+
+  const PostSubmissionModal = ({ open, handleClose }) => {
+    return (
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Thank You!</DialogTitle>
+        <DialogContent>
+          <p>Your post has been submitted successfully.</p>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleSuccessfulClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    )
+  }
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <>
@@ -51,6 +78,7 @@ export default function Journal(props) {
       />
       <br></br>
       <br></br>
+      <PostSubmissionModal open={modalOpen} handleClose={handleClose} />
     </>
   )
 }

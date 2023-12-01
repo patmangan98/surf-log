@@ -8,7 +8,6 @@ const JournalModal = ({ open, handleClose, waveData,
   return (
     <Dialog open={open} onClose={handleClose}>
       <JournalForm handleClose={handleClose} waveData={waveData} selectedBuoy={selectedBuoy} date={date} />
-  
     </Dialog>
   );
 };
