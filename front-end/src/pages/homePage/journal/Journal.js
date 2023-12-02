@@ -21,8 +21,10 @@ export default function Journal(props) {
   } else {
     buttonText = buttonText + "prior day " + date.format("MM-DD-YYYY")
   }
-
+  //State for the Journal modal dialog
   const [open, setOpen] = useState(false)
+  //State for the successful form submission dialog
+  const [modalOpen, setModalOpen] = useState(false)
 
   // Journal modal dialog open
   const handleOpen = () => {
@@ -35,9 +37,9 @@ export default function Journal(props) {
     setModalOpen(true)
   }
 
+  //Successful form submission close
   const handleSuccessfulClose = () => {
     setModalOpen(false)
-    console.log('made it to the close')
   }
 
   const PostSubmissionModal = ({ open, handleClose }) => {
@@ -55,8 +57,6 @@ export default function Journal(props) {
       </Dialog>
     )
   }
-
-  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <>

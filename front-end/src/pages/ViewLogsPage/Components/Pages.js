@@ -1,21 +1,24 @@
 import { Grid, Card, Typography, Divider, Button } from "@mui/material"
 import CardContent from "@mui/material/CardContent"
-import { getWeatherLocation } from '../../../utility'
 import StickyNotes from "./StickyNotes"
 import { v4 as uuidv4 } from "uuid"
 
 
-export default function Pages({ post }) {
+export default function Pages({ post, onDeletePost }) {
     //Format the timestamp into a readable date
-    const inputDate = new Date(post.post_date);
+    const inputDate = new Date(post.post_date)
 
     const options = { 
       year: 'numeric', 
       month: 'long', 
       day: 'numeric' 
-    };
+    }
     
-    const formattedDate = inputDate.toLocaleDateString('en-US', options);
+    const formattedDate = inputDate.toLocaleDateString('en-US', options)
+
+    const handlePostDelete = (postId) => {
+        onDeletePost(postId)
+      }
     
     return (
     <>
@@ -142,7 +145,9 @@ export default function Pages({ post }) {
               <Typography variant="h4" color="white">
                 {post.post_location}
               </Typography>
+              <br></br>
               <Divider color="white" />
+              <br></br>
               <Typography variant="h5" color="white">
                 {formattedDate}
               </Typography>
@@ -150,7 +155,14 @@ export default function Pages({ post }) {
               <Typography variant="body1" color="white">
                 {post.post_description}
               </Typography>
-              <Button>Edit Post</Button>
+              <br></br><br></br>
+              <Button
+          variant="contained"
+          onClick={() => handlePostDelete(post.post_id)}
+          sx={{ margin: "15px", width: "150px" }}
+        >
+          Delete Post
+        </Button>
             </CardContent>
           </Card>
         </Grid>

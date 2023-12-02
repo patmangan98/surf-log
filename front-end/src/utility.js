@@ -258,7 +258,7 @@ export const getWeatherLocation= (selectedBuoy) => {
     searchString: ''
   };
   
-  if (selectedBuoy != undefined){
+  if (selectedBuoy !== undefined){
     switch (selectedBuoy) {
       case '44008': 
         //Nantucket Buoy
@@ -303,7 +303,7 @@ export const getWeatherLocation= (selectedBuoy) => {
       case '41046':
         //Bahamas
         result.label = "Eleuthera, Bahamas"
-        result.searchString = 'abaco%2C%20bahamas'
+        result.searchString = 'eleuthera%2C%20bahamas'
         break;
       case '46053':
         //Santa Barbara

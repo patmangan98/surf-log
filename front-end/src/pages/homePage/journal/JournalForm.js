@@ -75,7 +75,7 @@ const JournalForm = ({ waveData, selectedBuoy, date, handleClose }) => {
               <Typography
                 variant="h4"
                 color="white"
-                style={{ fontSize: "24px" }}
+                // style={{ fontSize: "24px" }}
               >
                 Surf Journal Record for {date.format("MM-DD-YYYY")}{" "}
               </Typography>
@@ -84,7 +84,7 @@ const JournalForm = ({ waveData, selectedBuoy, date, handleClose }) => {
                 sx={{ marginBottom: "5px" }}
                 // onChange={(location) => setLocation(location.target.value)}
                 value={templocation}
-                helperText="Where did you surf?"
+                variant='outlined'
               />
 
               <TextField
