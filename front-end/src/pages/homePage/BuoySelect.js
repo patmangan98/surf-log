@@ -16,7 +16,7 @@ function BuoySelect({ onChange, value }) {
       <Card sx={{
         marginBottom: '2vh'
       }}>
-      <FormControl sx={{ m: 1, minWidth: 300 }} size="small">
+      <FormControl sx={{ m: 5, minWidth: 300 }} size="small">
         <InputLabel id="demo-simple-select-label">
           Choose a Location/Buoy
         </InputLabel>

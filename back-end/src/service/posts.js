@@ -1,9 +1,9 @@
 const knex = require('../knex')
 
 exports.showPostsByUserId = async (userId) => {
-  
-  const posts = await knex('posts').where('user_id', userId)
-  
+  const posts = await knex('posts')
+    .where('user_id', userId)
+    .orderBy('post_id', 'desc')
   return posts
 }
 

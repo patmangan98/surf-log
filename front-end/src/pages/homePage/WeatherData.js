@@ -21,12 +21,7 @@ export const WeatherData = ({ weatherData, messageText, locationText }) => {
       <Grid item xs={10}></Grid>
       <Grid item xs={10}></Grid>
       <Grid item xs={10}></Grid>
-    <Grid item xs={5}>
-      <DataBox
-        title="Conditions"
-        data={weatherData.conditions}
-      ></DataBox>
-    </Grid>
+   
 
     <Grid item xs={5}>
       <DataBox
@@ -65,6 +60,13 @@ export const WeatherData = ({ weatherData, messageText, locationText }) => {
         title="Wind Direction"
         data={weatherData.windDirection}
         label={weatherData.windDirectionDegrees + " degrees"}
+      ></DataBox>
+    </Grid>
+    <Grid item xs={5}>
+      <DataBox
+        title="Conditions"
+        data={weatherData.windGust}
+        label="mph"
       ></DataBox>
     </Grid>
 
