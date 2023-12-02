@@ -8,14 +8,14 @@ import CardContent from "@mui/material/CardContent"
 import { addNewPost } from "../../../api"
 import { getUserId } from "../../utilities/users-service"
 import Typography from "@mui/material/Typography"
-import { getWeatherLocation } from "../../../utility"
+import { getLocation } from "../../../utility"
 
 const JournalForm = ({ waveData, selectedBuoy, date, handleClose }) => {
   const [location, setLocation] = useState()
   const [description, setDescription] = useState()
   const [submitClicked, setSubmitClicked] = useState(false);
 
-  const templocation = getWeatherLocation(selectedBuoy).label
+  const templocation = getLocation(selectedBuoy).label
 
   let post = {
     user_id: "",

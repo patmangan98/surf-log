@@ -200,7 +200,7 @@ export const weatherSearchUrl = (dateString, location) => {
   //API Key 4PSEWATKQCJJCLS5LN8XJQQX9 damaristorrent21@gmail.com
   //API Key RM9MFARWRLYSCGUE7J8LYPUPM damaristorrent@hotmail.com
 
-  const apiKey = "4PSEWATKQCJJCLS5LN8XJQQX9"
+  const apiKey = "EXQ4HJA5WC2HZL3LRU6EANZKK"
 
   const stringOne = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
   const stringTwo = "?unitGroup=metric&include=hours&key="
@@ -212,7 +212,7 @@ export const weatherSearchUrl = (dateString, location) => {
 
 export const getWeatherData = async (selectedDate, selectedBuoy) => {
   console.log('selected buoy in the weathersearch url', selectedBuoy)
-  const location = getWeatherLocation(selectedBuoy)
+  const location = getLocation(selectedBuoy)
   console.log('location', location)
  
   const searchString = weatherSearchUrl(selectedDate, location.searchString)
@@ -225,20 +225,15 @@ export const getWeatherData = async (selectedDate, selectedBuoy) => {
     }
     
     const data = await response.json()
-    console.log(data)
+
     const weatherData = {
-      conditions: data.days[0].conditions,
-     
+      windGust: data.days[0].windgust,
       relativeHumidity: data.days[0].humidity,
       windSpeed: data.days[0].windspeed,
       windDirectionDegrees: data.days[0].winddir,
       windDirection: getCompassDirection(data.days[0].winddir),
-      maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax), 2).toFixed(
-        2
-      ),
-      minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin), 2).toFixed(
-        2
-      ),
+      maxTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmax), 2).toFixed(2),
+      minTemp: celsiusToFahrenheit(parseFloat(data.days[0].tempmin), 2).toFixed(2),
       sunriseTime: data.days[0].sunrise,
       sunsetTime: data.days[0].sunset,
       uvIndex: data.days[0].uvindex,
@@ -252,10 +247,12 @@ export const getWeatherData = async (selectedDate, selectedBuoy) => {
   }
 }
 
-export const getWeatherLocation= (selectedBuoy) => {
+export const getLocation = (selectedBuoy) => {
+  
   let result = {
     label: '',
-    searchString: ''
+    searchString: '',
+    buoyName: '',
   };
   
   if (selectedBuoy !== undefined){
@@ -264,60 +261,72 @@ export const getWeatherLocation= (selectedBuoy) => {
         //Nantucket Buoy
         result.label = 'Point Judith, Rhode Island'
         result.searchString = 'pt%20judith%20rhode%20island'
+        result.buoyName = 'Nantucket Buoy'
         break;
       case '41002':
         //Hatteras
         result.label = 'Cape Hatteras, North Carolina'
         result.searchString = 'cape%20hatteras%2C%20nc'
+        result.buoyName = 'South Hatteras Buoy'
         break;
       case '41013':
         //Frying pan
         result.label = 'Wilmington, North Carolina'
         result.searchString = 'wrightsville%20beach%2C%20nc'
+        result.buoyName = 'Frying Pan Shoals Buoy'
         break;
       case '41004':
         //Charleston
         result.label = 'Charleston, South Carolina'
         result.searchString = 'charleston%2C%20south%20carolina'
+        result.buoyName = 'Edisto Buoy'
         break;
       case '41008':
         //Jax/Grays Reef
         result.label = 'Jacksonville, Florida'
         result.searchString =  'savannah%2C%20ga'
+        result.buoyName = 'Grays Reef Buoy'
         break;
       case '41009':
         //Canaveral
         result.label = 'Cocoa Beach, Florida'
         result.searchString = 'cocoa%20beach%2C%20florida'
+        result.buoyName = 'East Canaveral Buoy'
         break;
       case '41114':
         //Ft Pierce
         result.label = "Fort Pierce, Florida"
         result.searchString = 'ft%20pierce%2C%20florida'
+        result.buoyName = 'Ft. Pierce Buoy'
         break;
       case '41047':
         //Bahamas
         result.label = 'Abaco, Bahamas'
         result.searchString = 'abaco%2C%20bahamas'
+        result.buoyName = 'Northeast Bahama Buoy'
         break;
       case '41046':
         //Bahamas
         result.label = "Eleuthera, Bahamas"
         result.searchString = 'eleuthera%2C%20bahamas'
+        result.buoyName = 'East Bahama Buoy'
         break;
       case '46053':
         //Santa Barbara
         result.label = "Santa Barbara, California"
         result.searchString = 'santa%20barbara%2C%20california'
+        result.buoyName = 'East Santa Barbara Buoy'
         break;
       case '46086':
         //San Clemente
         result.label = "San Clemente, California"
         result.searchString = 'san%20clemente%2C%20california'
+        result.buoyName = 'San Clemente Basin Buoy'
         break;
       default:
         result.label = 'Charleston, South Carolina'
         result.searchString = 'charleston%2C%20south%20carolina'
+        result.buoyName = 'Edisto Buoy'
     }
     return result
   }
